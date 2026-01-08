@@ -1,5 +1,5 @@
 ---
-title: "Psych 5066: Quantitative Methods I"
+title: "Psych 8066: Quantitative Methods I"
 subtitle: "Department of Psychological & Brain Sciences, Washington University in St. Louis"
 author: "Fall 2024 | Somers Family Hall 216"
 date: "Tue/Thur 9:30am - 10:50am"
