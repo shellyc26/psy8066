@@ -22,15 +22,15 @@ style_mono_accent(base_color = "#17139C",link_color = "#DD3E3E")
 .small[
 - Develop the basic quantitative skills necessary to be a research scientist
     - Not all the skills you will need (not the only courses you need)
-    - Foundations of statistics, methods, and data science
+    - **Foundations** of statistics, methods, and data science
 
 - Contextualize those skills
     - Building a toolbox, not a cookbook
     - How can I use this? Under what circumstances? When should I not use this?
     
 - Sequence
-  - **5066**: Tools of statistics (distilling lots of data to interpretable numbers, sampling, hypothesis testing)
-  - **5067**: Building models (how do translate our theory into testable relationships using the tools of 5066)
+  - **8066**: Tools of statistics (distilling lots of data to interpretable numbers, sampling, hypothesis testing)
+  - **8067**: Building models (how do translate our theory into testable relationships using the tools of 8066)
 ]
 ---
 
@@ -42,7 +42,11 @@ style_mono_accent(base_color = "#17139C",link_color = "#DD3E3E")
   
   - Summarize, test, and display data using `R`
   
-  - *Ideally* everyone will learn at least one thing they can use in their research this term.
+---
+
+class: inverse, center, middle
+
+# Build Your Intuition!
 
 ---
 
@@ -71,11 +75,11 @@ My job is to balance theory and application. Everyone is coming here with *extre
 
 ## Important Links
 
-[Class Website](https://shellyc26.github.io/psy5066/index.html) -- syllabus, lecture slides, homeworks etc. 
+[Class Website](https://shellyc26.github.io/psy8066/index.html) -- syllabus, lecture slides, homeworks etc. 
 
-[Slack Workspace](https://quantitativem-fbj8840.slack.com) -- here for answering questions, posting stats/`R` memes, building community
+[Slack Workspace](https://quantitativem-wva4818.slack.com) -- here for answering questions, posting stats/`R` memes, building community
 
-[Canvas](https://wustl.instructure.com/courses/137249) -- where you will turn in your homeworks and view your grades
+[Canvas](https://wustl.instructure.com/courses/179351) -- where you will turn in your homeworks and view your grades
 
 Data from class examples can be found on our [GitHub](https://github.com/shellyc26/psy5066) site in the `data` folder
 
@@ -92,7 +96,7 @@ Data from class examples can be found on our [GitHub](https://github.com/shellyc
 - Important equations will be presented in the slides
 
 ---
-class: center, middle
+class: center, middle inverse
 
 # Questions?
 

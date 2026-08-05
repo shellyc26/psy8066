@@ -7,8 +7,12 @@ navbar:
       href: schedule.html
     - text: HTML Slides
       menu:
+      - text: "1-Intro"
+        href: "lectures/1-intro.html"
     - text: PDF Slides
       menu:
+      - text: "1-Intro"
+        href: "lectures/1-intro.pdf"
     - text: Homework
       href: homework.html
   right:
