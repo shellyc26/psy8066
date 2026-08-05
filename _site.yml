@@ -15,9 +15,9 @@ navbar:
     - text: GitHub
       href: https://github.com/shellyc26/psy8066
     - text: Slack
-      href: https://quantitativem-fbj8840.slack.com
+      href: https://quantitativem-wva4818.slack.com
     - text: Canvas
-      href: https://wustl.instructure.com/courses/137249 
+      href: https://wustl.instructure.com/courses/179351 
 output:
   html_document:
     lib_dir: site_libs

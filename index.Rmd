@@ -1,7 +1,7 @@
 ---
 title: "Psych 8066: Quantitative Methods I"
 subtitle: "Department of Psychological & Brain Sciences, Washington University in St. Louis"
-author: "Fall 2024 | Somers Family Hall 216"
+author: "Fall 2026 | Somers Family Hall 216"
 date: "Tue/Thur 9:30am - 10:50am"
 output: 
   html_document:
@@ -10,17 +10,18 @@ output:
 
 **Shelly Cooper** -- [shelly.cooper@wustl.edu](mailto:shelly.cooper@wustl.edu)
 
-- Pronouns: she/her
-- Office Hours: By appointment. [Make an appointment here](https://calendly.com/shelly-cooper/30min). 
+- Pronouns: she/her/hers
+- Office Hours: By appointment. [Make an appointment here](https://calendly.com/shelly-cooper/30min).
+- Office: Somers Family Hall, 453A
 
-TEST TEST TEST
-
-**Ran Zhang** -- [ran.z@wustl.edu](mailto:ran.z@wustl.edu)
+**Eirini Zoupou** -- [e.zoupou@wustl.edu](mailto:e.zoupou@wustl.edu)
 
 - Pronouns: they/them
 - Office Hours: By appointment
+- Office: Somers Family Hall, 236
 
-**Ke Ning** -- [k.ning@wustl.edu ](mailto:k.ning@wustl.edu)
+**Qilin Zhang** -- [qilin@wustl.edu](mailto:qilin@wustl.edu)
 
-- Pronouns: he/him
-- Office Hours: By appointment
+- Pronouns: he/him/his
+- Office Hours: Tuesdays 11am-12pm or by appointment
+- Office: Somers Family Hall, 236

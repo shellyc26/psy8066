@@ -13,37 +13,37 @@ output:
 LSR readings can be found in the free, online textbook, [*Learning Statistics with R*](https://learningstatisticswithr-bookdown.netlify.com/index.html) by Danielle Navarro. For those interested in taking notes, I recommend the use of the [Hypothes.is](http://Hypothes.is) app to annotate webpages. I will note that the formatting of the book online is wonky in a few places. If this bothers you, or you prefer to work offline, you can download a [PDF version](https://learningstatisticswithr.com/lsr-0.6.pdf) of the book.
 
 | Week | Date | Topic | Readings | HW Due |
-|:--:|:--:|:--:|:--:|:--:|
-| 1 | 8/27 | Syllabus & Introductions |  |  |
-| \- | 8/29 | Models |  |  |
-| 2 | 9/3 | Measurements; RMarkdown/ RProjects | LSR Ch 1 & 3 |  |
-| \- | 9/5 | Describing data | LSR Ch 5 & 6 |  |
-| 3 | 9/10 | Describing data | LSR Ch 5 & 6, [Ozer & Funder (2019)](readings/Ozer_Funder_2019.pdf) | HW 1 due |
-| \- | 9/12 | Fisher tradition & probability | LSR Ch 9 |  |
-| 4 | 9/17 | Normal & binomial distributions | LSR Ch 9 |  |
-| \- | 9/19 | Sampling distributions and $t$ distributions | LSR Ch 10 |  |
-| 5 | 9/24 | **Exam 1** |  |  |
-| \- | 9/26 | Hypothesis testing 1 | LSR Ch 11 | HW 2 due |
-| 6 | 10/1 | Hypothesis testing 2 | LSR Ch 11 |  |
-| \- | 10/3 | Critique of NHST | LSR Ch 11, [Simmons et al. (2011)](readings/Simmons_etal_2011.pdf), [Cumming (2014)](readings/Cumming_2014.pdf) |  |
-| 7 | 10/8 | *No Class - Fall Break!* |  |  |
-| \- | 10/10 | Open science practices | [Five Thirty Eight](https://fivethirtyeight.com/features/science-isnt-broken/) |  |
-| 8 | 10/15 | Chi-Square test | LSR Ch 12 |  |
-| \- | 10/17 | One-sample tests | LSR Ch 13 |  |
-| 9 | 10/22 | Comparing two means | LSR Ch 13 |  |
-| \- | 10/24 | Comparing dependent means | LSR Ch 13 |  |
-| 10 | 10/29 | Visualizing Data |  |  |
-| \- | 10/31 | **Exam 2** |  | HW 3 due |
-| 11 | 11/5 | Introduction to model comparisons & $F$-distribution | LSR Ch 14 |  |
-| \- | 11/7 | One-way ANOVA | LSR Ch 14 |  |
-| 12 | 11/12 | Multiple comparisons & contrasts | LSR Ch 16 |  |
-| \- | 11/14 | Two between-subjects factors | LSR Ch 16 |  |
-| 13 | 11/19 | Interactions & ANCOVA | LSR Ch 16 |  |
-| \- | 11/21 | Within-subjects designs | LSR Ch 16 | HW 4 due 11/24 11:59pm |
-| 14 | 11/26 | Threats to Validity | LSR CH 2 & 4, [Cronbach & Meehl (1955)](readings/Cronbach_Meehl_1955.pdf) |  |
-| \- | 11/28 | *No Class – Happy Thanksgiving!* |  |  |
-| 15 | 12/3 | Threats to Validity Cont. |  | HW 5 due |
-| \- | 12/5 | **Exam 3** |  |  |
+|:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|
+| 1 | 8/25 | Syllabus & Introductions |  |  |
+| \- | 8/27 | Models |  |  |
+| 2 | 9/1 | Measurements; RMarkdown/ RProjects | LSR Ch 1 & 3 |  |
+| \- | 9/3 | Describing data | LSR Ch 5 & 6 |  |
+| 3 | 9/8 | Describing data | LSR Ch 5 & 6, [Ozer & Funder (2019)](readings/Ozer_Funder_2019.pdf) | HW 1 due |
+| \- | 9/10 | Fisher tradition & probability | LSR Ch 9 |  |
+| 4 | 9/15 | Normal & binomial distributions | LSR Ch 9 |  |
+| \- | 9/17 | Sampling distributions and $t$ distributions | LSR Ch 10 |  |
+| 5 | 9/22 | **Exam 1** |  |  |
+| \- | 9/24 | Hypothesis testing 1 | LSR Ch 11 | HW 2 due |
+| 6 | 9/29 | Hypothesis testing 2 | LSR Ch 11 |  |
+| \- | 10/1 | Critique of NHST | LSR Ch 11, [Simmons et al. (2011)](readings/Simmons_etal_2011.pdf), [Cumming (2014)](readings/Cumming_2014.pdf) |  |
+| 7 | 10/6 | *No Class - Fall Break!* |  |  |
+| \- | 10/8 | Open science practices | [Five Thirty Eight](https://fivethirtyeight.com/features/science-isnt-broken/) |  |
+| 8 | 10/13 | Chi-Square test | LSR Ch 12 |  |
+| \- | 10/15 | One-sample tests | LSR Ch 13 |  |
+| 9 | 10/20 | Comparing two means | LSR Ch 13 |  |
+| \- | 10/22 | Comparing dependent means | LSR Ch 13 |  |
+| 10 | 10/27 | Visualizing Data |  |  |
+| \- | 10/29 | **Exam 2** |  | HW 3 due |
+| 11 | 11/3 | Introduction to model comparisons & $F$-distribution | LSR Ch 14 |  |
+| \- | 11/5 | One-way ANOVA | LSR Ch 14 |  |
+| 12 | 11/10 | Multiple comparisons & contrasts | LSR Ch 16 |  |
+| \- | 11/12 | Two between-subjects factors | LSR Ch 16 |  |
+| 13 | 11/17 | Interactions & ANCOVA | LSR Ch 16 |  |
+| \- | 11/19 | Within-subjects designs | LSR Ch 16 |  |
+| 14 | 11/24 | Threats to Validity | LSR CH 2 & 4, [Cronbach & Meehl (1955)](readings/Cronbach_Meehl_1955.pdf) | HW 4 due |
+| \- | 11/26 | *No Class – Happy Thanksgiving!* |  |  |
+| 15 | 12/1 | Threats to Validity Cont. |  | HW 5 due |
+| \- | 12/3 | **Exam 3** |  |  |
 
 # Overview
 
@@ -57,43 +57,37 @@ We will primarily be referring to chapters in [*Learning Statistics with R*](htt
 
 Students must have the latest version of R, which can be downloaded [here](https://ftp.osuosl.org/pub/cran/). It is strongly recommended that students also download the RStudio GUI, available [here](https://www.rstudio.com/products/rstudio/download/#download). Both are free.
 
-### Resources for R and RStudio
-
-While we will be covering the use of R and RStudio extensively, one of the key skills required to use R is the ability to find answers on the Internet. The R community (sometimes referred to as the `useR` or `rstats` community) tends to be friendly and helpful and enjoys solving R-related problems in their spare time. For that reason, many common questions or problems have been posted to spaces online and answered by smart people. Finding and deciphering those answers is the key skill you should seek to hone this year. It's much more important than remembering function names.
-
 **Here's a [resource page](data/resources2021.pdf) to get you going.**
 
 # Graded materials
 
 Your final grade is comprised of three components:
 
--   5 Homework: 6% each, 30% total
--   Exams: 20% for the first exam, 25% for exams 2 and 3, 70% total
+- 5 Homework: 3% each, 15% total
+- Exams: 25% for the first exam, 30% for exams 2 and 3, 85% total
 
 ### Homework assignments
 
-Homework assignments are intended to gauge your ability to apply the topics covered in class to the practice of data analysis. Homework assignments are to be done using R and RMarkdown; completed assignments should be submitted to Canvas. Please submit BOTH your .Rmd and .html file. Please do not use PDF or Word documents. There will be 5 assignments in total, each worth 6% of your grade.
+Homework assignments are intended to gauge your ability to apply the topics covered in class to the practice of data analysis. Homework assignments are to be done using R and RMarkdown/Quarto; completed assignments should be submitted to Canvas. Please submit BOTH your .Rmd and .html file. Please do not use PDF or Word documents. There will be 5 assignments in total, each worth 3% of your grade. Please note that assignments might change throughout the semester. However, in total, homeworks will ultimately add up to 15% of your grade.
 
 HWs are due at their due date by 9:30am. Grading will go by the following rubric:
 
--   6/6: Completed all parts of the assignment, and results/interpretations were mostly correct (with maybe a few minor errors along the way)
--   5/6: Completed all parts of the assignment, and \~25% of the results/interpretations are incorrect
--   4/6: Completed all parts of the assignment, however \~50% of the results/interpretations are incorrect
--   4/6: Either parts of the assignment are missing but what is there is correct, OR all parts have been completed but there are substantial issues with the results/interpretation
--   2/6: Parts of the assignment are missing, and there are substantial issues with the results/interpretation
--   1/6: Nearly all of the assignment is missing, but something was turned in
--   0/6: No assignment submitted
+- 3/3: Completed all parts of the assignment, and results/interpretations were mostly correct (with maybe a few minor errors along the way)
+- 2/3: Completed all parts of the assignment, and \~25% of the results/interpretations are incorrect
+- 1/3: Completed all parts of the assignment, however \~50% of the results/interpretations are incorrect
+- 0/3: Parts of the assignment are missing, and there are substantial issues with the results/interpretation OR nearly all of the assignment is missing, but something was turned in OR no assignment submitted
 
 You may work with your peers on homework assignments, with the following caveats:
 
 1.  Your code cannot be 100% identical to your peer's code (trust me, we can tell). It's one thing to work together and consult, but it's another thing to copy someone's assignment. If it is determined that someone copied an entire homework assignment, both parties will be given automatic zero.
 2.  If you work with someone, you *must* acknowledge them in the assignment itself.
+3.  You may NOT use Artificial Intelligence tools like OpenAI, Anthropic, etc. to complete the code in the assignment. The goal is for you to build skillsets and socialize with your peers.
 
 ### Exams
 
-There will be 3 exams. They will test both your theoretical understanding of concepts, as well as your applied understanding of the material. You will not be expected to open `R` and code during these exams, however you will be expected to understand `R` code that has been provided. As exams get closer, I will go over the procedures and policies with you before the exam. If you have a disability that will require additional time, please contact me and Disability Resources as soon as possible (contact information below). The first exam is worth 20% of your grade. Exams 2 and 3 are each worth 25% of your grade.
+There will be 3 exams. They will test both your theoretical understanding of concepts, as well as your applied understanding of the material. You will not be expected to open `R` and code during these exams, however you will be expected to understand `R` code that has been provided. As exams get closer, I will go over the procedures and policies with you before the exam. If you have a disability that will require additional time, please contact me and Disability Resources as soon as possible (contact information below). The first exam is worth 25% of your grade. Exams 2 and 3 are each worth 30% of your grade.
 
-There will be 2 portions to each exam. The first part is a written exam to be taken during class time. The second portion will be an **oral** exam! You will schedule a time with me (I will have a sign up sheet for available times). Each oral exam to take longer than 10-15 minutes and will be worth between 10-15% of the exam grade.
+There will be 2 portions to each exam. The first part is a written exam to be taken during class time. The second portion will be an **oral** exam! You will schedule a time with me (you will sign up on Calendly for available times – I will send this to you). Each oral exam to take longer than 10-15 minutes and will be worth between 10-15% of the exam grade.
 
 ### Final Grading Rubric
 
@@ -122,72 +116,73 @@ All assignments and examinations are mandatory. If you need to miss an exam you 
 \end{split}
 \end{equation}
 
-# Learning from Crappy Years
-
-The pandemic made things...weird. But instead of burying our heads in the sand and forgetting it happened, let's at least extract some things and incorporate them into our lives. For this class, here's what that means...
+# Class Guidelines & Policies
 
 ### Staying Connected
 
-The past few years have been lonely. Although we're back in person, we still might feel that residual loneliness. On top of that, learning stats, learning to code, and grad school in general can be really scary -- impostor syndrome is real! The best thing we can do to combat these feelings is to stay connected to one another. Here's how we'll accomplish this in our class:
+You are new grdaduate students which is a strange place to be. Plus, learning stats, learning to code, and grad school in general can be really scary -- impostor syndrome is real! The best thing we can do to combat these feelings is to stay connected to one another. Here's how we'll accomplish this in our class:
 
--   We will have a dedicated class Slack work space (see upper right corner of website for link). You can post questions that everyone can see, or make use of direct messaging. Shelly or the AIs will respond to your questions on Slack (if your peers don't respond first!). This is really great for one-off questions, or if you need some quick clarification on something. We will also have a dedicated channel for silly programming and stats memes, because humor is important when you're learning a skill like coding, in which you'll repeatedly fail. Slack is not required *per se*, but it is **highly encouraged**.
+- We will have a dedicated class Slack work space (see upper right corner of website for link). You can post questions that everyone can see, or make use of direct messaging. Shelly or the AIs will respond to your questions on Slack (if your peers don't respond first!). This is really great for one-off questions, or if you need some quick clarification on something. We will also have a dedicated channel for silly programming and stats memes, because humor is important when you're learning a skill like coding, in which you'll repeatedly fail. Slack is not required *per se*, but it is **highly encouraged**.
 
--   We will occasionally have group discussions. Please engage with those around you.
+- We will occasionally have group discussions. Please engage with those around you.
 
 ### Be Considerate and Kind
 
--   It is OK to not be OK. If you tell me you're having trouble, I'm not going to judge you or think less of you. I hope you will do the same for me. I will work with you to make sure we have a reasonable plan in place should something come up. *However*, this does require you telling me "hey, I'm not OK".
--   You are always welcome to come talk to me about things that you're going through. If I can't help you, I usually know someone who can help -- or I can at least give you some resources and point you in the right direction.
--   If you are struggling or need extra help, please just ask. I promise I will work with you.
+- It is OK to not be OK. If you tell me you're having trouble, I'm not going to judge you or think less of you. I hope you will do the same for me. I will work with you to make sure we have a reasonable plan in place should something come up. *However*, this does require you telling me "hey, I'm not OK".
+- You are always welcome to come talk to me about things that you're going through. If I can't help you, I usually know someone who can help -- or I can at least give you some resources and point you in the right direction.
+- If you are struggling or need extra help, please just ask. I promise I will work with you.
 
 ### Attendance & In-person Etiquette
 
--   I expect all students to be in class if they are able (not sick, not at a conference etc.). The best way to succeed is to come to class. Your chosen profession requires mastery of these skills! Come to class!
--   I will take attendance. **If you are absent for 2 class periods in a row, *and you have not reached out to either the instructor or the AIs*, I will assume that something is wrong.** When I have concerns about a graduate student, I contact their PI. I will do the same here.
-    -   If you reach out and say you need to miss class for whatever reason, then there is no need for me to contact your PI. I know you are alive and well (or at least getting well).
-    -   This policy comes out of concern for you! It's hard to succeed if you aren't in class, and I really want you to succeed!
-    -   You are adults. Come to class when you can. Let me know when you can't (quick email or Slack is OK).
--   **If you are not feeling well, don't come to class!!** You have access to the slides and you can ask a friend for notes.
--   If there is even a *hint* of being sick, I prefer you stay home. If you are 100% sure it's nothing contagious -- like allergies, I still ask that you wear a mask and sit away from other students.
--   If you are in quarantine because of COVID exposure, or you fail the screening form because you are showing symptoms, please forward the screening form to me! Having a paper trail is extremely helpful for everyone.
--   Most people will have electronics with them in class. Drinks should have a lid on them so that if they spill, we hopefully aren't ruining yours or another person's laptop/tablet/phone etc. Be careful!
--   Occasionally, I'll ask you to get into small groups and chat about something. Be aware that other people might not be super comfortable being physically close together. Maintain appropriate distance, and if a classmate asks you to step back a bit, please do so.
+- I expect all students to be in class if they are able (not sick, not at a conference etc.). The best way to succeed is to come to class. Your chosen profession requires mastery of these skills! Come to class!
+- I will take attendance. **If you are absent for 2 class periods in a row, *and you have not reached out to either the instructor or the AIs*, I will assume that something is wrong.** When I have concerns about a graduate student, I contact their PI.
+  - If you reach out and say you need to miss class for whatever reason, then there is no need for me to contact your PI. I know you are alive and well (or at least getting well).
+  - This policy comes out of concern for you! It's hard to succeed if you aren't in class, and I really want you to succeed!
+  - You are adults. Come to class when you can. Let me know when you can't (quick email or Slack is OK).
+- **If you are not feeling well, don't come to class!!** You have access to the slides and you can ask a friend for notes. Lectures will NOT be recorded.
+- If there is even a *hint* of being sick, I prefer you stay home. If you are 100% sure it's nothing contagious -- like allergies, I still ask that you wear a mask and sit away from other students.
+- Most people will have electronics with them in class. Drinks should have a lid on them so that if they spill, we hopefully aren't ruining yours or another person's laptop/tablet/phone etc. Be careful!
+- Occasionally, I'll ask you to get into small groups and chat about something. Be aware that other people might not be super comfortable being physically close together. Maintain appropriate distance, and if a classmate asks you to step back a bit, please do so.
 
 ### Online Etiquette
 
 There will be a lot of online communication with the instructor, the AI, and your peers. You are expected to maintain a polite and respectful tone in their online discourse. Some things to consider:
 
--   Any communication shared privately may become public, so be mindful of what you share in discussion boards or chats. This is especially true for sharing any personal and/or identifying information about you or someone else. Do not share any passwords or divulge any personal information (yours or others) that can be used in a malicious manner (phone numbers, addresses etc.).
--   Humor doesn't always translate in an online forum. If you want to make a joke or a sarcastic remark, be 100% sure that it is clear you are joking.
--   Your comments must be readable to everyone. Very common acronyms are OK ("lol" or "haha"). But please refrain from acronyms that are not as well-known ("fwiw" etc.).
--   Treat your classmates, professor, and AIs with kindness and respect. Any indication of online harassment or bullying will not be tolerated and will be reported. This is especially pertinent when giving constructive feedback in code reviews.
--   Please avoid using ALL CAPS because it can be interpreted as yelling.
+- Any communication shared privately may become public, so be mindful of what you share in discussion boards or chats. This is especially true for sharing any personal and/or identifying information about you or someone else. Do not share any passwords or divulge any personal information (yours or others) that can be used in a malicious manner (phone numbers, addresses etc.).
+- Humor doesn't always translate in an online forum. If you want to make a joke or a sarcastic remark, be 100% sure that it is clear you are joking.
+- Your comments must be readable to everyone. Very common acronyms are OK ("lol" or "haha"). But please refrain from acronyms that are not as well-known ("fwiw" etc.).
+- Treat your classmates, professor, and AIs with kindness and respect. Any indication of online harassment or bullying will not be tolerated and will be reported. This is especially pertinent when giving constructive feedback in code reviews.
+- Please avoid using ALL CAPS because it can be interpreted as yelling.
 
-# Policies & Resources
+### Artificial Intelligence
 
-**University Code of Conduct:**
+Artificial Intelligence tools will not be permitted for any graded work component of this course. It is not to be used on written exams, it cannot be used on oral exams, and it cannot be used in your homework.
 
--   Any student found guilty of academic misconduct, such as cheating, plagiarizing, forgery, or furnishing false information to a University official will be subject to consequences including failing the class, suspension from the University, or expulsion from the University. Frankly, you're in graduate school, and the purpose of work is to create opportunities to learn and improve. Even if cheating helps you in the short term, you'll quickly find yourself ill-prepared for the career you have chosen. If you find yourself tempted to cheat, please come speak to me about an extension and developing tools to improve your success.
--   Please see the official [University Code of Conduct](https://wustl.edu/about/compliance-policies/academic-policies/university-student-judicial-code/)
+You are allowed to use it as a pedagogical tool to help with studying. But no graded work should be produced with artificial intelligence.
 
-**Special Accommodations:**
+### University Code of Conduct:
 
--   This includes but is not limited to a learning, sensory, or physical disability or any other diagnosis that requires special accommodations and/or assistance with lectures, reading, written assignments, and/or exam taking
--   Contact [Disability Resources](https://students.wustl.edu/disability-resources/) at [disabilityresources\@wustl.edu](mailto:disabilityresources@wustl.edu) or call 314-935-5970
--   Please also contact me as soon as possible if you need special accommodations. Once I have the Accommodation Letter from [Disability Resources](https://students.wustl.edu/disability-resources/), we can discuss ways to modify the course experience for you.
+- Any student found guilty of academic misconduct, such as cheating, plagiarizing, forgery, or furnishing false information to a University official will be subject to consequences including failing the class, suspension from the University, or expulsion from the University. Frankly, you're in graduate school, and the purpose of work is to create opportunities to learn and improve. Even if cheating helps you in the short term, you'll quickly find yourself ill-prepared for the career you have chosen. If you find yourself tempted to cheat, please come speak to me about an extension and developing tools to improve your success.
+- Please see the official [University Code of Conduct](https://wustl.edu/about/compliance-policies/academic-policies/university-student-judicial-code/)
 
-**Mental & Physical Health:**
+### Special Accommodations:
 
--   [Habif Health and Wellness Center](https://students.wustl.edu/habif-health-wellness-center/), email [HabifInfo\@wustl.edu](mailto:HabifInfo@wustl.edu) or call 314-935-6666
+- This includes but is not limited to a learning, sensory, or physical disability or any other diagnosis that requires special accommodations and/or assistance with lectures, reading, written assignments, and/or exam taking
+- Contact [Disability Resources](https://students.wustl.edu/disability-resources/) at [disabilityresources\@wustl.edu](mailto:disabilityresources@wustl.edu) or call 314-935-5970
+- Please also contact me as soon as possible if you need special accommodations. Once I have the Accommodation Letter from [Disability Resources](https://students.wustl.edu/disability-resources/), we can discuss ways to modify the course experience for you.
 
-**WUSTL Police Department:**
+### Mental & Physical Health:
 
--   For an on campus emergency, call 314-935-5555
--   For an off campus emergency, call 911
+- [Habif Health and Wellness Center](https://students.wustl.edu/habif-health-wellness-center/), email [HabifInfo\@wustl.edu](mailto:HabifInfo@wustl.edu) or call 314-935-6666
 
-**Relationship or Sexual Violence (including sexual harassment and stalking):**
+### WUSTL Police Department:
 
--   Contact a licensed RSVP counselor (confidential, with some limited information being shared as needed with the appropriate university administrator(s)) at [rsvpcenter\@wustl.edu](mailto:rsvpcenter@wustl.edu) or call 314-935-3445
--   Contact the university's Title IX Director, Ms. Jessica Kennedy, at [jwkennedy\@wustl.edu](mailto:jwkennedy@wustl.edu) or call 314-935-3118
+- For an on campus emergency, call 314-935-5555
+- For an off campus emergency, call 911
+
+### Relationship or Sexual Violence (including sexual harassment and stalking):
+
+- Contact a licensed RSVP counselor (confidential, with some limited information being shared as needed with the appropriate university administrator(s)) at [rsvpcenter\@wustl.edu](mailto:rsvpcenter@wustl.edu) or call 314-935-3445
+- Contact the university's Title IX Director, Ms. Jessica Kennedy, at [jwkennedy\@wustl.edu](mailto:jwkennedy@wustl.edu) or call 314-935-3118
 
 ***You can always come to me!** Period. However, if you come to me with any issues surrounding child abuse, suicidal tendencies, or sexual assault, sexual discrimination, sexual harassment, dating violence, domestic violence or stalking, I am required to report these to their appropriate administrators. Washington University faculty and administrators strive to maintain confidentiality, but some information may need to be disclosed when it is a matter of safety.*
