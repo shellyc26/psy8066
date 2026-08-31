@@ -3,7 +3,7 @@
   <head>
     <title>Describing Data Part 1</title>
     <meta charset="utf-8" />
-    <script src="libs/header-attrs-2.27/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.31/header-attrs.js"></script>
     <script src="libs/kePrint-0.0.1/kePrint.js"></script>
     <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
@@ -192,6 +192,12 @@ Average life expectancy of French women was 74.5. Andre was 47 years old
 the woman lived another 32 years to become the oldest person on record, outliving Andre by two years. He had paid more than twice the market value for the apartment
 
 ---
+![](images/jc1.png)
+
+
+
+![](images/jc2.png)
+---
 ## Other measures of central tendency
 
 - **Median** -- the middle point of the data
@@ -348,7 +354,7 @@ We'll get to expected values when we talk about probability distributions, but f
 .code-small[
 
 ``` r
-world %&gt;% ggplot(aes(x = Happiness)) + 
+world |&gt;  ggplot(aes(x = Happiness)) + 
   geom_bar(fill = "gray") +
   scale_x_binned() +
   geom_vline(aes(xintercept = mean(Happiness))) +
@@ -426,10 +432,10 @@ If you're calculating sample statistics for skewness and kurtosis, replace the `
 
 ``` r
 descriptives = describe(world)
-descriptives = descriptives %&gt;% 
+descriptives = descriptives |&gt;  
   mutate_if(is.numeric, round, 2)
 
-kable(descriptives) %&gt;% 
+kable(descriptives) |&gt;  
   kable_styling(bootstrap_options = "striped", font_size = 14)
 ```
 
@@ -932,9 +938,9 @@ psych::describe(world, fast =T)
 
 
 ``` r
-world %&gt;%
-  mutate_if(is.numeric, scale) %&gt;%
-  psych::describe(., fast =T)
+world |&gt; 
+  mutate_if(is.numeric, scale) |&gt; 
+  psych::describe(, fast =T)
 ```
 
 ```
@@ -960,9 +966,9 @@ describing relationships amongst 2 variables
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"highlightStyle": "github",
-"highlightLines": true,
-"countIncrementalSlides": false
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));

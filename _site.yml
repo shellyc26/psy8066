@@ -9,10 +9,26 @@ navbar:
       menu:
       - text: "1-Intro"
         href: "lectures/1-intro.html"
+      - text: "2-Models"
+        href: "lectures/2-models.html"
+      - text: "3-Data Types"
+        href: "lectures/3-dataTypes.html"
+      - text: "4-Describing Data 1"
+        href: "lectures/4-describing_data.html"
+      - text: "5-Describing Data 2"
+        href: "lectures/5-describing_data.html"
     - text: PDF Slides
       menu:
       - text: "1-Intro"
         href: "lectures/1-intro.pdf"
+      - text: "2-Models"
+        href: "lectures/2-models.html"
+      - text: "3-Data Types"
+        href: "lectures/3-dataTypes.html"
+      - text: "4-Describing Data 1"
+        href: "lectures/4-describing_data.html"
+      - text: "5-Describing Data 2"
+        href: "lectures/5-describing_data.html"
     - text: Homework
       href: homework.html
   right:

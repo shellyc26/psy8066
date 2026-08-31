@@ -164,6 +164,12 @@ Average life expectancy of French women was 74.5. Andre was 47 years old
 the woman lived another 32 years to become the oldest person on record, outliving Andre by two years. He had paid more than twice the market value for the apartment
 
 ---
+![](images/jc1.png)
+
+
+
+![](images/jc2.png)
+---
 ## Other measures of central tendency
 
 - **Median** -- the middle point of the data
@@ -264,7 +270,7 @@ We'll get to expected values when we talk about probability distributions, but f
 .pull-left-small[
 .code-small[
 ```{r, eval = FALSE, warning = FALSE, message = FALSE}
-world %>% ggplot(aes(x = Happiness)) + 
+world |>  ggplot(aes(x = Happiness)) + 
   geom_bar(fill = "gray") +
   scale_x_binned() +
   geom_vline(aes(xintercept = mean(Happiness))) +
@@ -362,10 +368,10 @@ If you're calculating sample statistics for skewness and kurtosis, replace the $
   
 ```{r describe}
 descriptives = describe(world)
-descriptives = descriptives %>% 
+descriptives = descriptives |>  
   mutate_if(is.numeric, round, 2)
 
-kable(descriptives) %>% 
+kable(descriptives) |>  
   kable_styling(bootstrap_options = "striped", font_size = 14)
 ```
 
@@ -591,9 +597,9 @@ psych::describe(world, fast =T)
 # Which variable has outliers?
 
 ```{r,warning=FALSE, message = FALSE, highlight.output = c(9)}
-world %>%
-  mutate_if(is.numeric, scale) %>%
-  psych::describe(., fast =T)
+world |> 
+  mutate_if(is.numeric, scale) |> 
+  psych::describe(, fast =T)
 ```
 
 ---

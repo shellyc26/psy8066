@@ -3,7 +3,7 @@
   <head>
     <title>Describing Data Part 2</title>
     <meta charset="utf-8" />
-    <script src="libs/header-attrs-2.27/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.31/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
     <link rel="stylesheet" href="my-theme.css" type="text/css" />
   </head>
@@ -155,10 +155,10 @@ Moment = variance is the second moment of a distribution
 
 
 ``` r
-data %&gt;% ggplot(aes(x = x, y = y)) + geom_point(size = 3) + theme_bw()
+data |&gt;  ggplot(aes(x = x, y = y)) + geom_point(size = 3) + theme_bw()
 ```
 
-&lt;img src="5-describing_data_files/figure-html/unnamed-chunk-3-1.png" width="50%" /&gt;
+&lt;img src="5-describing_data_files/figure-html/unnamed-chunk-3-1.png" alt="" width="50%" /&gt;
 
 What is the correlation between these two variables?
 
@@ -171,10 +171,10 @@ Correlation = 0.68
 
 
 ``` r
-data %&gt;% ggplot(aes(x = x, y = y)) + geom_point(size = 3) + theme_bw()
+data |&gt;  ggplot(aes(x = x, y = y)) + geom_point(size = 3) + theme_bw()
 ```
 
-&lt;img src="5-describing_data_files/figure-html/unnamed-chunk-5-1.png" width="50%" /&gt;
+&lt;img src="5-describing_data_files/figure-html/unnamed-chunk-5-1.png" alt="" width="50%" /&gt;
 
 What is the correlation between these two variables?
 
@@ -187,10 +187,10 @@ Correlation = -0.41
 
 
 ``` r
-data %&gt;% ggplot(aes(x = x, y = y)) + geom_point(size = 3) + theme_bw()
+data |&gt;  ggplot(aes(x = x, y = y)) + geom_point(size = 3) + theme_bw()
 ```
 
-&lt;img src="5-describing_data_files/figure-html/unnamed-chunk-7-1.png" width="50%" /&gt;
+&lt;img src="5-describing_data_files/figure-html/unnamed-chunk-7-1.png" alt="" width="50%" /&gt;
 
 What is the correlation between these two variables?
 
@@ -256,13 +256,13 @@ From Ozer &amp; Funder (2019)
 ???
 **What are good benchmarks?**
 - Classic social psych studies: `\(r\)` between .35 and .45
-- scarcity increases the perceived value of a commodity ($r = .12$), 
-- people attribute failures to bad luck ($r = .10$), 
-- communicators perceived as more credible are more persuasive ($r = .10$)
-- people in a bad mood are more aggressive ($r = .41$)
+- scarcity increases the perceived value of a commodity (`\(r = .12\)`), 
+- people attribute failures to bad luck (`\(r = .10\)`), 
+- communicators perceived as more credible are more persuasive (`\(r = .10\)`)
+- people in a bad mood are more aggressive (`\(r = .41\)`)
 - SES and IQ predicting mortality `\(r = 25\)`
 
-- Antihistomine and symptom relief: `\(r = .11\)`
+- Antihistamine and symptom relief: `\(r = .11\)`
 - Ibuprofen and pain relief: `\(r = .14\)`
 - Men weigh more than women: `\(r = .26\)`
 - High elevations have lower annual temps: `\(r = .34\)`
@@ -272,7 +272,7 @@ From Ozer &amp; Funder (2019)
 
 ## What affects correlations?
 
-It's not enough to calculate a correlation between two variables. You should always look at a figure of the data to make sure the number accurately describes the relationship. Correlations can be easily fooled by qualities of your data, like:
+It's not enough to calculate a correlation between two variables. You MUST always look at a figure of the data to make sure the number accurately describes the relationship. Correlations can be easily fooled by qualities of your data, like:
 
 - Skewed distributions
 
@@ -290,7 +290,7 @@ It's not enough to calculate a correlation between two variables. You should alw
 
 
 ``` r
-p = data %&gt;% ggplot(aes(x=x, y=y)) + geom_point()
+p = data |&gt;  ggplot(aes(x=x, y=y)) + geom_point() + theme_bw(base_size = 25)
 ggMarginal(p, type = "density")
 ```
 
@@ -303,7 +303,7 @@ ggMarginal(p, type = "density")
 
 
 ``` r
-data %&gt;% ggplot(aes(x=x, y=y)) + geom_point() 
+data |&gt;  ggplot(aes(x=x, y=y)) + geom_point() + theme_bw(base_size = 25)
 ```
 
 ![](5-describing_data_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
@@ -315,14 +315,15 @@ data %&gt;% ggplot(aes(x=x, y=y)) + geom_point()
 .code-small[
 
 ``` r
-data %&gt;% ggplot(aes(x=x, y=y)) +
+data |&gt;  ggplot(aes(x=x, y=y)) +
   geom_point() +
   geom_smooth(method = "lm",
               se = FALSE,
               color = "red") +
   geom_smooth(data = data[-51,], 
               method = "lm", 
-              se = FALSE)
+              se = FALSE) +
+  theme_bw(base_size = 25)
 ```
 ]
 ]
@@ -341,12 +342,13 @@ data %&gt;% ggplot(aes(x=x, y=y)) +
 .code-small[
 
 ``` r
-data %&gt;%
+data |&gt; 
 ggplot(aes(x=x, y=y)) +
   geom_point() +
   geom_smooth(method = "lm",
               se = FALSE,
-              color = "red")
+              color = "red") +
+  theme_bw(base_size = 25)
 ```
 ]
 ]
@@ -368,7 +370,7 @@ What if I told you there were scores on X could range from 97 to 103?
 
 
 ``` r
-data %&gt;%
+data |&gt; 
 ggplot(aes(x=x, y=y)) +
   geom_point() +
   geom_smooth(method = "lm",
@@ -378,7 +380,8 @@ ggplot(aes(x=x, y=y)) +
   geom_smooth(method = "lm",
               se = FALSE,
               data = real_data,
-              color = "blue")
+              color = "blue") +
+  theme_bw(base_size = 25)
 ```
 ]
 ]
@@ -619,9 +622,9 @@ Probability
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"highlightStyle": "github",
-"highlightLines": true,
-"countIncrementalSlides": false
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));

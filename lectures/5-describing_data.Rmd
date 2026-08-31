@@ -162,7 +162,7 @@ colnames(data) = c("x", "y")
 ```
 
 ```{r, out.width='50%'}
-data %>% ggplot(aes(x = x, y = y)) + geom_point(size = 3) + theme_bw()
+data |>  ggplot(aes(x = x, y = y)) + geom_point(size = 3) + theme_bw()
 ```
 
 What is the correlation between these two variables?
@@ -182,7 +182,7 @@ colnames(data) = c("x", "y")
 ```
 
 ```{r, out.width='50%'}
-data %>% ggplot(aes(x = x, y = y)) + geom_point(size = 3) + theme_bw()
+data |>  ggplot(aes(x = x, y = y)) + geom_point(size = 3) + theme_bw()
 ```
 
 What is the correlation between these two variables?
@@ -202,7 +202,7 @@ colnames(data) = c("x", "y")
 ```
 
 ```{r, out.width='50%'}
-data %>% ggplot(aes(x = x, y = y)) + geom_point(size = 3) + theme_bw()
+data |>  ggplot(aes(x = x, y = y)) + geom_point(size = 3) + theme_bw()
 ```
 
 What is the correlation between these two variables?
@@ -275,7 +275,7 @@ From Ozer & Funder (2019)
 - people in a bad mood are more aggressive ($r = .41$)
 - SES and IQ predicting mortality $r = 25$
 
-- Antihistomine and symptom relief: $r = .11$
+- Antihistamine and symptom relief: $r = .11$
 - Ibuprofen and pain relief: $r = .14$
 - Men weigh more than women: $r = .26$
 - High elevations have lower annual temps: $r = .34$
@@ -285,7 +285,7 @@ From Ozer & Funder (2019)
 
 ## What affects correlations?
 
-It's not enough to calculate a correlation between two variables. You should always look at a figure of the data to make sure the number accurately describes the relationship. Correlations can be easily fooled by qualities of your data, like:
+It's not enough to calculate a correlation between two variables. You MUST always look at a figure of the data to make sure the number accurately describes the relationship. Correlations can be easily fooled by qualities of your data, like:
 
 - Skewed distributions
 
@@ -310,7 +310,7 @@ data$x = data$x^4
 ```
 
 ```{r, fig.height = 5}
-p = data %>% ggplot(aes(x=x, y=y)) + geom_point()
+p = data |>  ggplot(aes(x=x, y=y)) + geom_point() + theme_bw(base_size = 25)
 ggMarginal(p, type = "density")
 ```
 ---
@@ -328,7 +328,7 @@ data[51, ] = c(7, 10)
 ```
 
 ```{r, fig.height = 5}
-data %>% ggplot(aes(x=x, y=y)) + geom_point() 
+data |>  ggplot(aes(x=x, y=y)) + geom_point() + theme_bw(base_size = 25)
 ```
 ---
 
@@ -337,28 +337,30 @@ data %>% ggplot(aes(x=x, y=y)) + geom_point()
 .pull-left-small[
 .code-small[
 ```{r, eval=FALSE, message = FALSE, warning = FALSE}
-data %>% ggplot(aes(x=x, y=y)) +
+data |>  ggplot(aes(x=x, y=y)) +
   geom_point() +
   geom_smooth(method = "lm",
               se = FALSE,
               color = "red") +
   geom_smooth(data = data[-51,], 
               method = "lm", 
-              se = FALSE)
+              se = FALSE) +
+  theme_bw(base_size = 25)
 ```
 ]
 ]
 
 .pull-right-large[
 ```{r, echo=FALSE, message = FALSE, warning = FALSE}
-data %>% ggplot(aes(x=x, y=y)) +
+data |>  ggplot(aes(x=x, y=y)) +
   geom_point() +
   geom_smooth(method = "lm",
               se = FALSE,
               color = "red") +
   geom_smooth(data = data[-51,], 
               method = "lm", 
-              se = FALSE)
+              se = FALSE) +
+  theme_bw(base_size = 25)
 ```
 ]
 
@@ -380,19 +382,20 @@ data = filter(data, x >100 & x < 101)
 .pull-left-small[
 .code-small[
 ```{r, eval = FALSE, message = FALSE, warning = FALSE}
-data %>%
+data |> 
 ggplot(aes(x=x, y=y)) +
   geom_point() +
   geom_smooth(method = "lm",
               se = FALSE,
-              color = "red")
+              color = "red") +
+  theme_bw(base_size = 25)
 ```
 ]
 ]
 
 .pull-right-large[
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-data %>% ggplot(aes(x=x, y=y)) + geom_point() + geom_smooth(method = "lm", se = FALSE, color = "red")
+data |>  ggplot(aes(x=x, y=y)) + geom_point() + geom_smooth(method = "lm", se = FALSE, color = "red") + theme_bw(base_size = 25)
 ```
 ]
 
@@ -408,7 +411,7 @@ What if I told you there were scores on X could range from 97 to 103?
 .code-small[
 
 ```{r, eval = FALSE, warning=F, message=F}
-data %>%
+data |> 
 ggplot(aes(x=x, y=y)) +
   geom_point() +
   geom_smooth(method = "lm",
@@ -418,14 +421,15 @@ ggplot(aes(x=x, y=y)) +
   geom_smooth(method = "lm",
               se = FALSE,
               data = real_data,
-              color = "blue")
+              color = "blue") +
+  theme_bw(base_size = 25)
 ```
 ]
 ]
 
 .pull-right-large[
 ```{r, echo = FALSE, warning=F, message=F}
-data %>%
+data |> 
 ggplot(aes(x=x, y=y)) +
   geom_point() +
   geom_smooth(method = "lm",
@@ -435,7 +439,8 @@ ggplot(aes(x=x, y=y)) +
   geom_smooth(method = "lm",
               se = FALSE,
               data = real_data,
-              color = "blue")
+              color = "blue") +
+  theme_bw(base_size = 25)
 ```
 ]
 
@@ -457,7 +462,7 @@ data = data.frame(x,y)
 ```
 
 ```{r, fig.height = 5, warning=FALSE, message=FALSE, echo=FALSE}
-data %>% ggplot(aes(x=x, y=y)) + geom_point() + geom_smooth(method = "lm", se = FALSE, color = "red")
+data |>  ggplot(aes(x=x, y=y)) + geom_point() + geom_smooth(method = "lm", se = FALSE, color = "red") + theme_bw(base_size = 25)
 ```
 
 ---
@@ -497,7 +502,7 @@ data = rbind(m_data, f_data)
 ```
 
 ```{r, fig.height = 5, message=F, warning=F, echo=FALSE}
-data %>% ggplot(aes(x=x, y=y)) + geom_point() + geom_smooth(method = "lm", se = FALSE, color = "red")
+data %>% ggplot(aes(x=x, y=y)) + geom_point() + geom_smooth(method = "lm", se = FALSE, color = "red") + theme_bw(base_size = 25)
 ```
 
 ---
@@ -505,7 +510,7 @@ data %>% ggplot(aes(x=x, y=y)) + geom_point() + geom_smooth(method = "lm", se = 
 ## Multiple groups
 
 ```{r, fig.height = 5, message=F, warning=F, echo=FALSE}
-data %>% ggplot(aes(x=x, y=y, color = gender)) + geom_point() + geom_smooth(method = "lm", se = FALSE) + guides(color = F)
+data %>% ggplot(aes(x=x, y=y, color = gender)) + geom_point() + geom_smooth(method = "lm", se = FALSE) + guides(color = F) + theme_bw(base_size = 25)
 ```
 
 --
