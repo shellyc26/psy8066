@@ -1,5 +1,5 @@
 ---
-title: 'Psych 5066: Homework #1'
+title: 'Psych 8066: Homework #1'
 author: 'YOUR NAME HERE'
 output: 
   html_document
@@ -11,7 +11,7 @@ Please complete this assignment using the RMarkdown file provided (<a href="home
 
 There will be empty gray sections below each question. Please put all R `CODE` within these gray chunks. They will behave as normal R code. If you are asked to explain something or write a few sentences, please do that *outside* of the gray chunks. That way, when you knit, your sentences will show up as normal text, but all of your code will be in a designated code chunk.
 
-You are allowed to Google things or use Chat-GPT. *However*, if you use code from an outside source (meaning not the lecture slides or the R help documentation), then you must provide a **working link** to the website you used. You don't need to use APA formatting or anything. Just a working url. You may discuss homework assignments with your classmates; however, it is important that you complete each assignment on your own and **do not simply copy someone else’s code**. If we believe one student has copied another’s work, both students will receive a 0 on the homework assignment. Please also list at the top of the document who you worked with. 
+You may Google things. **You may NOT use artificial intelligence to generate code that you turn in**. You may discuss homework assignments with your classmates; however, it is important that you complete each assignment on your own and **do not simply copy someone else’s code**. If we believe one student has copied another’s work, both students will receive a 0 on the homework assignment. Please  list at the top of the document who you worked with. 
 
 In the instructions, when it says **_by hand_**, what we mean is that you should not use a function that is built into R to complete the task. For example, if I ask you to find the mean *by hand*, you should **not** use the `mean()` function. However, you can (and should!) use your variables. So for instance, if I ask you to find the `mean()` by hand, you may do something like `sum(variableX)/length(variableX)`. This would be an appropriate *by hand* calculation. (You don't need to type `(3 + 5 + 5 + 17) / 4`...you can still use your variables). 
 
@@ -96,8 +96,7 @@ Now make a scatterplot for each of these 3 relationships. Include a linear best 
    - Do the angles of the best fit lines correspond to the correlations that you got in Part A of this question? Why or why not?
    
    - Does a linear relationship seem to describe any of the pairwise relationships?
-   
-   - Are there any countries that stand out as being unusual by their distance from the remaining countries in these plots? Identify these countries by name and describe how they differ from the others.
+
 
 ```{r q5b}
 

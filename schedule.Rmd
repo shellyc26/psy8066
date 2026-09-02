@@ -18,8 +18,8 @@ LSR readings can be found in the free, online textbook, [*Learning Statistics wi
 | \- | 8/27 | Models |  |  |
 | 2 | 9/1 | Measurements; RMarkdown/ RProjects | LSR Ch 1 & 3 |  |
 | \- | 9/3 | Describing data | LSR Ch 5 & 6 |  |
-| 3 | 9/8 | Describing data | LSR Ch 5 & 6, [Ozer & Funder (2019)](readings/Ozer_Funder_2019.pdf) | HW 1 due |
-| \- | 9/10 | Fisher tradition & probability | LSR Ch 9 |  |
+| 3 | 9/8 | Describing data | LSR Ch 5 & 6, [Ozer & Funder (2019)](readings/Ozer_Funder_2019.pdf) |  |
+| \- | 9/10 | Fisher tradition & probability | LSR Ch 9 | HW 1 due |
 | 4 | 9/15 | Normal & binomial distributions | LSR Ch 9 |  |
 | \- | 9/17 | Sampling distributions and $t$ distributions | LSR Ch 10 |  |
 | 5 | 9/22 | **Exam 1** |  |  |

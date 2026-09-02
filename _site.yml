@@ -17,18 +17,22 @@ navbar:
         href: "lectures/4-describing_data.html"
       - text: "5-Describing Data 2"
         href: "lectures/5-describing_data.html"
+      - text: "6-Probability"
+        href: "lectures/6-probability.html"
     - text: PDF Slides
       menu:
       - text: "1-Intro"
         href: "lectures/1-intro.pdf"
       - text: "2-Models"
-        href: "lectures/2-models.html"
+        href: "lectures/2-models.pdf"
       - text: "3-Data Types"
-        href: "lectures/3-dataTypes.html"
+        href: "lectures/3-dataTypes.pdf"
       - text: "4-Describing Data 1"
-        href: "lectures/4-describing_data.html"
+        href: "lectures/4-describing_data.pdf"
       - text: "5-Describing Data 2"
-        href: "lectures/5-describing_data.html"
+        href: "lectures/5-describing_data.pdf"
+      - text: "6-Probability"
+        href: "lectures/6-probability.html"
     - text: Homework
       href: homework.html
   right:
