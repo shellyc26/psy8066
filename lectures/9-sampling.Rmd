@@ -232,11 +232,6 @@ PLAY WITH THIS!
 [Sampling distribution example](http://shiny.calpoly.sh/Sampling_Distribution/)
 
 ---
-class: inverse, middle, center
-
-# Sampling
-### Part 2
----
 
 ## Statistical Inference
 
@@ -667,9 +662,11 @@ class:inverse
 
 ## Next time...
 
-Exam 1 Review with Ran
+(Finish material if needed)
 
-Exam 1
+Lab Assignment 1
+
+Exam 1 on 9/24!
 
 
 (ahhhhhhhhhhh!)

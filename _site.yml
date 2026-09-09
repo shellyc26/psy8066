@@ -19,6 +19,12 @@ navbar:
         href: "lectures/5-describing_data.html"
       - text: "6-Probability"
         href: "lectures/6-probability.html"
+      - text: "7-Binomial Distribution"
+        href: "lectures/7-binomial.html"
+      - text: "8-Normal Distribution"
+        href: "lectures/8-normal.html"
+      - text: "9-Sampling Distributions"
+        href: "lectures/9-sampling.html"
     - text: PDF Slides
       menu:
       - text: "1-Intro"
@@ -32,7 +38,13 @@ navbar:
       - text: "5-Describing Data 2"
         href: "lectures/5-describing_data.pdf"
       - text: "6-Probability"
-        href: "lectures/6-probability.html"
+        href: "lectures/6-probability.pdf"
+      - text: "7-Binomial Distribution"
+        href: "lectures/7-binomial.pdf"
+      - text: "8-Normal Distribution"
+        href: "lectures/8-normal.pdf"
+      - text: "9-Sampling Distributions"
+        href: "lectures/9-sampling.pdf"
     - text: Homework
       href: homework.html
   right:

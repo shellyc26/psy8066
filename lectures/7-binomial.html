@@ -3,7 +3,7 @@
   <head>
     <title>Binomial Distribution</title>
     <meta charset="utf-8" />
-    <script src="libs/header-attrs-2.27/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.31/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
     <link rel="stylesheet" href="my-theme.css" type="text/css" />
   </head>
@@ -152,7 +152,7 @@ Every probability distribution has an **expected value**.
 - What is the average number of successes out of 5 flips? 
 - In 5 coin flips, what is the average number of times you'd get "heads"?
 
-&lt;img src="7-binomial_files/figure-html/binom-plot-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="7-binomial_files/figure-html/binom-plot-1.png" alt="" width="50%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -224,7 +224,7 @@ I might want to know the proportion of outcomes in the sample space that fall at
 ---
 At or below what outcome in the sample space do 75% of the outcomes fall? What is the outcome? Providing the `75%`, trying to find the `2`...
 
-&lt;img src="7-binomial_files/figure-html/binom-plot2-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="7-binomial_files/figure-html/binom-plot2-1.png" alt="" style="display: block; margin: auto;" /&gt;
 
 ---
 What proportion of outcomes in the sample space that fall at or below a given outcome? What percentage of outcomes fall at or below 2? Providing the `2`, looking for the `75%`
@@ -255,7 +255,7 @@ For example, suppose I give a 40-item multiple choice test, with each question h
 
 ---
 
-&lt;img src="7-binomial_files/figure-html/binom-plot3-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="7-binomial_files/figure-html/binom-plot3-1.png" alt="" style="display: block; margin: auto;" /&gt;
 
 ???
 I could use this distribution to help me decide if a given student is consistent with a guessing model.
@@ -316,14 +316,14 @@ The probability of getting 24 or more questions correct:
 
 Cumulatively, what proportion of guessers will fall below each score?
 
-&lt;img src="7-binomial_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="7-binomial_files/figure-html/unnamed-chunk-9-1.png" alt="" style="display: block; margin: auto;" /&gt;
 
 ???
 
 Seems safe to assume that, practically speaking, all guessers will fall below the minimally passing score.
 
 ---
-## There’s always a but
+## There’s always a "but"
 
 But, what assumptions are we making and what consequences will they have?
 
@@ -373,9 +373,9 @@ the normal distribution
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"highlightStyle": "github",
-"highlightLines": true,
-"countIncrementalSlides": false
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));

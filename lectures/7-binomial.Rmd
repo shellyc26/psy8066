@@ -400,7 +400,7 @@ data.frame(num = 0:limit, p = pbinom(q = 0:limit, size = 40, prob = .25)) %>%
 Seems safe to assume that, practically speaking, all guessers will fall below the minimally passing score.
 
 ---
-## There’s always a but
+## There’s always a "but"
 
 But, what assumptions are we making and what consequences will they have?
 

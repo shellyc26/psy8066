@@ -346,6 +346,15 @@ div.tocify {
     <li>
       <a href="lectures/6-probability.html">6-Probability</a>
     </li>
+    <li>
+      <a href="lectures/7-binomial.html">7-Binomial Distribution</a>
+    </li>
+    <li>
+      <a href="lectures/8-normal.html">8-Normal Distribution</a>
+    </li>
+    <li>
+      <a href="lectures/9-sampling.html">9-Sampling Distributions</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -371,7 +380,16 @@ div.tocify {
       <a href="lectures/5-describing_data.pdf">5-Describing Data 2</a>
     </li>
     <li>
-      <a href="lectures/6-probability.html">6-Probability</a>
+      <a href="lectures/6-probability.pdf">6-Probability</a>
+    </li>
+    <li>
+      <a href="lectures/7-binomial.pdf">7-Binomial Distribution</a>
+    </li>
+    <li>
+      <a href="lectures/8-normal.pdf">8-Normal Distribution</a>
+    </li>
+    <li>
+      <a href="lectures/9-sampling.pdf">9-Sampling Distributions</a>
     </li>
   </ul>
 </li>
@@ -493,27 +511,41 @@ class="math inline">\(t\)</span> distributions</td>
 <tr class="odd">
 <td align="center">5</td>
 <td align="center">9/22</td>
-<td align="center"><strong>Exam 1</strong></td>
+<td align="center">Lab Assignment 1</td>
 <td align="center"></td>
 <td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">-</td>
 <td align="center">9/24</td>
-<td align="center">Hypothesis testing 1</td>
-<td align="center">LSR Ch 11</td>
+<td align="center"><strong>Exam 1</strong></td>
+<td align="center"></td>
 <td align="center">HW 2 due</td>
 </tr>
 <tr class="odd">
 <td align="center">6</td>
 <td align="center">9/29</td>
-<td align="center">Hypothesis testing 2</td>
+<td align="center">Hypothesis testing 1</td>
 <td align="center">LSR Ch 11</td>
 <td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">-</td>
 <td align="center">10/1</td>
+<td align="center">Hypothesis testing 2</td>
+<td align="center">LSR Ch 11</td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td align="center">7</td>
+<td align="center">10/6</td>
+<td align="center"><em>No class – Fall Break!</em></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="center">-</td>
+<td align="center">10/8</td>
 <td align="center">Critique of NHST</td>
 <td align="center">LSR Ch 11, <a
 href="readings/Simmons_etal_2011.pdf">Simmons et al. (2011)</a>, <a
@@ -521,114 +553,98 @@ href="readings/Cumming_2014.pdf">Cumming (2014)</a></td>
 <td align="center"></td>
 </tr>
 <tr class="odd">
-<td align="center">7</td>
-<td align="center">10/6</td>
-<td align="center"><em>No Class - Fall Break!</em></td>
-<td align="center"></td>
-<td align="center"></td>
-</tr>
-<tr class="even">
-<td align="center">-</td>
-<td align="center">10/8</td>
+<td align="center">8</td>
+<td align="center">10/13</td>
 <td align="center">Open science practices</td>
 <td align="center"><a
 href="https://fivethirtyeight.com/features/science-isnt-broken/">Five
 Thirty Eight</a></td>
 <td align="center"></td>
 </tr>
-<tr class="odd">
-<td align="center">8</td>
-<td align="center">10/13</td>
-<td align="center">Chi-Square test</td>
-<td align="center">LSR Ch 12</td>
-<td align="center"></td>
-</tr>
 <tr class="even">
 <td align="center">-</td>
 <td align="center">10/15</td>
-<td align="center">One-sample tests</td>
-<td align="center">LSR Ch 13</td>
+<td align="center">Chi-Square test</td>
+<td align="center">LSR Ch 12</td>
 <td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="center">9</td>
 <td align="center">10/20</td>
-<td align="center">Comparing two means</td>
+<td align="center">One-sample tests</td>
 <td align="center">LSR Ch 13</td>
 <td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">-</td>
 <td align="center">10/22</td>
-<td align="center">Comparing dependent means</td>
+<td align="center">Comparing two means</td>
 <td align="center">LSR Ch 13</td>
 <td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="center">10</td>
 <td align="center">10/27</td>
-<td align="center">Visualizing Data</td>
-<td align="center"></td>
+<td align="center">Comparing dependent means</td>
+<td align="center">LSR Ch 13</td>
 <td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">-</td>
 <td align="center">10/29</td>
-<td align="center"><strong>Exam 2</strong></td>
+<td align="center">Lab Assignment 2</td>
 <td align="center"></td>
 <td align="center">HW 3 due</td>
 </tr>
 <tr class="odd">
 <td align="center">11</td>
 <td align="center">11/3</td>
-<td align="center">Introduction to model comparisons &amp; <span
-class="math inline">\(F\)</span>-distribution</td>
-<td align="center">LSR Ch 14</td>
+<td align="center"><strong>Exam 2</strong></td>
+<td align="center"></td>
 <td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">-</td>
 <td align="center">11/5</td>
-<td align="center">One-way ANOVA</td>
+<td align="center">Introduction to model comparisons &amp; <span
+class="math inline">\(F\)</span>-distribution</td>
 <td align="center">LSR Ch 14</td>
 <td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="center">12</td>
 <td align="center">11/10</td>
-<td align="center">Multiple comparisons &amp; contrasts</td>
-<td align="center">LSR Ch 16</td>
+<td align="center">One-way ANOVA</td>
+<td align="center">LSR Ch 14</td>
 <td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">-</td>
 <td align="center">11/12</td>
-<td align="center">Two between-subjects factors</td>
+<td align="center">Multiple comparisons &amp; contrasts</td>
 <td align="center">LSR Ch 16</td>
 <td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="center">13</td>
 <td align="center">11/17</td>
-<td align="center">Interactions &amp; ANCOVA</td>
+<td align="center">Two between-subjects factors</td>
 <td align="center">LSR Ch 16</td>
-<td align="center"></td>
+<td align="center">HW 4 due</td>
 </tr>
 <tr class="even">
 <td align="center">-</td>
 <td align="center">11/19</td>
-<td align="center">Within-subjects designs</td>
+<td align="center">Interactions &amp; ANCOVA</td>
 <td align="center">LSR Ch 16</td>
 <td align="center"></td>
 </tr>
 <tr class="odd">
 <td align="center">14</td>
 <td align="center">11/24</td>
-<td align="center">Threats to Validity</td>
-<td align="center">LSR CH 2 &amp; 4, <a
-href="readings/Cronbach_Meehl_1955.pdf">Cronbach &amp; Meehl
-(1955)</a></td>
-<td align="center">HW 4 due</td>
+<td align="center">Within-subjects designs</td>
+<td align="center">LSR Ch 16</td>
+<td align="center"></td>
 </tr>
 <tr class="even">
 <td align="center">-</td>
@@ -640,7 +656,7 @@ href="readings/Cronbach_Meehl_1955.pdf">Cronbach &amp; Meehl
 <tr class="odd">
 <td align="center">15</td>
 <td align="center">12/1</td>
-<td align="center">Threats to Validity Cont.</td>
+<td align="center">Lab Assignment 3</td>
 <td align="center"></td>
 <td align="center">HW 5 due</td>
 </tr>
@@ -697,6 +713,14 @@ to get you going.</strong></p>
 <ul>
 <li>5 Homework: 3% each, 15% total</li>
 <li>Exams: 25% for the first exam, 30% for exams 2 and 3, 85% total</li>
+</ul>
+<p>NOTE: On September 9th, Shelly changed the graded material
+percentages. Grades will be calculated BOTH WAYS and the highest overall
+grade will be kept.</p>
+<ul>
+<li>5 Homework: 3% each, 15% total</li>
+<li>3 Lab Assignments (in-class): 5% each, 15% total</li>
+<li>Exams: 20% for the first exam, 25% for exams 2 and 3, 70% total</li>
 </ul>
 <div id="homework-assignments" class="section level3">
 <h3>Homework assignments</h3>

@@ -3,7 +3,7 @@
   <head>
     <title>Normal Distribution</title>
     <meta charset="utf-8" />
-    <script src="libs/header-attrs-2.27/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.31/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
     <link rel="stylesheet" href="my-theme.css" type="text/css" />
   </head>
@@ -72,7 +72,7 @@ In the *binomial distribution*, each outcome in the sample space has a probabili
 
 In the *normal distribution*, there are an infinite number of values, each having a probability of 0, but the probability that some value will occur is 1.  **The area under the curve is 1**.
 
-The density values are derived to insure that the area under the density curve is 1.  They have no inherent meaning beyond that.
+The density values are derived to ensure that the area under the density curve is 1.  They have no inherent meaning beyond that.
 
 ---
 ## Probabilities - same but different
@@ -153,7 +153,7 @@ It will be very, very small.
 
 ---
 
-&lt;img src="8-normal_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="8-normal_files/figure-html/unnamed-chunk-8-1.png" alt="" style="display: block; margin: auto;" /&gt;
 
 ---
 All of these distributions are normal and have an equivalent area (proportion) that falls between a standard deviation below and above their respective means.
@@ -261,11 +261,11 @@ Note for the standard deviation property
 .pull-right[
 
 ``` r
-starwars %&gt;% 
-  select(1:2) %&gt;% 
-  mutate_at(2, ~round(x = scale(.), digits = 2)) %&gt;% 
-  head(.) %&gt;% 
-  print(.)
+starwars |&gt;  
+  select(1:2) |&gt;  
+  mutate_at(2, ~round(x = scale(.), digits = 2)) |&gt;  
+  head() |&gt;  
+  print()
 ```
 
 ```
@@ -312,7 +312,7 @@ What does .4721 mean?
   - The probability of obtaining a z-score less than -.07
   - The area under the curve from -.07, moving left
   
-&lt;img src="8-normal_files/figure-html/unnamed-chunk-13-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="8-normal_files/figure-html/unnamed-chunk-13-1.png" alt="" width="60%" style="display: block; margin: auto;" /&gt;
 
 ---
   
@@ -344,7 +344,7 @@ The probability of getting a z-score of -.07 or greater?
 ]
 
 
-&lt;img src="8-normal_files/figure-html/unnamed-chunk-15-1.png" width="68%" style="display: block; margin: auto;" /&gt;
+&lt;img src="8-normal_files/figure-html/unnamed-chunk-15-1.png" alt="" width="68%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -362,7 +362,7 @@ pnorm(q = -2.25, mean = 0, sd = 1)
 ```
 ]
 
-&lt;img src="8-normal_files/figure-html/unnamed-chunk-17-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="8-normal_files/figure-html/unnamed-chunk-17-1.png" alt="" width="60%" style="display: block; margin: auto;" /&gt;
 
 ---
 .small[
@@ -379,7 +379,7 @@ Probability of getting a z-score of -2.25 or something larger
 ]
 
 
-&lt;img src="8-normal_files/figure-html/unnamed-chunk-19-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="8-normal_files/figure-html/unnamed-chunk-19-1.png" alt="" width="60%" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -399,9 +399,9 @@ class: inverse
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"highlightStyle": "github",
-"highlightLines": true,
-"countIncrementalSlides": false
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));

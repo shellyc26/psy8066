@@ -83,7 +83,7 @@ In the *binomial distribution*, each outcome in the sample space has a probabili
 
 In the *normal distribution*, there are an infinite number of values, each having a probability of 0, but the probability that some value will occur is 1.  **The area under the curve is 1**.
 
-The density values are derived to insure that the area under the density curve is 1.  They have no inherent meaning beyond that.
+The density values are derived to ensure that the area under the density curve is 1.  They have no inherent meaning beyond that.
 
 ---
 ## Probabilities - same but different
@@ -371,11 +371,11 @@ starwars[1:6,1:2]
 
 .pull-right[
 ```{r}
-starwars %>% 
-  select(1:2) %>% 
-  mutate_at(2, ~round(x = scale(.), digits = 2)) %>% 
-  head(.) %>% 
-  print(.)
+starwars |>  
+  select(1:2) |>  
+  mutate_at(2, ~round(x = scale(.), digits = 2)) |>  
+  head() |>  
+  print()
 ```
 
 ]

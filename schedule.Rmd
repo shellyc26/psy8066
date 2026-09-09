@@ -22,27 +22,27 @@ LSR readings can be found in the free, online textbook, [*Learning Statistics wi
 | \- | 9/10 | Fisher tradition & probability | LSR Ch 9 | HW 1 due |
 | 4 | 9/15 | Normal & binomial distributions | LSR Ch 9 |  |
 | \- | 9/17 | Sampling distributions and $t$ distributions | LSR Ch 10 |  |
-| 5 | 9/22 | **Exam 1** |  |  |
-| \- | 9/24 | Hypothesis testing 1 | LSR Ch 11 | HW 2 due |
-| 6 | 9/29 | Hypothesis testing 2 | LSR Ch 11 |  |
-| \- | 10/1 | Critique of NHST | LSR Ch 11, [Simmons et al. (2011)](readings/Simmons_etal_2011.pdf), [Cumming (2014)](readings/Cumming_2014.pdf) |  |
-| 7 | 10/6 | *No Class - Fall Break!* |  |  |
-| \- | 10/8 | Open science practices | [Five Thirty Eight](https://fivethirtyeight.com/features/science-isnt-broken/) |  |
-| 8 | 10/13 | Chi-Square test | LSR Ch 12 |  |
-| \- | 10/15 | One-sample tests | LSR Ch 13 |  |
-| 9 | 10/20 | Comparing two means | LSR Ch 13 |  |
-| \- | 10/22 | Comparing dependent means | LSR Ch 13 |  |
-| 10 | 10/27 | Visualizing Data |  |  |
-| \- | 10/29 | **Exam 2** |  | HW 3 due |
-| 11 | 11/3 | Introduction to model comparisons & $F$-distribution | LSR Ch 14 |  |
-| \- | 11/5 | One-way ANOVA | LSR Ch 14 |  |
-| 12 | 11/10 | Multiple comparisons & contrasts | LSR Ch 16 |  |
-| \- | 11/12 | Two between-subjects factors | LSR Ch 16 |  |
-| 13 | 11/17 | Interactions & ANCOVA | LSR Ch 16 |  |
-| \- | 11/19 | Within-subjects designs | LSR Ch 16 |  |
-| 14 | 11/24 | Threats to Validity | LSR CH 2 & 4, [Cronbach & Meehl (1955)](readings/Cronbach_Meehl_1955.pdf) | HW 4 due |
+| 5 | 9/22 | Lab Assignment 1 |  |  |
+| \- | 9/24 | **Exam 1** |  | HW 2 due |
+| 6 | 9/29 | Hypothesis testing 1 | LSR Ch 11 |  |
+| \- | 10/1 | Hypothesis testing 2 | LSR Ch 11 |  |
+| 7 | 10/6 | *No class – Fall Break!* |  |  |
+| \- | 10/8 | Critique of NHST | LSR Ch 11, [Simmons et al. (2011)](readings/Simmons_etal_2011.pdf), [Cumming (2014)](readings/Cumming_2014.pdf) |  |
+| 8 | 10/13 | Open science practices | [Five Thirty Eight](https://fivethirtyeight.com/features/science-isnt-broken/) |  |
+| \- | 10/15 | Chi-Square test | LSR Ch 12 |  |
+| 9 | 10/20 | One-sample tests | LSR Ch 13 |  |
+| \- | 10/22 | Comparing two means | LSR Ch 13 |  |
+| 10 | 10/27 | Comparing dependent means | LSR Ch 13 |  |
+| \- | 10/29 | Lab Assignment 2 |  | HW 3 due |
+| 11 | 11/3 | **Exam 2** |  |  |
+| \- | 11/5 | Introduction to model comparisons & $F$-distribution | LSR Ch 14 |  |
+| 12 | 11/10 | One-way ANOVA | LSR Ch 14 |  |
+| \- | 11/12 | Multiple comparisons & contrasts | LSR Ch 16 |  |
+| 13 | 11/17 | Two between-subjects factors | LSR Ch 16 | HW 4 due |
+| \- | 11/19 | Interactions & ANCOVA | LSR Ch 16 |  |
+| 14 | 11/24 | Within-subjects designs | LSR Ch 16 |  |
 | \- | 11/26 | *No Class – Happy Thanksgiving!* |  |  |
-| 15 | 12/1 | Threats to Validity Cont. |  | HW 5 due |
+| 15 | 12/1 | Lab Assignment 3 |  | HW 5 due |
 | \- | 12/3 | **Exam 3** |  |  |
 
 # Overview
@@ -65,6 +65,12 @@ Your final grade is comprised of three components:
 
 - 5 Homework: 3% each, 15% total
 - Exams: 25% for the first exam, 30% for exams 2 and 3, 85% total
+
+NOTE: On September 9th, Shelly changed the graded material percentages. Grades will be calculated BOTH WAYS and the highest overall grade will be kept.
+
+- 5 Homework: 3% each, 15% total
+- 3 Lab Assignments (in-class): 5% each, 15% total
+- Exams: 20% for the first exam, 25% for exams 2 and 3, 70% total
 
 ### Homework assignments
 
