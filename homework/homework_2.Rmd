@@ -11,9 +11,9 @@ Please complete this assignment using the RMarkdown file provided (<a href="home
 
 There will be empty gray sections below each question. Please put all R `CODE` within these gray chunks. They will behave as normal R code. If you are asked to explain something or write a few sentences, please do that *outside* of the gray chunks. That way, when you knit, your sentences will show up as normal text, but all of your code will be in a designated code chunk.
 
-You are allowed to Google things and/or use ChatGPT. *However*, if you use code from an outside source (meaning not the lecture slides or the R help documentation), then you must provide a **working link** to the website you used and/or the "conversation" you had. You don't need to use APA formatting or anything. Just a working url. You may discuss homework assignments with your classmates; however, it is important that you complete each assignment on your own and **do not simply copy someone else’s code**. If we believe one student has copied another’s work, both students will receive a 0 on the homework assignment. Please also list at the top of the document who you worked with. 
+You may Google things. **You may NOT use artificial intelligence to generate code that you turn in**. You may discuss homework assignments with your classmates; however, it is important that you complete each assignment on your own and **do not simply copy someone else’s code**. If we believe one student has copied another’s work, both students will receive a 0 on the homework assignment. Please  list at the top of the document who you worked with. 
 
-In the instructions, when it says **_by hand_**, what we mean is that you should not use a function that is built into R to complete the task. For example, if I ask you to find the mean *by hand*, you should **not** use the `mean()` function. However, you can (and should!) use your variables. So for instance, if I ask you to find the `mean()` by hand, you may do something like `sum(variableX)/length(variableX)`. This would be an appropriate *by hand* calculation. (You don't need to type `(3 + 5 + 5 + 17) / 4`...you can still use your variables). 
+In the instructions, when it says **_by hand_**, what we mean is that you should not use a function that is built into R to complete the task. For example, if I ask you to find the mean *by hand*, you should **not** use the `mean()` function. However, you can (and should!) use your variables. So for instance, if I ask you to find the `mean()` by hand, you may do something like `sum(variableX)/length(variableX)`. This would be an appropriate *by hand* calculation. (You don't need to type `(3 + 5 + 5 + 17) / 4`...you can still use your variables).
 
 **Data:** Some of the questions in this assignment use the dataset referred to as `homework-avengers`. [Link to data here.](homework-avengers.csv) This dataset contains data on every movie in the Marvel Cinematic Universe from *Iron Man* (2008) through *Captain Marvel* (2019), including the budget, number of screens it was released on, year of release, and gross earnings in the United States (`DomesticGross`), over the first weekend (`WeekendGross`), internationally (`OverseasGross`) and total (`WorldwideGross`). It also contains a character variable for each character (pun not intended) in the MCU, which takes the value of `"yes"` if that character was in that movie and `"no"` if that character was not in that movie.
 
@@ -24,43 +24,46 @@ Questions 1 - 3 will use the avengers dataset. No dataset is necessary for Quest
 
 ## Setup
 Create your own "setup" chunk here where you import the `homework-avengers.csv` file and load any packages you might require. You may name the data.frame whatever you'd like. If you would like to recode any variables, do it here (not necessary, but might make your life easier). Finally, make sure that all variables that ought to be factors are treated as such.
+```{r setup, warning=FALSE, message=FALSE}
+
+```
+
 
  
 ## Question 1 
 Calculate the correlation between Budget and Running Time in the avengers data set. Do this "by hand" (aka do not use the `cor()` function! You may use `cor()` after you have done this "by hand" to check your work, if you wish). 
+```{r q1}
+
+```
+
 
 ## Question 2
-Use the `homework-avengers` to answer the following questions (Note: you may choose to use tidyverse functions or not, whichever make more sense to you):
 
-* What's the average amount of money Marvel makes per movie?
+You randomly sample the cell phone records of 5000 college students to determine the number of text messages sent during a typical school day (Monday through Friday). You find the mean to be 124.6 with a standard deviation of 21.2. What is the 99% confidence interval for the true mean based on these data? Interpret this confidence interval?
+```{r q2}
 
-* How many movies is Nick Fury in?
+```
 
-* Do Black Widow movies make more domestically or internationally?
 
 ## Question 3
 
-Which avengers character do you believe brings in the most money? Using the `homework-avengers` dataset, create a figure that demonstrates the relationship between budget and worldwide gross earnings. Color the geoms differently if the movie includes your predicted character. Be sure your graph includes a title and appropriate labels. 
+Suppose you live in a state with a lottery system that selects 6 numbers from 36 balls (labeled 1-36) to determine a winner. The order of selection does not influence the outcome. To win, you simply have to match the 6 numbers that the lottery commission selects. What are the odds of you winning that lottery by purchasing one ticket?
+```{r q3}
 
-* Based on this graph, what do you conclude regarding whether movies including this character make more than projected? 
+```
 
 
 ## Question 4
 
-You randomly sample the cell phone records of 5000 college students to determine the number of text messages sent during a typical school day (Monday through Friday). You find the mean to be 124.6 with a standard deviation of 21.2. What is the 99% confidence interval for the true mean based on these data? Interpret this confidence interval?
-
-
-## Question 5
-
-Suppose you live in a state with a lottery system that selects 6 numbers from 36 balls (labeled 1-36) to determine a winner. The order of selection does not influence the outcome. To win, you simply have to match the 6 numbers that the lottery commission selects. What are the odds of you winning that lottery by purchasing one ticket?
-
-
-## Question 6
-
-Psychological and educational tests, including the MMPI (Minnesota Multiphasic Personality Inventory), are often designed so they have a mean of 50 and a standard deviation of 10.
+The MMPI (Minnesota Multiphasic Personality Inventory), was designed so that it has a mean of 50 and a standard deviation of 10.
 
 * The MMPI says that scores that are two standard deviations or more above the mean may indicate pathology. Among a thousand people, how many would be expected to have scores two standard deviations or more above the mean?
 
 * What proportion would be expected to score 68 or above?
 
 * What proportion would be expected to score between 53 and 63?
+
+```{r q4}
+
+```
+

@@ -15,7 +15,7 @@ Homework assignments will appear here. You'll be able to access the assignment, 
 - Due on **9/10 by 9:30am**
 
 ## Homework 2
-- Homework 2 will be posted here
+- [Homework 2 is here](homework/homework_2.html)
 - Due on **9/24 by 9:30am**
 
 ## Homework 3
