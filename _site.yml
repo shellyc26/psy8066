@@ -25,6 +25,10 @@ navbar:
         href: "lectures/8-normal.html"
       - text: "9-Sampling Distributions"
         href: "lectures/9-sampling.html"
+      - text: "10-NHST I"
+        href: "lectures/10-nhst.html"
+      - text: "11-NHST II"
+        href: "lectures/11-nhst.html"
     - text: PDF Slides
       menu:
       - text: "1-Intro"
@@ -45,6 +49,10 @@ navbar:
         href: "lectures/8-normal.pdf"
       - text: "9-Sampling Distributions"
         href: "lectures/9-sampling.pdf"
+      - text: "10-NHST I"
+        href: "lectures/10-nhst.pdf"
+      - text: "11-NHST II"
+        href: "lectures/11-nhst.pdf"
     - text: Homework
       href: homework.html
   right:
