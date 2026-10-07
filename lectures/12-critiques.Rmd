@@ -57,7 +57,7 @@ Many will describe the current "replication crisis" or "reproducibility crisis" 
 - [Simmons, Nelson, & Simonsohn. (2011). False-positive psychology. ](../readings/Simmons_etal_2011.pdf)
 
 
-But the reality is that NHST has always had its critics. And it's not for lack of eloquence that they have been ignored...
+But the reality is that NHST has always had its critics...
 
 ---
 

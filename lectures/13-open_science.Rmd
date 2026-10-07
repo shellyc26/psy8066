@@ -185,45 +185,9 @@ what you see is what you get editor
 
 ## Open Science Framework (OSF.io)
 
-* Another repository, also includes version control
-  * Reproducibility
+- CHANGED AS OF 2026
 
-* Doesn't use code/terminal to update files
-  * Drag and drop, or linked with other repository (Dropbox, Box, Google Drive, etc)
-  
-* Also great for collaborations
-
-* Easy to navigate
-
-* Can be paired with applications you (should) already use
-
----
-
-class: center
-
-![](images/osf.png)
----
-## PsyArXiv
-
-.pull-left[
-![](images/psyarxiv.png)
-
-* preprint = the pre-copyedited version of your manuscript
-
-* journals have different policies regarding what you can post. It's always a good idea to [check](http://sherpa.ac.uk/romeo/index.php).
-
-
-]
-
-.pull-right[
-OSF connects to PsyArXiv, which is the primary preprint server for psychology
-
-* Make your work available to the public (equity and inclusion)
-
-* Post reports of work that can't get published (avoid the file drawer, improve everyone's work)
-
-* Even citable in journals with doi
-]
+- Mainly used for study registration (pre-registration) and linking research records 
 
 ---
 
@@ -315,6 +279,30 @@ Many journals now allow RRs, and even RRR (registered **replication** reports)
 
 ---
 
+## PsyArXiv
+
+.pull-left[
+![](images/psyarxiv.png)
+
+* preprint = the pre-copyedited version of your manuscript
+
+* journals have different policies regarding what you can post. It's always a good idea to [check](http://sherpa.ac.uk/romeo/index.php).
+
+
+]
+
+.pull-right[
+OSF connects to PsyArXiv, which is the primary preprint server for psychology
+
+* Make your work available to the public (equity and inclusion)
+
+* Post reports of work that can't get published (avoid the file drawer, improve everyone's work)
+
+* Even citable in journals with doi
+]
+
+---
+
 ## Meta-science tools
 
 New methods of conducting science on science -- often developed to find fraud, but super useful for detecting errors
@@ -345,7 +333,9 @@ The Psychological Science Accelerator is a globally distributed network of psych
 
 ]
 
-Traditional status hierarchies are being upset. Many early career researchers have contributed to open science, even as graduate students. 
+Traditional status hierarchies are being upset. Many early career researchers have contributed to open science.
+
+SIPS welcomes **graduate students**
 
 ???
 society for the improvement of psychological science

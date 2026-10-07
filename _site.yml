@@ -29,6 +29,10 @@ navbar:
         href: "lectures/10-nhst.html"
       - text: "11-NHST II"
         href: "lectures/11-nhst.html"
+      - text: "12-Critiques of NHST"
+        href: "lectures/12-critiques.html"
+      - text: "13-Open Science"
+        href: "lectures/13-open_science.html"
     - text: PDF Slides
       menu:
       - text: "1-Intro"
@@ -53,6 +57,10 @@ navbar:
         href: "lectures/10-nhst.pdf"
       - text: "11-NHST II"
         href: "lectures/11-nhst.pdf"
+      - text: "12-Critiques of NHST"
+        href: "lectures/12-critiques.pdf"
+      - text: "13-Open Science"
+        href: "lectures/13-open_science.pdf"
     - text: Homework
       href: homework.html
   right:
