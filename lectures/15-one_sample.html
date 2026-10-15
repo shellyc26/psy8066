@@ -3,7 +3,7 @@
   <head>
     <title>One-sample hypothesis tests</title>
     <meta charset="utf-8" />
-    <script src="libs/header-attrs-2.27/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.31/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
     <link rel="stylesheet" href="my-theme.css" type="text/css" />
   </head>
@@ -111,7 +111,7 @@ The heavier tails of the t-distribution, especially for small *N*, are the penal
 
 * He developed the *t*-test, to test small samples of beer against a population with an unknown standard deviation.
   
-  * Probably had input from Karl Pearson and Ronald Fisher
+  * In Pearson's lab and then had input from Fisher
   
 * Published this as "Student" because Guinness wouldn't let him share company secrets. 
 
@@ -127,13 +127,18 @@ The heavier tails of the t-distribution, especially for small *N*, are the penal
 |Probability distribution | standard normal | t |
 | DF | none | `\(N-1\)` |
 | Tails | One or two | One or two |
-| Critical value ( `\(\alpha = .05, two-tailed\)` | 1.96 | Depends on DF |
+| Critical value `\(\alpha = .05, two-tailed\)` | 1.96 | Depends on DF |
 
 ---
 
 ## Always Assuming...
 
-**Normality.** We assume the population distribution is normal. If we don't meet this assumption --&gt; non-parametric tests. (Wilcoxon signed-rank test)
+**Normality.** The observations are independent draws from a normally distributed _population_
+- This does NOT have to do with the sample
+- Due to the CLT, if your sample size is large, your sampling distribution will be approximately normal. As a result this test is **robust** to violations of normality
+- If it's really wonky --&gt; non-parametric tests can help (not the same exact question; Wilcoxon signed-rank test)
+
+--
 
 **Independence.** Observations in the dataset are not associated with one another. Put another way, collecting a score from Participant A doesn't tell me anything about what Participant B will say. They are generated independently.
 
@@ -148,7 +153,7 @@ Using the same Census at School data, we find that Missouri students who partici
 
 ``` r
 library(tidyverse)
-school %&gt;% 
+school |&gt; 
   summarize(meanMemory = mean(Score_in_memory_game),
             sdMemory = sd(Score_in_memory_game))
 ```
@@ -178,12 +183,14 @@ Using the same Census at School data, we find that Missouri students who partici
 
 **Hypotheses**
 
-`\(H_0: 45.05 (\mu) = 45.93 (\bar{X})\)`
+`\(H_0: \mu_{Missouri} = 45.05\)`
 
-`\(H_1: 45.05 (\mu) \neq 45.93 (\bar{X})\)`
+`\(H_1: \mu_{Missouri} \neq 45.05\)`
 
 ---
+&lt;img src="15-one_sample_files/figure-html/unnamed-chunk-4-1.png" alt="" style="display: block; margin: auto;" /&gt;
 
+---
 `$$\mu = 45.05$$`
 
 `$$N = 51$$`
@@ -260,7 +267,8 @@ Cohen suggested one of the most common effect size estimates—the standardized 
 
 --
 
-Cohen’s *d* is in the standard deviation (*Z*) metric. Why does this matter?
+- Cohen’s *d* is in the standard deviation (*Z*) metric. Why does this matter?
+- Technically it can be + or -. This depends on DIRECTION. Your interpretation matters a lot.
 
 
 ---
@@ -280,28 +288,27 @@ Cohens’s *d* for these data is .068.  In other words, the sample mean differs 
 
 --
 
-Not bounded by 1 the way a correlation is bounded
+- Not bounded by 1 the way a correlation is bounded
+- Benchmarks are trivial at best!
 ---
 
 Another useful metric is the overlap between the two distributions -- the smaller the overlap, the farther apart the distributions
 
-![](15-one_sample_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+![](15-one_sample_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
 
 ---
 
 ## You Try!
 
-Download the data: [sample data](../data/cenus_at_school_missouri.csv)
+Download the data: [sample data](../data/census_at_school_missouri.csv)
 
 
 ``` r
 library(tidyverse)
-school_pollution = read.csv(here("data/cenus_at_school_missouri.csv"))
-school_pollution = school %&gt;%
+library(here)
+school_pollution = read.csv(here("data/census_at_school_missouri.csv")) |&gt; 
   filter(!is.na(Importance_reducing_pollution))
 ```
-
-.small[ You'll need to change the working directory to wherever you downloaded the file]
 
 ---
 
@@ -324,7 +331,7 @@ Using the same data:
 
 --
 
-**Step 3**: Calculate Cohen's *D* "by hand". Interpret!
+**Step 3**: Calculate Cohen's *d* "by hand". Interpret!
 
 ---
 ### Let's do it together
@@ -333,7 +340,7 @@ Using the same data:
 
 
 ``` r
-school_pollution %&gt;% 
+school_pollution |&gt; 
   summarize(meanPollution = round(mean(Importance_reducing_pollution),
                                   digits = 3),
             sdPollution = round(sd(Importance_reducing_pollution),
@@ -393,7 +400,7 @@ N = nrow(school_pollution)
 
 --
 
-The probability of obtaining a test statistic of -1.032 or more extreme, given the null hypothesis is true is .307. This is above our standard threshold of .05. We therefore cannot reject the null hypothesis. We retain the null hypothesis that states that our sample mean and population mean are the same. 
+The probability of obtaining a test statistic of -1.032 or more extreme, given the null hypothesis is true is .307. This is above our standard threshold of .05. We therefore cannot reject the null hypothesis that the mean of Missouri is 762.52.
 
 ---
 **Step 2b**: Get the 95% CIs. Interpret
@@ -426,12 +433,38 @@ ci_ub_t
 
 --
 
-If we carried out random sampling a large number of times, and each time we calculated the 95% confidence interval, we would expect 95% of those intervals to contain the true population mean, which is likely between 633 and 804
+If we carried out random sampling a large number of times, and each time we calculated the 95% confidence interval, we would expect 95% of those intervals to contain the true population mean.
 
---
+---
+**Step 2b**: Get the 95% CIs. Interpret
 
-$$ t(48) = -1.032 \\
-CI_{95}[633.249, 804.097] $$
+`\(\bar{X} \pm [t_{.975, df}\frac{\hat{\sigma}}{\sqrt{N}}]\)`
+
+
+``` r
+# we have N stored from previous slide
+xbar = 718.673
+sem = 297.403/sqrt(49)
+
+ci_lb_t = xbar - sem * qt(p = .975, df = N-1)
+ci_ub_t = xbar + sem * qt(p = .975, df = N-1)
+
+ci_lb_t
+```
+
+```
+## [1] 633.2489
+```
+
+``` r
+ci_ub_t
+```
+
+```
+## [1] 804.0971
+```
+
+The CI shows that while the data are not inconsistent with a population mean of 762.52, they are also consistent with means anywhere from 633 (lower bound) to 804 (upper bound).
 
 ---
 **Step 3**: Get Cohen's *d*. Interpret
@@ -459,7 +492,7 @@ CI_{95}[633.249, 804.097] \\
 
 --
 
-The standardized difference in means is quite small, with a Cohen's *d* equal to 0.147. According to Cohen (1988), this is considered a small effect size. 
+The standardized difference in means doesn't even reach "small", with a Cohen's *d* equal to 0.147. A negligible difference of ~.15 SD units. 
 
 ---
 
@@ -503,7 +536,8 @@ How often will you conducted a one-sample *t*-test on raw data?
 
 --
 
-* (Probably) never
+* Eh. Not that often
+* Some things are a one-sample *t*-test in disguise 😉
 
 --
 
@@ -577,37 +611,6 @@ summary(model)
 ## Residual standard error: 297.4 on 48 degrees of freedom
 ```
 
-
----
-
-
-``` r
-model = lm(Petal.Width ~ Species, data = iris)
-summary(model)
-```
-
-```
-## 
-## Call:
-## lm(formula = Petal.Width ~ Species, data = iris)
-## 
-## Residuals:
-##    Min     1Q Median     3Q    Max 
-## -0.626 -0.126 -0.026  0.154  0.474 
-## 
-## Coefficients:
-##                   Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)        0.24600    0.02894    8.50 1.96e-14 ***
-## Speciesversicolor  1.08000    0.04093   26.39  &lt; 2e-16 ***
-## Speciesvirginica   1.78000    0.04093   43.49  &lt; 2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 0.2047 on 147 degrees of freedom
-## Multiple R-squared:  0.9289,	Adjusted R-squared:  0.9279 
-## F-statistic:   960 on 2 and 147 DF,  p-value: &lt; 2.2e-16
-```
-
 ---
 
 ## If time...
@@ -623,15 +626,13 @@ class: inverse
 # Next time...
 
 Comparing two means
-
-![](images/jolo.png)
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"highlightStyle": "github",
-"highlightLines": true,
-"countIncrementalSlides": false
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));

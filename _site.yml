@@ -35,6 +35,10 @@ navbar:
         href: "lectures/13-open_science.html"
       - text: "14-ChiSquare"
         href: "lectures/14-chisq.html"
+      - text: "15-tTests1"
+        href: "lectures/15-one_sample.html"
+      - text: "16-tTests2"
+        href: "lectures/16-two_means_I.html"
     - text: PDF Slides
       menu:
       - text: "1-Intro"
@@ -65,6 +69,10 @@ navbar:
         href: "lectures/13-open_science.pdf"
       - text: "14-ChiSquare"
         href: "lectures/14-chisq.pdf"
+      - text: "15-tTests1"
+        href: "lectures/15-one_sample.pdf"
+      - text: "16-tTests2"
+        href: "lectures/16-two_means_I.pdf"
     - text: Homework
       href: homework.html
   right:

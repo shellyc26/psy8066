@@ -3,7 +3,7 @@
   <head>
     <title>Comparing Means I</title>
     <meta charset="utf-8" />
-    <script src="libs/header-attrs-2.27/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.31/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
     <link rel="stylesheet" href="my-theme.css" type="text/css" />
   </head>
@@ -78,7 +78,7 @@ Two main methods of calculating the *SE*:
 
 1. __Student's *t*-test__ is used when the variances of each sample are (roughly) the same. In many cases, slightly more powerful test but the **pooled variance** will be biased toward the sample with the larger sample size.
 
-2. __Welch's *t*-test__ if the variances are NOT (roughly) the same. Slightly less powerful. You don't pool the variances int he same way
+2. __Welch's *t*-test__ if the variances are NOT (roughly) the same. Slightly less powerful. You don't pool the variances in the same way
 ---
 
 ## Assumptions
@@ -224,7 +224,7 @@ $$ \sigma_D= 1.73\sqrt{\frac{1}{500} + \frac{1}{35}} = 0.302$$
 With this information, we can build a sampling distribution
 
 
-![](16-two_means_I_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+&lt;img src="16-two_means_I_files/figure-html/unnamed-chunk-5-1.png" alt="" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -279,7 +279,7 @@ t.test(Candy ~ Age, data = trickRtreat, var.equal = TRUE)
 ## Confidence Intervals 
 Why stop there? We can also calculate confidence intervals of the mean difference
 
-Confidence intervals are used to communicate the precision in how well our statistic estimates the parameter. As a reminder, they are grounded in frequentist probability: if we repeated our experiment or sampling infinitely, we would expect that 95% of our 95% confidence intervals would capture the true population parameter.
+Confidence intervals are used to communicate the precision in how well our statistic estimates the parameter. As a reminder, they are grounded in frequentist probability: if we repeated our experiment or sampling infinitely, we would expect that 95% of our intervals would capture the true population parameter.
 
 In an independent sample's *t*-test, we calculated three statistics, and so you can construct three different confidence intervals. Yay.
 
@@ -447,16 +447,9 @@ psych::describeBy(trickRtreat$Candy, group = trickRtreat$Age)
 ---
 
 
-``` r
-plot_data &lt;- Rmisc::summarySE(trickRtreat, "Candy", "Age")
-plot_data %&gt;% 
-  ggplot(aes(x = Age, y = Candy, fill=Age)) + 
-  geom_bar(stat = "identity") + ggtitle("Amount of Candy Obtained by Age Group") + 
-  geom_errorbar(aes(ymin=Candy-ci, ymax=Candy+ci), width = .2) + xlab("Age Group") + scale_y_continuous(breaks=seq(5,16,1)) + coord_cartesian( ylim = c(5,16))
-```
 
 
-![](16-two_means_I_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+&lt;img src="16-two_means_I_files/figure-html/unnamed-chunk-15-1.png" alt="" style="display: block; margin: auto;" /&gt;
 
 
 
@@ -495,7 +488,7 @@ Almost all the variability in Kids' candy scores are contained within Adults' in
 ---
 ## Welch's
 
-This is where Welch's comes in handy (default)
+This is where Welch's comes in handy (default in `R`)
 
 ``` r
 t.test(Candy ~ Age, data = trickRtreat, var.equal = F) #var.equal = F uses Welch's test, although it's also the default, so you don't need to type it
@@ -519,35 +512,15 @@ With Welch's test, adults do not get significantly more candy than kids on Hallo
 We can perform a significance test of homogeneity of variance as reassurance that the variances are indeed unequal. 
 ---
 
-## Levene's Test for Homogeneity of Variance
+## How do you know if your variances are equal?
 
-Homogeneity of variance can be checked with Levene’s procedure.  It tests the null hypothesis that the variances for two or more groups are equal (or within sampling variability of each other): 
-
-`$$H_0: \sigma^2_1 = \sigma^2_2$$`
-`$$H_A: \sigma^2_1 \neq \sigma^2_2$$`
-???
-Levene's test can be expanded to more than two variances; in this case, the alternative hypothesis is that at least one variance is different from at least one other variance.So a significant F value means a significant departure from homogeneity of variance. 
-
-Levene's produces a statistic, *W*, that is *F* distributed with degrees of freedom of `\(k-1\)` and `\(N-k\)`.
-
----
-
-
-``` r
-car::leveneTest(Candy~as.factor(Age), data = trickRtreat, center = "mean")
-```
-
-```
-## Levene's Test for Homogeneity of Variance (center = "mean")
-##        Df F value    Pr(&gt;F)    
-## group   1   301.3 &lt; 2.2e-16 ***
-##       533                      
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-```
-Levene’s test gets more powerful as sample size increases. So unless your two variances are *exactly* equal to each other (and if they are, you don't need to do a test), your test will be "significant" with a large enough sample. Part of the analysis has to be an eyeball test -- is this "significant" because they are truly different, or because I have many subjects. 
+- A procedure exists. It's called **Levene's Test for Homogeneity of Variance**
+- Levene’s test gets more powerful as sample size increases. So unless your two variances are *exactly* equal to each other (and if they are, you don't need to do a test), your test will be "significant" with a large enough sample.
+- Part of the analysis has to be an eyeball test -- is this "significant" because they are truly different, or because I have many participants 
 
 Don't need to base decision of Welch or Student based on a significance test. Utilize some of the tools we used earlier (looking at SDs, visualizations of spread and confidence intervals)
+
+**Important**: You lose almost nothing by using Welch's, which is why it is the default in `R`. 
 ---
 ### Normality
 
@@ -571,18 +544,6 @@ But...
 
 ---
 .code-small[
-
-``` r
-shapiro.test(x = trickRtreat$Candy)
-```
-
-```
-## 
-## 	Shapiro-Wilk normality test
-## 
-## data:  trickRtreat$Candy
-## W = 0.88625, p-value &lt; 2.2e-16
-```
 
 ``` r
 shapiro.test(x = trickRtreat$Candy[trickRtreat$Age == "Adult"])
@@ -609,7 +570,7 @@ shapiro.test(x = trickRtreat$Candy[trickRtreat$Age == "Kid"])
 ```
 ]
 
-It's obvious that this isn't normal because the two groups have very different variabilities. It might seem surprising that Kids' significantly deviates from normalty, but we have a lot of Kids in the group.  
+It's obvious that this isn't normal because the two groups have very different variability. It might seem surprising that Kids' significantly deviates from normality, but we have a lot of Kids in the group.  
 ---
 #### What if I don't meet the normality assumption?
 Non-parametric version of the independent samples *t*-test is the **Wilcoxon sum rank test**.  
@@ -639,7 +600,7 @@ Significance isn't a great proxy for meaningfulness or size of an effect. Many f
 
 **Cohen's d** is a standardized mean difference and is one of the most common effect size estimate. Easy to understand and to compare across different experiments/studies. 
 
-`$$\delta = \frac{\mu_1 - \mu_0}{\sigma} \approx d = \frac{\bar{X}_1-\bar{X}_2}{\hat{\sigma}_p}$$`
+`$$\delta = \frac{\mu_1 - \mu_2}{\sigma} \approx d = \frac{\bar{X}_1-\bar{X}_2}{\hat{\sigma}_p}$$`
 
 
 --
@@ -802,9 +763,9 @@ independentSamplesTTest(Candy ~ Age, data = trickRtreat, var.equal = F)
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"highlightStyle": "github",
-"highlightLines": true,
-"countIncrementalSlides": false
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
