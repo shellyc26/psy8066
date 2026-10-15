@@ -19,29 +19,161 @@ style_mono_accent(base_color = "#17139C",link_color = "#DD3E3E", base_font_size 
 ```{r setup, warning=FALSE, message=FALSE, include = FALSE}
 library(tidyverse)
 library(knitr)
+
+expected_prop <- c(A = .25, B = .25, C = .25, D = .25)
+observed_prop <- c(A = .30, B = .24, C = .23, D = .23)
+sample_sizes <- c(100, 400, 4000, 40000)
+
+# Precalculate results for use in later slides
+results <- do.call(rbind, lapply(sample_sizes, function(n) {
+  observed_counts <- observed_prop * n
+
+  test <- chisq.test(
+    x = observed_counts,
+    p = expected_prop
+  )
+
+  data.frame(
+    N = n,
+    Chi_square = unname(test$statistic),
+    df = unname(test$parameter),
+    p_value = test$p.value
+  )
+}))
+
+cohen_w <- sqrt(sum(
+  (observed_prop - expected_prop)^2 / expected_prop
+))
 ```
 
 ## Recap
 
-Typically, the probability distribution function for a distribution is regulated by two parameters. For the normal:
+Theoretical probability distributions are regulated by **parameters**.
 
- - mean $\mu$
- - standard deviation $\sigma$
- 
---
+- $X \sim N(\mu, \sigma)$
+- $X \sim B(N, \theta)$
 
-These parameters are sometimes independent (normal, $t$ ) and sometimes associated with one another (binomial)
+These parameters are sometimes independent (normal) and sometimes associated with one another (binomial)
 
 ---
+## Our Road Map
 
+- What is a model?
+- Is our model good?
+- How would we know if our model is good?
+--
+
+- Describe your data
+- Calculate some measure of center and spread of distributions
+- Start to ask hypothesis-based questions
+- Calculate some test statistic
+- How likely is it that we would obtain our test statistic or more extreme, given the null hypothesis is true? Does it cross some threshold?
+- Acknowledge that this process sucks
+- Is this the only way of knowing if our model is good?
+
+---
+## "Goodness of Fit"
+
+#### Does our model fit the data?
+
+If it does...?
+
+If it doesn't...?
+
+--
+
+Enter the $\chi^2$ distribution
+---
+
+## What have we been doing this semester?
+
+- Take a normally distributed variable
+- Get deviation scores
+- (Standardize them -- z-scores)
+- Square the deviation scores
+- Sum them up
+
+---
 ## Chi-Square Distribution
 
-The **chi-square** ( $\chi^2$ ) distribution is very unique in that we really only have one parameter, $k$
+$\chi^2 = \sum_{i=1}^{k} Z_i^2$
+
+- $Z_i$ = standard normal variable
+- $k$ = number of independent z-scores being squared (**degrees of freedom** of the $\chi^2$ distribution)
+
+--
+
+In English:
+
+> $\chi^2$ is created by squaring standard normal variables and adding them together
+
+---
+## Chi-Square Distribution
+
+$\chi^2 = \sum_{i=1}^{k} Z_i^2$
+
+- $Z_i$ = standard normal variable
+- $k$ = number of independent z-scores being squared (**degrees of freedom** of the $\chi^2$ distribution)
+
+1. Take a bunch of random z-scores
+2. Square each one so they’re all positive
+3. Add them up.
+
+Do that over and over, and the totals you get follow the χ² distribution.
+
+---
+## Chi-Square Distribution
+
+The **chi-square** ( $\chi^2$ ) distribution is unique in that we really only have one parameter, $k$, which are your **degrees of freedom** of the $\chi^2$ distribution
 
 - mean = $k$
 - variance = $2k$
 
+It is entirely defined by degrees of freedom! It is the *number of pieces of information that you have*
+
 ---
+## What kind of crazy function would lead to a distribution like this?!?!!
+
+![](images/animal.png)
+
+---
+
+```{r, echo=FALSE, fig.align='center'}
+set.seed(1)
+sims <- replicate(10000, sum(rnorm(3)^2))
+hist(sims, breaks = 60, freq = FALSE, main = "Sum of 3 squared z-scores")
+curve(dchisq(x, df = 3), add = TRUE, lwd = 2)
+mean(sims); var(sims)   # ≈ 3 and ≈ 6, so mean = df, variance = 2df
+```
+
+---
+```{r, echo=FALSE, fig.align='center'}
+set.seed(1)
+sims <- replicate(10000, sum(rnorm(6)^2))
+hist(sims, breaks = 60, freq = FALSE, main = "Sum of 6 squared z-scores")
+curve(dchisq(x, df = 6), add = TRUE, lwd = 2)
+mean(sims); var(sims)   
+```
+
+---
+```{r, echo=FALSE, fig.align='center'}
+set.seed(1)
+sims <- replicate(10000, sum(rnorm(9)^2))
+hist(sims, breaks = 60, freq = FALSE, main = "Sum of 9 squared z-scores")
+curve(dchisq(x, df = 9), add = TRUE, lwd = 2)
+mean(sims); var(sims)   # ≈ 3 and ≈ 6, so mean = df, variance = 2df
+```
+
+---
+```{r, echo=FALSE, fig.align='center'}
+set.seed(1)
+sims <- replicate(10000, sum(rnorm(12)^2))
+hist(sims, breaks = 60, freq = FALSE, main = "Sum of 12 squared z-scores")
+curve(dchisq(x, df = 12), add = TRUE, lwd = 2)
+mean(sims); var(sims)   # ≈ 3 and ≈ 6, so mean = df, variance = 2df
+```
+---
+
 
 ```{r, echo = FALSE, fig.width = 7, warning = FALSE, message = FALSE, fig.align='center'}
 ggplot(data.frame(x = seq(0, 50)), aes(x)) +
@@ -66,445 +198,575 @@ ggplot(data.frame(x = seq(0, 50)), aes(x)) +
 ```
 
 ---
-## What kind of crazy function would lead to a distribution like this?!?!!
+## Goodness of Fit
 
-![](images/animal.png)
+Let's go back to our idea that we create a model of how the world works. **It is not perfect**.
 
+If our model fits our observed data, then we can say *"hey, this might be useful for understanding how the world works"*.
+
+If it doesn't fit the data well, then we say *"this probably isn't that helpful, we should revise or re-think our theories of how the world works"*
+
+--
+
+"All models are wrong, but some are useful" - Box
+
+---
+Suppose psychological theory predicts that responses should be equally distributed across four categories:
+
+- Category A: 25%
+- Category B: 25%
+- Category C: 25%
+- Category D: 25%
+
+--
+
+We collect data on this variable and observe the following proportions:
+
+- Category A: 30%
+- Category B: 24%
+- Category C: 23%
+- Category D: 23%
+
+**Question: Is this distribution significantly different from what our theory predicts?**
+
+**What information would you need to answer this?**
+
+---
+
+```{r}
+# Expected proportions under the null hypothesis
+expected_prop <- c(A = 0.25, B = 0.25,
+                   C = 0.25, D = 0.25)
+
+# Observed proportions
+observed_prop <- c(A = 0.30, B = 0.24,
+                   C = 0.23, D = 0.23)
+
+# Four sample sizes
+sample_sizes <- c(100, 400, 4000, 40000)
+
+# Construct observed counts at each sample size
+data_by_n <- lapply(sample_sizes, function(n) {
+  observed_prop * n
+})
+
+names(data_by_n) <- paste0("N = ", sample_sizes)
+
+# Display observed counts for each N
+do.call(rbind, data_by_n)
+```
+
+
+The observed proportions are always 30%, 24%, 23%, and 23%.
+
+---
+
+```{r, echo=FALSE, fig.align='center'}
+# Data for plotting
+plot_data <- data.frame(
+  Category = factor(
+    rep(names(expected_prop), 2),
+    levels = names(expected_prop)
+  ),
+  Proportion = c(expected_prop, observed_prop),
+  Distribution = rep(
+    c("Expected", "Observed"),
+    each = length(expected_prop)
+  )
+)
+
+library(ggplot2)
+
+ggplot(plot_data,
+       aes(x = Category, y = Proportion,
+           fill = Distribution)) +
+  geom_col(position = "dodge", width = 0.7) +
+  geom_hline(yintercept = 0.25, linetype = "dashed") +
+  scale_y_continuous(
+    labels = scales::percent,
+    limits = c(0, 0.35)
+  ) +
+  labs(
+    title = "Observed vs. Expected Proportions",
+    x = "Response Category",
+    y = "Proportion",
+    fill = NULL
+  ) +
+  theme_minimal(base_size = 18) +
+  theme(legend.position = "bottom")
+```
+
+--
+
+**Key Question**: What does this figure look like at N = 100, 400, 4000, 40000?
+---
+
+## A test! 
+
+$H_0$ = The four categories have equal probabilities of occurring. $p_a = p_b = p_c = p_d = .25$
+
+$H_A$ = The four categories do not have equal probabilities of occurring. At least 1 $p_i \neq .25$
+
+$$ \chi^2 = \Sigma\frac{(O_i - E_i)^2}{E_i}$$
+
+$$ \chi^2 = \Sigma\frac{(\text{observed frequency} - \text{expected frequency})^2}{\text{expected frequency}}$$
+
+- $O_i$ = observed count
+- $E_i$ = expected count under the null hypothesis. $N/4$
+
+---
+## Why is this a Chi-square?
+
+For a count, the variance is roughly the expected count. So $\frac{(O_i − E_i)}{\sqrt{E_i}}$ acts like a z-score for each category (it's approximate though). Square those and add them up, and you get a sum of squared z-scores, which is a $\chi^2$.
+
+--
+
+You lose one df because the counts must add up to N. Once you know three of the counts, the fourth is fixed. That’s where j − 1 comes from
+
+.small[Note: this breaks a little when expected counts are too small (less than 5 per category). Come find me if you run into this situation]
+---
+
+## Chi-Square Goodness of Fit: N = 100
+
+Our null hypothesis is that responses are equally distributed across four categories.
+
+| Category | Observed (O) | Expected (E) | (O − E)² / E |
+|---|---:|---:|---:|
+| A | 30 | 25 | |
+| B | 24 | 25 | |
+| C | 23 | 25 | |
+| D | 23 | 25 | |
+| **Total** | **100** | **100** | **?** |
+
+---
+
+## Chi-Square Goodness of Fit: N = 100
+Calculate the contribution of each category to the chi-square statistic.
+
+$$\chi^2=\sum\frac{(O_i-E_i)^2}{E_i}$$
+
+1. What is the total chi-square statistic?
+2. What are the degrees of freedom?
+3. What is the p-value?
+4. At $\alpha=.05$, do we reject the null hypothesis?
+--
+
+- 1.36
+- j - 1 = 3, j = number of categories; 4 - 1 = 3
+- `pchisq(1.36, df = 3, lower.tail = FALSE)` = .714
+- No
+
+---
+```{r, echo=FALSE, fig.align='center'}
+set.seed(2)
+N <- 100; p0 <- rep(.25, 4); E <- N * p0
+chi_null <- apply(rmultinom(10000, N, p0), 2,
+                  function(O) sum((O - E)^2 / E))
+
+hist(chi_null, breaks = 40, freq = FALSE)
+curve(dchisq(x, df = 3), add = TRUE, lwd = 2)   # matches
+curve(dchisq(x, df = 4), add = TRUE, lty = 2)   # doesn't
+  # ≈ .71, same as pchisq()
+```
+
+10,000 simulations under the null hypothesis (.25 per category). It looks much more like the solid line (df = 3) than the dashed line (df = 4)
+---
+## Chi-Square Goodness of Fit: N = 400
+
+
+| Category | Observed (O) | Expected (E) | (O − E)² / E |
+|---|---:|---:|---:|
+| A | 120 | 100 | |
+| B | 96 | 100 | |
+| C | 92 | 100 | |
+| D | 92 | 100 | |
+| **Total** | **400** | **400** | **?** |
+
+Calculate the chi-square statistic, degrees of freedom, and p-value.
+
+**Before calculating:** Do you expect the p-value to be larger or smaller than it was for $N=100$? Why?
+
+---
+
+## Chi-Square Goodness of Fit: N = 400
+Calculate the contribution of each category to the chi-square statistic.
+
+$$\chi^2=\sum\frac{(O_i-E_i)^2}{E_i}$$
+
+1. What is the total chi-square statistic?
+2. What are the degrees of freedom?
+3. What is the p-value?
+4. At $\alpha=.05$, do we reject the null hypothesis?
+--
+
+- 5.44
+- j - 1 = 3
+- `pchisq(5.44, df = 3, lower.tail = FALSE)` = .142
+- No
+
+---
+
+## Chi-Square Goodness of Fit: N = 4,000
+
+| Category | Observed (O) | Expected (E) | (O − E)² / E |
+|---|---:|---:|---:|
+| A | 1,200 | 1,000 | |
+| B | 960 | 1,000 | |
+| C | 920 | 1,000 | |
+| D | 920 | 1,000 | |
+| **Total** | **4,000** | **4,000** | **?** |
+
+Calculate the chi-square statistic and p-value.
+
+**Is the discrepancy between the observed and expected proportions any different from the discrepancy at N = 100? What about the statistical conclusion?**
+
+---
+
+## Chi-Square Goodness of Fit: N = 4,000
+Calculate the contribution of each category to the chi-square statistic.
+
+$$\chi^2=\sum\frac{(O_i-E_i)^2}{E_i}$$
+
+1. What is the total chi-square statistic?
+2. What are the degrees of freedom?
+3. What is the p-value?
+4. At $\alpha=.05$, do we reject the null hypothesis?
+--
+
+- 54.4
+- j - 1 = 3
+- `pchisq(54.4, df = 3, lower.tail = FALSE)` = 9.22x10^-12
+- **YES**
+
+---
+## Chi-Square Goodness of Fit: N = 40,000
+
+| Category | Observed (O) | Expected (E) | (O − E)² / E |
+|---|---:|---:|---:|
+| A | 12,000 | 10,000 | |
+| B | 9,600 | 10,000 | |
+| C | 9,200 | 10,000 | |
+| D | 9,200 | 10,000 | |
+| **Total** | **40,000** | **40,000** | **?** |
+
+Calculate the chi-square statistic and p-value.
+
+**Final question:** Has the distribution become more substantively different from the null hypothesis, or have we simply become more certain that it is not exactly equal to the null distribution?
+
+---
+## Chi-Square Goodness of Fit: N = 40,000
+Calculate the contribution of each category to the chi-square statistic.
+
+$$\chi^2=\sum\frac{(O_i-E_i)^2}{E_i}$$
+
+1. What is the total chi-square statistic?
+2. What are the degrees of freedom?
+3. What is the p-value?
+4. At $\alpha=.05$, do we reject the null hypothesis?
+--
+
+- 544.0
+- j - 1 = 3
+- `pchisq(544.0, df = 3, lower.tail = FALSE)` = 1.39x10^-117
+- **YES**
 ---
 class: inverse, center, middle
 
-## If a tree falls in the forest, and no one is around, does it make a sound?
+# What changed across the 4 tests?
 
 ---
+## Visualizing the P-values
 
-## Trees Example
-
-Let's say a total of 110 trees have fallen. We might *expect* that half of those trees make a sound and half of them don't.
-  - 55 trees fall and do make a sound
-  - 55 trees fall and do not make a sound
-
----
-
-## Trees Example
-
-We expect 55 trees to fall per category (sound and no sound). However, our data show that 10 fell and made a sound whereas 100 fell and did not make a sound.
-
---
-
-This let's build a table that shows us what we have:
-
-```{r}
-trees = data.frame(TreesFallen = c(10, 100),
-                   Expected = c(55, 55))
-rownames(trees) = c("Registered Noise", "No Registered Noise")
-
-trees
+```{r, echo=FALSE, fig.height=4, fig.width=8}
+ggplot(results, aes(x = N, y = -log10(p_value))) +
+  geom_line() +
+  geom_point(size = 3) +
+  geom_hline(
+    yintercept = -log10(.05),
+    linetype = "dashed"
+  ) +
+  scale_x_log10(
+    breaks = sample_sizes,
+    labels = scales::label_comma()
+  ) +
+  labs(
+    title = "Larger Samples Produce Smaller P-values",
+    subtitle = "The observed proportions are identical at every N",
+    x = "Sample Size (log scale)",
+    y = expression(-log[10](p))
+  ) +
+  theme_minimal(base_size = 14)
 ```
 
----
+The dashed line corresponds to p = .05.
 
-## Trees Example
-
-```{r, echo = FALSE}
-trees
-```
-
-
-
-$$ \chi^2_P = \Sigma\frac{(\text{observed frequency} - \text{expected frequency})^2}{\text{expected frequency}}$$
----
-
-## Trees Example
-
-```{r, echo = FALSE}
-trees
-```
-
-Step 1: Get the ratio across rows:
-
-$\frac{(10-55)^2}{55}$
-$\frac{(100-55)^2}{55}$
-
-
-```{r}
-noise <- ((10-55)^2)/55
-noise
-
-noNoise <- ((100-55)^2)/55
-noNoise
-```
-
----
-## Trees Example
-
-Step 2: Sum these up
-
-
-```{r}
-noise + noNoise
-```
-
-
----
-## Trees Example
-
-Step 3: Determine Degrees of Freedom
-
-df = $(r-1)(c-1)$
-
-df = $(2-1)(2-1)$
-
-df = 1
+Why does the p-value decrease even though the observed proportions remain unchanged?
 
 ---
 
-## Trees Example
+Under the null hypothesis, the expected counts are $E_i=Np_i$. With the observed proportions held constant, $O_i=N\hat p_i$
 
-.left-column[
-.small[
-$\chi^2(1) = 73.636$
-]
-]
+- $p_i$ is the expected proportion under the null hypothesis (.25).
+- $\hat p_i$ is the observed proportion.
 
-```{r, echo=FALSE}
-ggplot(data.frame(x = seq(0, 100)), aes(x)) +
-  stat_function(fun = function(x) dchisq(x, df = 1), 
-                color = "black", linetype = "dashed") +
-  scale_x_continuous("Variable X") +
-  scale_y_continuous("Density") +
-  geom_vline(aes(xintercept = 73.636), color = "red", size = 3) +
-  ggtitle("Trees Example") +
-  theme_classic()
-```
+$$
+\chi^2=\sum_{i=1}^{j}\frac{(O_i-E_i)^2}{E_i}
+$$
+
+Substituting the counts:
+
+$$
+\chi^2=N\sum_{i=1}^{j}
+\frac{(\hat p_i-p_i)^2}{p_i}
+$$
 
 ---
-## What did we learn?
 
-The $\chi^2$ distribution gives us the probability to find the data (or those more extreme) given a theory (expected values)
+The summation term is constant because the observed and expected proportions do not change.
 
---
+Therefore:
 
-Comparing that against some threshold for determining whether that probability is within the range of expectations or not
+$$
+\chi^2\propto N
+$$
 
-```{r}
-pchisq(q = 73.636, df = 1, lower.tail = FALSE)
-```
+In our example:
 
---
+$$
+\chi^2=0.0136N
+$$
 
-Our caclulation, like with the z-score, reflects our value minus some expectation, to understand how far away it is from that expectation.
-
----
-## When to use?
-- Classes of observations
-
-- Non-continuous data
-
-???
-The normal is no longer useful if you have noncontinuous data
-
----
-## Assumptions
-
-- Each observation is in only one category
-
-- Observations are independent
-
-- N is large (or expected N is large)
-  - 2 groups greater than 10 per group
-  - More than 2 groups greater than 5 per group
+As N increases, the test statistic increases while the degrees of freedom remain fixed. The p-value therefore decreases.
   
 ---
-## Remember Independence? 
-
-$$p(A)p(B) = p(A\cap B)$$
----
-## Let's expand... Tests of Association (or Independence)
-
-- aka Pearson Chi-square test
-
-- Developed to see how close we are to the estimated distribution
-  - nominal data (ordinal and greater we can use corelations)
-  
----
-## Same Old Same
-- If we are interested in knowing whether X is contingent (or dependent) upon Y, or whether X and Y are **independent**, we're going to need a bigger table.
-
-- And we need to calculate our expected frequencies differently, where...
-
-- Expected value = $R_iC_j/N$
-
----
-class: inverse, middle, center
-
-## Is attrition on a longitudinal study related to educational attainment?
-
-???
-People seem to be dropping out of your study. You hope that they drop out at random. But you're concerned that the people dropping out do so in a way that seems to be related to education levels. Maybe you think that the less educated a participant is, the more likely it is that they drop out of the study. 
-
----
-## Attrition Example
-
-Our data...
-
-```{r,echo=FALSE}
-att = data.frame(StayedIn = c(20, 25, 30),
-                 DroppedOut = c(20, 15, 10))
-
-row.names(att) = c("Failed to complete high school",
-                   "High school degree",
-                   "College degree")
-
-att
-```
-
-*Null Hypothesis*: There is no association between the categorical variables we are testing. No association between educational attainment and attrition. They are independent
-
-*Alternative Hypothesis*: There is an association between educational attainment and attrition. They are not independent.
-
----
-
-## Attrition Example
+## The Discrepancy Has Not Changed
 
 ```{r, echo=FALSE}
-att
-```
-
-It's the same general formula, but we need to calculate our expected values a little differently...
-$$ \chi^2_P = \Sigma\frac{(\text{observed frequency} - \text{expected frequency})^2}{\text{expected frequency}}$$
-
-$$\text{Expected Value} = R_iC_j/N$$
----
-## Attrition Example
-
-The OG Data
-
-```{r,echo=FALSE}
-att = data.frame(StayedIn = c(20, 25, 30),
-                 DroppedOut = c(20, 15, 10))
-
-row.names(att) = c("Failed to complete high school",
-                   "High school degree",
-                   "College degree")
-
-att
+data.frame(
+  Category = names(expected_prop),
+  Expected = expected_prop,
+  Observed = observed_prop,
+  Difference = observed_prop - expected_prop, row.names = NULL)
 ```
 
 
---
+The differences from the expected proportions are always:
 
-The Expected Value Calculations
+- A: +5 percentage points
+- B: −1 percentage point
+- C: −2 percentage points
+- D: −2 percentage points
 
-```{r,echo=FALSE}
-att2 = data.frame(StayedIn = c("40*75/120", "40*75/120", "40*75/120"),
-                 DroppedOut = c("40*45/120", "40*45/120", "40*45/120"))
+The same proportional discrepancy produces different p-values because the **precision of our estimates changes with N**.
 
-row.names(att2) = c("Failed to complete high school",
-                   "High school degree",
-                   "College degree")
-
-att2
-```
-
-Expected frequency for staying in = 25
-
-Expected frequency for dropping out = 15
 ---
 
-## Attrition Example
+## Is This Difference Important?
 
-Plug this in for "expected frequencies"
-```{r,echo=FALSE}
-att3 = data.frame(StayedIn = c("(20-25)^2/25", "(25-25)^2/25", "(30-25)^2/25"),
-                 DroppedOut = c("(20-15)^2/15", "(15-15)^2/15", "(10-15)^2/15"))
+1. What was N when we first rejected the null?
 
-row.names(att3) = c("Failed to complete high school",
-                   "High school degree",
-                   "College degree")
+2. As N got bigger, did the observed distribution (or proportions) become *more* different than the hypothesized distribution?
 
-att3
-```
+3. What additional information would you want when reading a paper reporting this result?
 
---
-
-So we get...
-
-```{r,echo=FALSE}
-att4 = data.frame(StayedIn = c(1, 0, 1),
-                 DroppedOut = c(1.666667, 0, 1.666667))
-
-row.names(att4) = c("Failed to complete high school",
-                   "High school degree",
-                   "College degree")
-
-att4
-```
-
---
-
-Sum them up:
-```{r}
-1 + 0 + 1 + 1.666667 + 0 + 1.666667
-```
+4. If the null model is a useful approximation, does detecting a tiny departure necessarily make the model useless?
 
 ---
-## Attrition Example
 
-$\chi^2(?) = 5.33$
+class: middle, center, inverse
+
+# If the null hypothesis is even a little bit wrong, a large enough N will find it...
+
+# `r emo::ji("scared")`
+
+---
+## What Does a Small p-value Tell Us?
+
+A small p-value tells us that the observed data (or more extreme) would be unusual under the very *specific* null model
+
+It does **not** tell us:
+
+- How large the discrepancy is
+- Whether the discrepancy is theoretically important
+- Whether the null model is a useful approximation
+- Whether the effect is practically (or clinically) meaningful.
+
+**Statistical significance** $\neq$ **practical significance!**
+
+---
+## Interim Summary
+
+The test is not broken. It is correctly detecting departures from the **exact** null hypothesis.
+
+The problem arises when we treat rejection of an exact null hypothesis as proof that a _meaningful_ effect exists.
+
+2 separate but related questions to ask:
+
+1. Is the observed data inconsistent with the null model? [Collect $200]
+2. Is the observed departure large enough to matter for our scientific question?
+
+---
+## What can we do? Effect sizes!
+
+We've actually already done this (almost)!
+
+Cohen's $w^2$ = $\Sigma\frac{(\hat p_i-p_i)^2}{p_i}$
+
+Cohen's w = $\sqrt{\Sigma\frac{(\hat p_i-p_i)^2}{p_i}}$
+
+What is Cohen's w when:
+- N = 100
+- N = 400
+- N = 4,000
+- N = 40,000
 
 --
 
-What is our degrees of freedom?
+**THEY ARE THE SAME!**
 
-- $df = (r-1)(c-1)$
-- $df = (3-1)(2-1)$
-- $df = 2*1$
-- $df = 2$
+$w = \sqrt{.0136} \approx .12$; small
+---
+
+## Effect Sizes
+
+Here, $\chi^2 = Nw^2$
 
 --
 
-$\chi^2(2) = 5.33$
+**Nearly all test statistics are roughly effect size x (some  function of) sample size**
+
+---
+## Are Two Variables Related?
+
+Same idea, new question: did **Condition** affect whether people chose **Category A**?
+
+|             | Chose A | Didn't | Total |
+|:------------|--------:|-------:|------:|
+| Condition 1 | 30      | 70     | 100   |
+| Condition 2 | 20      | 80     | 100   |
+| **Total**   | **50**  | **150**| **200** |
+
+--
+
+$H_0$: Condition and choice are unrelated
+
+If that's true, both conditions should choose A at the *overall* rate: 50/200 = 25%
+
+$$E = \frac{\text{row total} \times \text{column total}}{N} = \frac{100 \times 50}{200} = 25$$
+
+---
+
+|             | Chose A | Didn't | Total |
+|:------------|--------:|-------:|------:|
+| Condition 1 | 30      | 70     | 100   |
+| Condition 2 | 20      | 80     | 100   |
+| **Total**   | **50**  | **150**| **200** |
+
+$$E = \frac{\text{row total} \times \text{column total}}{N} = \frac{100 \times 50}{200} = 25$$
+
+So we *expected* 25 A's per condition, but we observed 30 and 20. Same question as before: **how far is the data from the model?**
+---
+## Chi-Square Test of Independence
+
+Same formula, now summed over all 4 cells:
+
+$$\chi^2 = \sum\frac{(O - E)^2}{E}$$
+
+df = (rows − 1)(columns − 1) = (2 − 1)(2 − 1) = **1**
+
+--
 
 ```{r}
-pchisq(5.33, df = 2, lower.tail = FALSE)
+tab <- matrix(c(30, 70,
+                20, 80), nrow = 2, byrow = TRUE,
+              dimnames = list(Condition = c("1", "2"),
+                              ChoseA = c("Yes", "No")))
+
+chisq.test(tab, correct = FALSE)
 ```
 
+---
+## Chi-Square Test of Independence
+
+Same formula, now summed over all 4 cells:
+
+$$\chi^2 = \sum\frac{(O - E)^2}{E}$$
+
+`\(\chi^2(1) = 2.67, p = .10\)`. Not significant.
+
+.small[R applies a "continuity correction" to 2×2 tables by default. It's overly conservative, so we turn it off with `correct = FALSE`.]
 
 ---
-## What's up with these df?
+## Effect Size: The Odds Ratio
 
-We have 3 constraints:
+**Odds** = (# who did it) / (# who didn't)
 
-- The cell frequencies must sum to the overall sample size
+- Condition 1: 30/70 = 0.43
+- Condition 2: 20/80 = 0.25
 
-- The row totals must sum to the overall sample size
+**Odds ratio** = 0.43 / 0.25 = **1.71**
 
-- The column totals must sum to the overall sample size
+> The odds of choosing A were 1.71 times higher in Condition 1.
 
----
-
-## Assumptions
-
-Independent observations
-
-Each obseravation is in one and only one category
-
-N is large (usually taken to mean that expected N is at least 5 in each cell)
+- OR = 1 → no association
+- OR > 1 → higher odds
+- OR < 1 → lower odds
 
 ---
 
-## Effect Sizes for Chi-Square
+**Watch what happens when we multiply every cell by 10:**
 
-**Odds Ratio**
-OR = number experiencing event divided by number who did not experience event.
-
-```{r, echo=FALSE}
-att
+```{r}
+chisq.test(tab * 10, correct = FALSE)
 ```
 
-- $p(\text{Dropped Out} | <\text{high school}) = 20/40$
-- $p(\text{Dropped Out} | \text{high school}) = 15/40$
-
-
-???
-We're going ACROSS THE ROWS to get the denominator
-
----
-
-## Odds Ratio
-OR = number experiencing event divided by number who did not experience event.
-
-- Odds(Dropped Out | < High School = 20/40 = .5
-- Odds(Dropped Out | High School = 15/40 = .375
+`\(\chi^2(1) = 26.67, p < .001\)`, but the OR is **still 1.71**
 
 --
 
-- Odds Ratio = .5 / .375 = 1.33
-
-*The odds of dropping out of the study rather than remaining in the study when they did not complete high school are 1.33 times the odds of dropping out if they completed high school, but not college*
-
----
-
-## Rules of thumb
-
-Cohen (1988) provided the following advice for interpreting odds ratios:
-
-- 1.5 small
-- 2.5 medium
-- 4.3 large
-
----
-
-## Phi Correlation
-
-- Pearson correlation between two dichotomous variables is $\phi$
-- This doesn't quite work with our attrition example, so let's look at another contingency table...
+**Statistical significance** $\neq$ **practical significance!**
 
 --
 
-.small[
-- Rosenstein & Horowitz (1996): Adolescent attachment and psychopathology
-- Researchers were interested in whether attachment to mothers was associated with having a conduct disorder or affective disorder (clinical sample)
-- Attachment:
-  - Preoccupied: appear confused and entangled by attachment relationships
-  - Dismissive: dismiss the importance or influence of attachment figure
-- Disorder:
-  - Conduct: persistent antisocial behavior that violates norms
-  - Affective: major or recurrent depressive symptoms, mania, and/or mood disorders
-]
+**Spoiler:** logistic regression (spring!) is basically a machine for estimating odds ratios.
 ---
 
-## Attachment
+## What do we want to know?
 
-```{r, echo=FALSE}
-attachment = data.frame(AnyConduct = c(1, 3),
-                        JustAffective = c(5,14))
-
-row.names(attachment) = c("Dissmissive", "Preoccupied")
-
-attachment
-```
-
-Practice:
-- Work through the full chi-square test on your own time. You should get .003. See if you're right!
-- Calculate the effect size (odds ratio). You can choose what you're calculating, but note that your interpretation will change!
-
----
-
-## Phi Correlation
-
-```{r, echo=FALSE}
-attachment2 = data.frame(AnyConduct = c("1 (Cell 11)", "3 (Cell 21)"),
-                        JustAffective = c("5 (Cell 12)", "14 (Cell 22)"))
-
-row.names(attachment2) = c("Dissmissive", "Preoccupied")
-
-attachment2
-```
-
-.small[
-$$\phi = \frac{Cell_{11} Cell_{22} - Cell_{12} Cell_{21}}{\sqrt{(Cell_{11} + Cell_{12})(Cell_{21} + Cell_{22})(Cell_{11} + Cell_{21})(Cell_{12} + Cell_{22})}}$$
-]
----
-## Phi Correlation
-.small[
-
-$$\phi = \frac{Cell_{11} Cell_{22} - Cell_{12} Cell_{21}}{\sqrt{(Cell_{11} + Cell_{12})(Cell_{21} + Cell_{22})(Cell_{11} + Cell_{21})(Cell_{12} + Cell_{22})}}$$
-]
-
-$$\phi = \frac{(1*14) - (5*3)}{\sqrt{(1+5)(3+14)(1+3)(5+14)}}$$
-
-$$\phi = .01$$
+Are variables related?
+- Chi-square test of association / independence (contingency tables)
 
 --
 
-OR
+Does the data match what a model predicts?
+- Goodness-of-fit test
 
-$$\phi = \sqrt{\frac{\chi^2}{N}}$$
+--
+
+Does a more complex model improve fit?
+- Likelihood ratio test
+
+--
+
+Does the model adequately explain the data?
+- Deviance statistic
 
 ---
+
+## What do we want to know?
+
+All of these ask the same underlying question:
+
+> How far are the observed data from what the model predicts?
+
+They are cousins of this formula:
+
+$$ \chi^2 = \Sigma\frac{(\text{observed frequency} - \text{expected frequency})^2}{\text{expected frequency}}$$
+
+---
+
 class: inverse
 
-## Next time
+## Next Time
 
-Comparing means with all the $t$-tests
+- t-tests galore!
