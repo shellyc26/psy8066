@@ -19,7 +19,7 @@ Homework assignments will appear here. You'll be able to access the assignment, 
 - Due on **9/24 by 9:30am**
 
 ## Homework 3
-- Homework 3 will be posted here
+- [Homework 3 is here](homework/homework_3.html)
 - Due on **10/29 by 9:30am**
 
 ## Homework 4

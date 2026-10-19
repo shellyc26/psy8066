@@ -11,11 +11,11 @@ Please complete this assignment using the RMarkdown file provided (<a href="home
 
 There will be empty gray sections below each question. Please put all R `CODE` within these gray chunks. They will behave as normal R code. If you are asked to explain something or write a few sentences, please do that *outside* of the gray chunks. That way, when you knit, your sentences will show up as normal text, but all of your code will be in a designated code chunk.
 
-You are allowed to Google things and/or use ChatGPT. *However*, if you use code from an outside source (meaning not the lecture slides or the R help documentation), then you must provide a **working link** to the website you used and/or the "conversation" you had. You don't need to use APA formatting or anything. Just a working url. You may discuss homework assignments with your classmates; however, it is important that you complete each assignment on your own and **do not simply copy someone else’s code**. If we believe one student has copied another’s work, both students will receive a 0 on the homework assignment. Please also list at the top of the document who you worked with. 
+You may Google things. **You may NOT use artificial intelligence to generate code that you turn in**. You may discuss homework assignments with your classmates; however, it is important that you complete each assignment on your own and **do not simply copy someone else’s code**. If we believe one student has copied another’s work, both students will receive a 0 on the homework assignment. Please  list at the top of the document who you worked with.
 
 In the instructions, when it says **_by hand_**, what we mean is that you should not use a function that is built into R to complete the task. For example, if I ask you to find the mean *by hand*, you should **not** use the `mean()` function. However, you can (and should!) use your variables. So for instance, if I ask you to find the `mean()` by hand, you may do something like `sum(variableX)/length(variableX)`. This would be an appropriate *by hand* calculation. (You don't need to type `(3 + 5 + 5 + 17) / 4`...you can still use your variables). 
 
-**Data:** You will be using the same census data that we used in class for our one-sample $t$-test. These data are specific to the state of Missouri [Here is the link for the census data](cenus_at_school_missouri.csv).
+**Data:** You will be using the same census data that we used in class for our one-sample $t$-test. These data are specific to the state of Missouri [Here is the link for the census data](../data/census_at_school_missouri.csv).
 
 Good luck!
 
@@ -38,7 +38,29 @@ High school students rated the importance of saving energy on a scale of 0 (not 
 
 ## Question 3
 
-You are interested in better understanding technology use and consumption among teenagers. However, you are concerned that in your sample of Missouri high school students that males might be more likely to prefer social media whereas females might be more likely to prefer text messaging. Run an appropriate statistical test and interpret the results. Calculate an appropriate measure of effect size (you may do this by hand or you may find a function...Google is your friend!)
+You are interested in technology preferences among teenagers. You survey Missouri high school students about which of four technologies they prefer most. If teens had no preference, each option would be chosen equally often (25% each).
+
+You run the survey at four schools of very different sizes. Oddly, the percentages come out identical at every school:
+
+| School | N    | Social media | Texting | Video streaming | Gaming |
+|--------|------|--------------|---------|-----------------|--------|
+| A      | 40   | 12           | 10      | 10              | 8      |
+| B      | 500  | 150          | 125     | 125             | 100    |
+| C      | 2000 | 600          | 500     | 500             | 400    |
+
+- State the null and alternative hypotheses for a chi-square goodness-of-fit test.
+- Run the test for each school in R (`chisq.test(x = c(...), p = rep(.25, 4))`). Record $\chi^2$, df, and p for each.
+Fill in this table: (hint: knit this document first, so you can see how it will print!)
+
+| School | N    | χ² | df | p | 
+|--------|------|----|----|---|
+| A      | 40   |    |    |   |
+| B      | 500  |    |    |   |
+| C      | 2000 |    |    |   | 
+
+- Which values changed across schools, and which stayed the same? Why?
+- The degrees of freedom are the same for every school, so the chi-square distribution you’re comparing against is the same. Use that fact to explain why School C is significant and School A is not.
+
 
 ## Question 4
 
@@ -58,3 +80,13 @@ In your own words, describe this table. Do so in language that an average **fres
 |------------:|:------------:|:-------------:|
 |  $H_0$ True |   $\alpha$   |  $1-\alpha$   |
 | $H_0$ False |  $1-\beta$   |    $\beta$    |
+
+## Question 6
+
+**Answer one of the following prompts:**
+
+Explain 2 things that your lab does to promote or engage with "open science" practices. Explain the protocol/procedure, why it helps, and how you think it does (or doesn't!) speak to the goals of "open science".
+
+If your lab does NOT engage with any practices, what changes would you *like* to see your lab make? Why would the help with "open science" and why do YOU want to see the changes made?
+
+If you dislike "open science" please tell me why. If this is you, then also tell me how you think science *should* operate (loaded question, I know!).
