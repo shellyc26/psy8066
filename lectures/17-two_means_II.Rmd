@@ -46,7 +46,7 @@ Thoughts on conservatism (Welch vs. Student, *t* vs. normal, etc.)
 
 * pooled variance
 
-* effect sizes -- Cohen's D and distribution overlap
+* effect sizes -- Cohen's d and distribution overlap
 
 * assumptions and dealing with violations
   * normality -- Wilcoxon Rank Sum
@@ -83,6 +83,8 @@ All of these are instances of repeated measures designs.
 ---
 ## The Pros 
 
+The pairing tells you which two observations belong together! This lets us calculate a meaningful within-pair difference. Each difference score is 1 observational unit! 
+
 The advantage of repeated measures designs is that, compared to an independent groups design of the same size, the repeated measures design is **more powerful**.
 
 * Two groups are more alike than in simple randomization
@@ -90,8 +92,18 @@ The advantage of repeated measures designs is that, compared to an independent g
 
 * The correlated sampling units will have less variability on "nuisance variables" because those are either the same over time (longitudinal) or over measures (paired measures), or very similar over people (paired samples).
 
-    * Nuisance variables -- anything that isn't relevant to the study. 
+    * Nuisance variables -- anything that isn't relevant to the study.
 
+---
+
+## The Cons
+
+Research Methods stuff:
+  - Carryover effects
+  - Order effects
+  - Practice effects
+  - Attrition
+  - etc...
 ---
 ## Dealing with Dependencies
 
@@ -104,15 +116,11 @@ If the repeated measures are $X_1$ and $X_2$, then their difference is $D = X_1 
 
 $$t_{df = N-1} = \frac{\bar{\Delta}-\mu}{\frac{\hat{\sigma}_\Delta}{\sqrt{N}}}$$
 
-.pull-left[
-$$H_0: \bar{\Delta} = \mu$$
-$$H_1: \bar{\Delta} \neq \mu$$
-]
+--
 
-.pull-right[
-$$H_0: \bar{\Delta} = 0$$
-$$H_1: \bar{\Delta} \neq 0$$
-]
+$$H_0: \mu_\Delta = 0$$
+$$H_1: \mu_\Delta \neq 0$$
+
 
 ???
 Note here the signal to noise ratios
@@ -121,7 +129,7 @@ Note here the signal to noise ratios
 
 ### Example
 
-Human-wildlife conflict in urban areas endangers wildlife species. One species under threat is the *Larus argentatus* or herring gull, which is considered a nuisance owing to food-snatching and other behaviors. A [recent study](https://royalsocietypublishing.org/doi/10.1098/rsbl.2019.0405) examined whether herring gull behavior is influenced by human behavior cues and whether this could be used to reduce human-gull conflict. 
+Human-wildlife conflict in urban areas endangers wildlife species. One species under threat is the *Larus argentatus* or herring gull, which is considered a nuisance owing to food-snatching and other behaviors. A [study](https://royalsocietypublishing.org/doi/10.1098/rsbl.2019.0405) examined whether herring gull behavior is influenced by human behavior cues and whether this could be used to reduce human-gull conflict. 
 
 .pull-left[
 ![](images/gulls.jpg)]
@@ -317,7 +325,7 @@ ggpubr::ggpaired(data = gulls, cond1 = "At", cond2 = "Away", line.color = "grey"
 
 ---
 
-## Cohen's D
+## Cohen's d
 
 Calculating a standardized effect size for a paired samples t-test (and research design that includes nesting or dependency) is slightly complicated, because there are two levels at which you can describe results. 
 
@@ -326,11 +334,11 @@ The first level is the **within-subject** (or within-pair, or within-gull) level
 $$d = \frac{\bar{\Delta}}{\hat{\sigma_\Delta}} = \frac{`r round(m_delta,2)`}{`r round(s_delta,2)`} = `r round(m_delta/s_delta,2)`$$
 
 
-The interpretation is that, on average, variability within a single gull is about .72 standard deviations of differences.
+The interpretation is that the mean difference is 0.72 standard deviations of the difference scores.
 
 ---
 
-### Cohen's D
+### Cohen's d
 
 ```{r} 
 lsr::cohensD(x = gulls$At, y = gulls$Away, method = "paired")
@@ -359,18 +367,18 @@ Some argue the between-conditions version is better because the paired-design is
 
 ---
 
-## Cohen's D from *t*
+## Cohen's d from *t*
 
 This can be calculated from *t*-statistics, allowing you to calculate standardized effect sizes from manuscripts even when the authors did not provide them. 
 
 .pull-left[
 **One sample or within-subjects for paired**
 
-$$\large d = \frac{t}{\sqrt{N-1}}$$
+$$\large d = \frac{t}{\sqrt{N}}$$
 ]
-.pull-right[**Independent sample**
+.pull-right[__Independent sample__
 
-$$\large d = \frac{2t}{\sqrt{N_1+N_2-1}}$$
+$$\large d = t \cdot \sqrt{\frac{1}{N_1} + \frac{1}{N_2}}$$
 ]
 
 
@@ -379,7 +387,7 @@ $$\large d = \frac{2t}{\sqrt{N_1+N_2-1}}$$
 ## Assumptions
 
 * Independence (between pairs)
-* Normality
+* Normality of the difference scores at the population level (*not* separately for each of the two original conditions)
 
 
 **Note:** These are the same assumptions as a one-sample *t*-test.
@@ -388,13 +396,18 @@ $$\large d = \frac{2t}{\sqrt{N_1+N_2-1}}$$
 
 ## Violating normality
 
-For two independent samples, we can use the Wilcoxon Sum Rank test if we have severe violations of normality. There is a paired-samples version as well.
+For two independent samples, we can use the Wilcoxon Rank Sum test if we have severe violations of normality. There is a paired-samples version as well -- Wilcoxon Signed Rank test.
 
 ```{r, warning = F}
 wilcox.test(gulls$At, gulls$Away, paired = T)
 ```
 
 ---
+class: middle, inverse, center
+
+# What do all these t-tests have in common?
+---
+
 background-image: url("images/wrap-up1.jpeg")
 background-size: contain
 
@@ -440,7 +453,7 @@ What happens when our tests are not independent of one another?
 
 ---
 
-The issue of independence between tests has long been ignored by scientists. It was only when we were confronted with impossible-to believe results (listening to "When I'm Sixty-Four" by The Beatles makes you younger) that we started to doubt our methods. + a lot of fraud. 
+The issue of independence between tests has long been ignored by scientists. It was only when we were confronted with impossible-to believe results (listening to "When I'm Sixty-Four" by The Beatles makes you younger) that we started to doubt our methods. Replication crisis + plus a smattering of fraud. 
 
 
 .pull-left[
@@ -496,5 +509,5 @@ class: inverse
 
 ## Coming up...
 
-- Written Exam 2 11/2 (ommmgggggggg!!!!!)
-- Oral Exam 2 11/6-11/8
+- Lab Assignment 2
+- Written Exam 2 11/3 (ommmgggggggg!!!!!)

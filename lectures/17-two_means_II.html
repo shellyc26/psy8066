@@ -3,7 +3,7 @@
   <head>
     <title>Comparing two dependent means</title>
     <meta charset="utf-8" />
-    <script src="libs/header-attrs-2.25/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.31/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
     <link rel="stylesheet" href="my-theme.css" type="text/css" />
   </head>
@@ -42,7 +42,7 @@ Thoughts on conservatism (Welch vs. Student, *t* vs. normal, etc.)
 
 * pooled variance
 
-* effect sizes -- Cohen's D and distribution overlap
+* effect sizes -- Cohen's d and distribution overlap
 
 * assumptions and dealing with violations
   * normality -- Wilcoxon Rank Sum
@@ -79,6 +79,8 @@ All of these are instances of repeated measures designs.
 ---
 ## The Pros 
 
+The pairing tells you which two observations belong together! This lets us calculate a meaningful within-pair difference. Each difference score is 1 observational unit! 
+
 The advantage of repeated measures designs is that, compared to an independent groups design of the same size, the repeated measures design is **more powerful**.
 
 * Two groups are more alike than in simple randomization
@@ -86,8 +88,18 @@ The advantage of repeated measures designs is that, compared to an independent g
 
 * The correlated sampling units will have less variability on "nuisance variables" because those are either the same over time (longitudinal) or over measures (paired measures), or very similar over people (paired samples).
 
-    * Nuisance variables -- anything that isn't relevant to the study. 
+    * Nuisance variables -- anything that isn't relevant to the study.
 
+---
+
+## The Cons
+
+Research Methods stuff:
+  - Carryover effects
+  - Order effects
+  - Practice effects
+  - Attrition
+  - etc...
 ---
 ## Dealing with Dependencies
 
@@ -100,15 +112,11 @@ If the repeated measures are `\(X_1\)` and `\(X_2\)`, then their difference is `
 
 `$$t_{df = N-1} = \frac{\bar{\Delta}-\mu}{\frac{\hat{\sigma}_\Delta}{\sqrt{N}}}$$`
 
-.pull-left[
-`$$H_0: \bar{\Delta} = \mu$$`
-`$$H_1: \bar{\Delta} \neq \mu$$`
-]
+--
 
-.pull-right[
-`$$H_0: \bar{\Delta} = 0$$`
-`$$H_1: \bar{\Delta} \neq 0$$`
-]
+`$$H_0: \mu_\Delta = 0$$`
+`$$H_1: \mu_\Delta \neq 0$$`
+
 
 ???
 Note here the signal to noise ratios
@@ -117,7 +125,7 @@ Note here the signal to noise ratios
 
 ### Example
 
-Human-wildlife conflict in urban areas endangers wildlife species. One species under threat is the *Larus argentatus* or herring gull, which is considered a nuisance owing to food-snatching and other behaviors. A [recent study](https://royalsocietypublishing.org/doi/10.1098/rsbl.2019.0405) examined whether herring gull behavior is influenced by human behavior cues and whether this could be used to reduce human-gull conflict. 
+Human-wildlife conflict in urban areas endangers wildlife species. One species under threat is the *Larus argentatus* or herring gull, which is considered a nuisance owing to food-snatching and other behaviors. A [study](https://royalsocietypublishing.org/doi/10.1098/rsbl.2019.0405) examined whether herring gull behavior is influenced by human behavior cues and whether this could be used to reduce human-gull conflict. 
 
 .pull-left[
 ![](images/gulls.jpg)]
@@ -159,7 +167,7 @@ In this study, experimenters visited coastal towns in the UK and found locations
 ---
 
 
-```r
+``` r
 gulls = read.delim(here("data/gulls/pairs.txt"))
 gulls
 ```
@@ -222,7 +230,7 @@ Our standard deviation of our sampling distribution is the **standard error of d
 ---
 
 
-```r
+``` r
 difference = gulls$At - gulls$Away
 ```
 
@@ -236,7 +244,7 @@ difference = gulls$At - gulls$Away
 We can take the mean of this new variable:
 
 
-```r
+``` r
 (m_delta = mean(difference))
 ```
 
@@ -252,7 +260,7 @@ We can take the mean of this new variable:
 And we can calculate the standard deviation
 
 
-```r
+``` r
 (s_delta = sd(difference))
 ```
 
@@ -267,7 +275,7 @@ And we can calculate the standard deviation
 Std Error: divide the standard deviation by the square root of the number of *pairs* or, in the case of repeated measures, the number of *subjects*.
 
 
-```r
+``` r
 (se_delta = s_delta/sqrt(nrow(gulls)))
 ```
 
@@ -300,7 +308,7 @@ class: middle, center
 Calculate the area above the absolute value of the test statistic and multiply that by two -- this estimates the probability of finding this test statistic or more extreme.
 
 
-```r
+``` r
 (t_statistic = m_delta/se_delta)
 ```
 
@@ -308,7 +316,7 @@ Calculate the area above the absolute value of the test statistic and multiply t
 ## [1] 3.126906
 ```
 
-```r
+``` r
 pt(t_statistic, df = 19-1, lower.tail = F)
 ```
 
@@ -316,7 +324,7 @@ pt(t_statistic, df = 19-1, lower.tail = F)
 ## [1] 0.002912942
 ```
 
-```r
+``` r
 pt(t_statistic, df = 19-1, lower.tail = F)*2
 ```
 
@@ -328,7 +336,7 @@ pt(t_statistic, df = 19-1, lower.tail = F)*2
 ## `\(t\)`-test functions
 
 
-```r
+``` r
 t.test(x = gulls$At, y = gulls$Away, 
        paired = TRUE)
 ```
@@ -350,7 +358,7 @@ t.test(x = gulls$At, y = gulls$Away,
 ---
 
 
-```r
+``` r
 ggpubr::ggpaired(data = gulls, cond1 = "At", cond2 = "Away", line.color = "grey",
                  ylab = "Time to approach (seconds)", 
                  title = "Some gulls approach food more quickly when \npeople look away from them")
@@ -360,7 +368,7 @@ ggpubr::ggpaired(data = gulls, cond1 = "At", cond2 = "Away", line.color = "grey"
 
 ---
 
-## Cohen's D
+## Cohen's d
 
 Calculating a standardized effect size for a paired samples t-test (and research design that includes nesting or dependency) is slightly complicated, because there are two levels at which you can describe results. 
 
@@ -369,14 +377,14 @@ The first level is the **within-subject** (or within-pair, or within-gull) level
 `$$d = \frac{\bar{\Delta}}{\hat{\sigma_\Delta}} = \frac{83.11}{115.85} = 0.72$$`
 
 
-The interpretation is that, on average, variability within a single gull is about .72 standard deviations of differences.
+The interpretation is that the mean difference is 0.72 standard deviations of the difference scores.
 
 ---
 
-### Cohen's D
+### Cohen's d
 
 
-```r
+``` r
 lsr::cohensD(x = gulls$At, y = gulls$Away, method = "paired")
 ```
 
@@ -390,7 +398,7 @@ The second level is the **between-conditions** variance, which is in the units o
 For that, you can use the Cohen's d calculated for independent samples *t*-tests.
 
 
-```r
+``` r
 lsr::cohensD(x = gulls$At, y = gulls$Away, method = "pooled")
 ```
 
@@ -412,18 +420,18 @@ Some argue the between-conditions version is better because the paired-design is
 
 ---
 
-## Cohen's D from *t*
+## Cohen's d from *t*
 
 This can be calculated from *t*-statistics, allowing you to calculate standardized effect sizes from manuscripts even when the authors did not provide them. 
 
 .pull-left[
 **One sample or within-subjects for paired**
 
-`$$\large d = \frac{t}{\sqrt{N-1}}$$`
+`$$\large d = \frac{t}{\sqrt{N}}$$`
 ]
-.pull-right[**Independent sample**
+.pull-right[__Independent sample__
 
-`$$\large d = \frac{2t}{\sqrt{N_1+N_2-1}}$$`
+`$$\large d = t \cdot \sqrt{\frac{1}{N_1} + \frac{1}{N_2}}$$`
 ]
 
 
@@ -432,7 +440,7 @@ This can be calculated from *t*-statistics, allowing you to calculate standardiz
 ## Assumptions
 
 * Independence (between pairs)
-* Normality
+* Normality of the difference scores at the population level (*not* separately for each of the two original conditions)
 
 
 **Note:** These are the same assumptions as a one-sample *t*-test.
@@ -441,23 +449,28 @@ This can be calculated from *t*-statistics, allowing you to calculate standardiz
 
 ## Violating normality
 
-For two independent samples, we can use the Wilcoxon Sum Rank test if we have severe violations of normality. There is a paired-samples version as well.
+For two independent samples, we can use the Wilcoxon Rank Sum test if we have severe violations of normality. There is a paired-samples version as well -- Wilcoxon Signed Rank test.
 
 
-```r
+``` r
 wilcox.test(gulls$At, gulls$Away, paired = T)
 ```
 
 ```
 ## 
-## 	Wilcoxon signed rank test with continuity correction
+## 	Wilcoxon signed rank exact test
 ## 
 ## data:  gulls$At and gulls$Away
-## V = 156, p-value = 0.01485
+## V = 156, p-value = 0.0119
 ## alternative hypothesis: true location shift is not equal to 0
 ```
 
 ---
+class: middle, inverse, center
+
+# What do all these t-tests have in common?
+---
+
 background-image: url("images/wrap-up1.jpeg")
 background-size: contain
 
@@ -503,7 +516,7 @@ What happens when our tests are not independent of one another?
 
 ---
 
-The issue of independence between tests has long been ignored by scientists. It was only when we were confronted with impossible-to believe results (listening to "When I'm Sixty-Four" by The Beatles makes you younger) that we started to doubt our methods. + a lot of fraud. 
+The issue of independence between tests has long been ignored by scientists. It was only when we were confronted with impossible-to believe results (listening to "When I'm Sixty-Four" by The Beatles makes you younger) that we started to doubt our methods. Replication crisis + plus a smattering of fraud. 
 
 
 .pull-left[
@@ -559,15 +572,15 @@ class: inverse
 
 ## Coming up...
 
-- Written Exam 2 11/2 (ommmgggggggg!!!!!)
-- Oral Exam 2 11/6-11/8
+- Lab Assignment 2
+- Written Exam 2 11/3 (ommmgggggggg!!!!!)
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"highlightStyle": "github",
-"highlightLines": true,
-"countIncrementalSlides": false
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
