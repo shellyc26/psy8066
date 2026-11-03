@@ -41,6 +41,8 @@ navbar:
         href: "lectures/16-two_means_I.html"
       - text: "17-tTests3"
         href: "lectures/17-two_means_II.html"
+      - text: "18-ModelComparisons"
+        href: "lectures/19-modelcomparison.html"
     - text: PDF Slides
       menu:
       - text: "1-Intro"
@@ -76,7 +78,9 @@ navbar:
       - text: "16-tTests2"
         href: "lectures/16-two_means_I.pdf"
       - text: "17-tTests3"
-        href: "lectures/17-two_means_II.html"
+        href: "lectures/17-two_means_II.pdf"
+      - text: "18-ModelComparisons"
+        href: "lectures/19-modelcomparison.pdf"
     - text: Homework
       href: homework.html
   right:

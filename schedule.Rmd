@@ -37,8 +37,8 @@ LSR readings can be found in the free, online textbook, [*Learning Statistics wi
 | 11 | 11/3 | **Exam 2** |  |  |
 | \- | 11/5 | Introduction to model comparisons & $F$-distribution | LSR Ch 14 |  |
 | 12 | 11/10 | One-way ANOVA | LSR Ch 14 |  |
-| \- | 11/12 | Multiple comparisons & contrasts | LSR Ch 16 |  |
-| 13 | 11/17 | Two between-subjects factors | LSR Ch 16 | HW 4 due |
+| \- | 11/12 | Two between-subjects factors | LSR Ch 16 |  |
+| 13 | 11/17 | Multiple Comparisons *(Guest Speaker: Eirini)* | LSR Ch 16 | HW 4 due |
 | \- | 11/19 | Interactions & ANCOVA | LSR Ch 16 |  |
 | 14 | 11/24 | Within-subjects designs | LSR Ch 16 |  |
 | \- | 11/26 | *No Class – Happy Thanksgiving!* |  |  |

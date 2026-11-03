@@ -63,9 +63,8 @@ name: one
 
 In the normal **one-sample $t$-test**
 
-  - $\bar{x} = \mu$
-  - $H_0: \bar{x} - \mu = 0$
-  - $H_A: \bar{x} - \mu \neq 0$
+  - $H_0: \mu = 53$
+  - $H_A: \mu \neq 53$
 
 ---
 ## Model Comparisons
@@ -233,13 +232,16 @@ round(x = tstat, digits = 3)
 ```
 
 ---
-## Model Comparison Approach
 
 Is `r round(x = tstat, digits = 3)` more extreme than our critical value? 
 
 - For an $\alpha = .05$ in a two-tailed test with $df = 7$, the critical $t$ value is 2.3650. 
 
-**Conclusion: No, it's not more extreme than the critical value. The weighted error term from the restricted model is smaller than the weighted error term from the full model -- 53 is a better estimator than 52. The means are not statistically significantly different**
+Conclusion: No, F = 0.012 (t = 0.108) is not more extreme than the critical value.
+
+**Estimating the sample mean from the data cost us one degree of freedom, and the error reduction we bought with it (8) is no larger than we’d expect from adding a parameter that does nothing. So we stick with the simpler (restricted) model.**
+
+The mean district percentage (52%) is not significantly different from 53%. This doesn't show the true mean is 53, only that the data don’t give us reason to need a different value.
 
 ---
 
@@ -461,13 +463,16 @@ round(x = tstat, digits = 3)
 ```
 
 ---
-## Model Comparison Approach
 
 Is `r round(x = tstat, digits = 3)` more extreme than our critical value? 
 
 - For an $\alpha = .05$ in a two-tailed test with $df = 14$, the critical $t$ value is 2.145. 
 
-**Conclusion: No, it's not more extreme than the critical value. The weighted error term for the restricted is smaller than the weighted error term from the full. The grand mean was a better estimator than using individual group means. Therefore, the means are not statistically significantly different.**
+Conclusion: No, F = 0.486 (t = 0.697) is not more extreme than the critical value.
+
+**Estimating a separate mean for each year instead of one grand mean cost us one additional degree of freedom. The error reduction we bought with it (225) is no larger than we’d expect from adding a parameter that does nothing. So we stick with the simpler (restricted) model.**
+
+The mean district percentage in 2016 (52%) is not significantly different from the mean district percentage in 2010 (44.5%). This doesn’t show the two years have the same true mean, only that the data don’t give us reason to need separate means for each year.
 
 ---
 
@@ -476,7 +481,7 @@ Is `r round(x = tstat, digits = 3)` more extreme than our critical value?
 We just did an independent-samples $t$-test! Let's verify our results:
 
 ```{r}
-t.test(dems$Dem ~ dems$Year)
+t.test(dems$Dem ~ dems$Year, var.equal = TRUE)
 ```
 
 ---
@@ -530,6 +535,7 @@ iris_sorted = iris %>%
 - $H_0: \bar{x}_{setosa} = \bar{x}_{versicolor} = \bar{x}_{virginica}$
 - $H_A: \bar{x}_{setosa} \neq \bar{x}_{versicolor} \neq \bar{x}_{virginica}$
 
+NOTE: At least 1 mean is different from the others. Not all are equal.
 --
 
 - Restricted Model: the best way of minimizing errors is to use the overall **grand mean**
@@ -691,13 +697,15 @@ round(x = effect, digits = 3)
 ```
 
 ---
-## Model Comparison Approach
-
 Is `r round(x = effect, digits = 3)` more extreme than our critical value? 
 
 - The critical value for this test is 3.058
 
-**Conclusion: The weighted error term of the restricted is larger than the weighted error term of the full. Using each group's mean was a better estimator, compared to the overall grand mean. Therefore, the means are statistically significantly different.**
+Conclusion: Yes, F = 119.265 is more extreme
+
+**Estimating a separate mean for each species instead of one grand mean cost us two additional degrees of freedom. The error reduction we bought with them (63.21) is far larger than we’d expect from adding parameters that do nothing: 31.61 per parameter, compared with 0.265 per df left in the full model. So we adopt the more complex (full) model.**
+
+Mean sepal length differs significantly among the three species (setosa = 5.01, versicolor = 5.94, virginica = 6.59). This doesn’t show that every species differs from every other, only that at least one mean differs. Finding out which ones takes follow-up comparisons.
 
 ---
 
@@ -742,18 +750,17 @@ with the numerator depending on the normal
 ]
 ]
 
-<img src="18-modelcomparison_files/figure-html/fdist.png", width="80%">
+<img src="19-modelcomparison_files/figure-html/fdist.png", width="80%">
 
 ---
 
-## But keep in mind
+## Assumptions of the F Distribution
 
-These probability distributions have a key assumption:
+1. Independent errors (or observations)
 
-  - the sample is a random selection from the population
-    
+2. Normally distributed errors (or the outcome is normal *within* each group, not necessarily pooled across all groups)
 
-If the sample is not a random selection, the rules of probability don't apply.
+3. Homogeneity of variance (equal variance across groups) --> homoscedasticity
 
 ---
 
@@ -774,6 +781,14 @@ Minimizing error terms is how we evaluate multitudes of models!
 --
 
 Plus, model comparison frameworks come up more formally in some advanced types of statistics. 
+
+---
+
+## Where we are going
+
+Next semester, every single regression you run will have an associated F-test
+
+That F-test is asking is this model better than one without any predictors. **AKA a restricted (null) model!**
 
 ---
 
