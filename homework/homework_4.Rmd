@@ -1,40 +1,61 @@
 ---
-title: 'Psych 5066: Homework #4'
+title: 'Psych 8066: Homework #4'
 output: 
   html_document
 ---
-
 # Instructions
 
-This assignment is going to be a little different than what we've done. Here's what's going to happen:
+Please complete this assignment using the RMarkdown file provided (<a href="homework_4.Rmd" download="homework_4.Rmd">download here</a>). Be sure to include your name in the preamble. When you turn in the assignment, include **_both_** the .Rmd and knitted .html files. Please turn in both documents to the **ASSIGNMENTS** page on Canvas.
 
--   First, [watch this video on using RMarkdown](https://www.youtube.com/watch?v=z2a80FnLFfE) and customization. It is truly an EXCELLENT talk. Watching this is **required**.
+Please put all R `CODE` within gray chunks. They will behave as normal R code. If you are asked to explain something or write a few sentences, please do that *outside* of the gray chunks. That way, when you knit, your sentences will show up as normal text, but all of your code will be in a designated code chunk.
 
--   You will create your own RMarkdown file, and you need to utilize at least 5 things from the video. It can range from themes, to inserting tables or equations, formatting the text to be bold/italics, bibliographies, formatting figures on the page etc. You can choose. But the resulting output document needs to look amazing.
+You may Google things. **You may NOT use artificial intelligence to generate code that you turn in**. You may discuss homework assignments with your classmates; however, it is important that you complete each assignment on your own and **do not simply copy someone else’s code**. If we believe one student has copied another’s work, both students will receive a 0 on the homework assignment. Please list at the top of the document who you worked with.
 
--   In this gorgeous RMarkdown document that you create, you will answer the questions below. So the content will be the questions/answers, and the formatting better be 🔥
+In the instructions, when it says **_by hand_**, what we mean is that you should not use a function that is built into R to complete the task. For example, if I ask you to find the mean *by hand*, you should **not** use the `mean()` function. However, you can (and should!) use your variables. So for instance, if I ask you to find the `mean()` by hand, you may do something like `sum(variableX)/length(variableX)`. This would be an appropriate *by hand* calculation. (You don't need to type `(3 + 5 + 5 + 17) / 4`...you can still use your variables). 
 
-- Please turn in both documents to the **ASSIGNMENTS** page *and* the **PEER REVIEW DISCUSSION** on Canvas.
-
-# Data
-
-Please install the `palmerpenguins` package. This package contains 2 different datasets, one called `penguins` and the other called `penguins_raw`. Please use the `penguins` dataset for all of the questions below. I strongly suggest storing `penguins` as it's own object that you can work with in your environment.
+**Data:** You will use the `palmerpenguins` data. Please install the package `palmerpenguins` if you don't have it already. The data itself is just called `penguins`. 
 
 Good luck!
 
-## Question 1
+### Preprocessing
+Remove missing data before getting started to make your life easier.
 
-Do certain islands produce more males or more females? State the null and alternative hypotheses, run the test, interpret the results.
+# Question 1
 
-## Question 2
+You are interested in whether different species of penguins have different length flippers (the penguin equivalent of t-rex arms).
 
-Do certain islands produce more of one specie of penguin than other islands? State the null and alternative hypotheses, run the test, interpret the results.
+* What kind of statistical test is this?
+* Write out the null and alternative hypotheses. Then write out what the restricted and full models actually mean.
+* Do the analysis "by hand" using the model comparison framework.
+* Double check your work by re-running the analysis using a function or two from `R`.
+* Calculate an effect size.
+* Interpret the results of the NHST procedure and the effect size.
+* Make a corresponding figure.
 
-## Question 3
+```{r}
 
-In our hypothetical world, it is well-understood that the average body mass (in grams) of penguins worldwide is about 4200. Does your sample of Biscoe penguins differ from the average penguin? State the null and alternative hypotheses, run the test, interpret the results.
+```
 
-## Question 4
 
-Do male and female penguins have similar bill lengths? State the null and alternative hypotheses, run the test, interpret the results.
+# Question 2
 
+Male penguins are generally heavier than females. You want to know whether species differ in body mass *after accounting for sex*.
+
+* What kind of statistical test is this?
+* Write out the null and alternative hypotheses. Then describe the restricted and full models: what does each model predict for a given penguin?
+* Provide either a statistical test or a figure showing that you meet at least 1 assumption of ANOVA.
+* Do the analysis. Does not need to be by hand, but you should be able to follow along the slides and complete it that way if necessary.
+* Interpret the results of the NHST procedure and the effect size.
+* Make a corresponding figure.
+
+# Question 3
+
+A classmate looks at their Question 1 output and says: "*E~F~* is smaller than *E~R~*, so species matters." Why is that not enough to support the conclusion?
+
+# Question 4
+
+Make a histogram of flipper length for all penguins pooled, then one per species. Is the pooled distribution normal? Does this violate the normality assumption for Question 1? Explain.
+
+# Question 5
+
+Keep only Adelie and Chinstrap penguins. Run `t.test(flipper_length_mm ~ species, var.equal = TRUE)` and `anova()` comparing the grand-mean model to the group-means model. What is the relationship between the *t* and *F* you get? What would change if you left out `var.equal = TRUE`, and why?

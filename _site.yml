@@ -43,6 +43,8 @@ navbar:
         href: "lectures/17-two_means_II.html"
       - text: "18-ModelComparisons"
         href: "lectures/19-modelcomparison.html"
+      - text: "19-Oneway ANOVA"
+        href: "lectures/20-onewayanova.html"
     - text: PDF Slides
       menu:
       - text: "1-Intro"
@@ -81,6 +83,8 @@ navbar:
         href: "lectures/17-two_means_II.pdf"
       - text: "18-ModelComparisons"
         href: "lectures/19-modelcomparison.pdf"
+      - text: "19-Oneway ANOVA"
+        href: "lectures/20-onewayanova.pdf"
     - text: Homework
       href: homework.html
   right:

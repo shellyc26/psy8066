@@ -3,7 +3,7 @@
   <head>
     <title>Oneway ANOVA</title>
     <meta charset="utf-8" />
-    <script src="libs/header-attrs-2.27/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.31/header-attrs.js"></script>
     <script src="libs/kePrint-0.0.1/kePrint.js"></script>
     <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
@@ -192,8 +192,6 @@ cdrLong = cdr %&gt;%
 ]
 
 ---
-
-### Means
 
 
 ``` r
@@ -766,7 +764,48 @@ dff
 ```
 
 ---
+### Quick Aside: Why is losing a degree of freedom a cost?
 
+Every parameter we estimate from the data fits *some* of the noise.
+
+--
+
+- Even if group membership meant nothing, the group means would differ a little by chance
+- So the full model **always** has less error than the restricted model: Ef ≤ Er
+- "The error got smaller" can never be our criterion
+
+---
+
+**What if group membership meant nothing?**
+
+- Take our 15 anxiety scores and randomly shuffle who belongs to which group, so impairment and anxiety have no real connection
+- Compute the error reduction for these fake groups
+- Repeat 5,000 times
+
+--
+
+- Random groups reduced the error by about **192** on average
+- The real groups reduced it by **923**
+
+---
+
+**Extreme case:** give each of our 15 participants their own "group mean"
+
+--
+
+- Ef = 0. A perfect fit!
+- dff = 15 − 15 = 0
+- The model learned nothing. It memorized the data, and there's nothing left over to estimate error
+
+--
+
+**So we always ask two questions:**
+
+1. How much error did we eliminate *per parameter we spent*? → (E&lt;sub&gt;R&lt;/sub&gt; − E&lt;sub&gt;F&lt;/sub&gt;) / (df&lt;sub&gt;R&lt;/sub&gt; − df&lt;sub&gt;F&lt;/sub&gt;)
+2. How much information do we have left to judge that? → df&lt;sub&gt;F&lt;/sub&gt;. Fewer leftover df means a less trustworthy estimate of error, so the bar gets higher
+
+*All models are wrong, but some are useful.* A model with a parameter for everything is never wrong, and never useful.
+---
 ### Wrapping it up!
 
 $$ F = \frac{(1343.333-420)/(14-12)}{420/12} \\
@@ -901,13 +940,18 @@ The ratio of SS between (signal) with the SS within (noise)
 
 Total variability associated with the outcome variable (SStot) can be divided into “the variation due to the differences in the sample means for the different groups” (SSb) plus “all the rest of the variation” (SSw).
 
-If the null hypothesis is true, then what would you expect? A larger SSb or a larger SSw?
+The null hypothesis: `\(MS_{between}\)` = `\(MS_{within}\)`
+  - what would this F statistic be if true?
 
---
+---
+### Analysis of "Variance"
 
-The sample means should be pretty similar to each other, right? And that would mean SSb to be really small, in comparison to the “the variation associated with everything else”, SSw.
+If the null hypothesis is true, we would expect the sample means to be pretty similar to each other, right?
 
-What does it mean if I have a large SSb but also a large SSw?
+Think about what the F-statistic will look like if:
+  - large SSb, small SSw
+  - small SSb, larger SSw
+  - equal SSb and SSw
 
 Note that the cut-off point will depend on the dfs.
 
@@ -933,7 +977,7 @@ If you take the square root of `\(\eta^2\)`, it can be interpreted as if it refe
 To what extent does the full model reduce the errors made? 
 
 `$$PRE = \frac{E_R - E_F}{E_R}$$`
-
+- Proportion of the restricted model’s error that the full model eliminates
 - Scale of 0 to 1
 - If it's 0, then knowing X does not help predict Y. The full model does not reduce the errors made.
 - If it's 1, then knowing X 100% predicts Y. The full model completely reduces the errors made. 
@@ -944,9 +988,11 @@ To what extent does the full model reduce the errors made?
 
 The following should hold in order to assume that your observed `\(F\)` maps on to the population distribution for `\(F\)`:
 
-1. Normally distributed scores
-2. Equal variances (homogeneity)
-3. Scores should be independent
+1. Independent errors (or observations)
+
+2. Normally distributed errors (or the outcome is normal *within* each group, not necessarily pooled across all groups)
+
+3. Homogeneity of variance (equal variance across groups) --&gt; homoscedasticity
 
 --
 
@@ -956,8 +1002,7 @@ What happens when your `\(n\)` is unequal? Or your variances are not equal?
 
 ### Assumptions, assumptions
 
-If you have unequal `\(n\)`, we need to use a slightly different formula for `\(E_F\)`
-
+If you have unequal `\(n\)`,
 - `\(E_F\)` reflects deviations from the group mean
 - `\(\Sigma(\text{SS X sample size for the group})\)`
 - Weight the sum of squares by the group size
@@ -980,30 +1025,29 @@ If you have unequal `\(n\)`, we need to use a slightly different formula for `\(
 
   A conservative test tends to reduce the chance of a Type I error (rejection of a true null hypothesis) at the cost of increasing the risk of a Type II error.
   
-- If you have large samples with very small variances, considered a *liberal* test
+- If your smaller groups have very large variances, considered a *liberal* test
 
   A liberal test tends to increase the chance of a Type I error but reduces the chance of a Type II error.
   
-- Large variances make it harder to detect true differences (more conservative). Small variances make it easier to detect differences, including those that might not be meaningful (more liberal).
 
 ---
 
 ### You try!
- - Complete the first question in HW 4 
+ - Complete the Question 1 on HW 4 
  
 ---
 class: inverse
 
 ## Next time
 
-- Multiple comparisons &amp; contrasts
+- Twoway ANOVA by hand (no interactions)
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"highlightStyle": "github",
-"highlightLines": true,
-"countIncrementalSlides": false
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));

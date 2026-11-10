@@ -1,5 +1,5 @@
 ---
-title: 'Psych 5066: Homework #2'
+title: 'Psych 8066: Homework #2'
 author: 'YOUR NAME HERE'
 output: 
   html_document

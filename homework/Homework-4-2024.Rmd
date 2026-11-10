@@ -47,7 +47,7 @@ You are interested in if the sex differences seen in body mass are consistent ac
 - Interpret the results of the NHST procedure and the effect size
 - Make a corresponding figure
 
-# Question 3
+# Question 3 -- maybe, stay tuned in class
 
 The island of Biscoe seems to have some really big penguins. You want to know if the average body mass of penguins from the islands of Dream and Torgersen is the same as Biscoe penguins. 
 
