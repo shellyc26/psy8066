@@ -31,9 +31,10 @@ colors = RColorBrewer::brewer.pal(4, "Set2")
     * Full 
     * _F_ test
     
-  * Explored different approaches to comparing means
-    * Multiple comparisons
-    * Contrast coefficients
+  * Translated it into classic terminology
+    * Sum of Squares & Mean Square **Between**
+    * Sum of Squares & Mean Square **Within**
+    
 
 ---
 
@@ -47,7 +48,7 @@ colors = RColorBrewer::brewer.pal(4, "Set2")
 
 name: one
 
-## Nomenclature
+## (G)nomenclature
 
 ![](22-btwn_subj_fctr_lecture_files/figure-html/gardengnome.jpg)
 
@@ -86,22 +87,22 @@ xtabs(~ grade + doublet, data)
 ---
 ## Null Hypothesis for "Main Effects" 
 
-$H_{0.1}$: Main effect of grade: The two grade groups perform similarly, regardless of doublet type.
+$H_{0.1}$: Main effect of grade: The two grade groups perform similarly, averaging across doublet type.
 
-$H_{0.2}$: Main effect of doublet legality: Children perform similarly with allowed and unallowed doublets, regardless of what grade they are in.
+$H_{0.2}$: Main effect of doublet legality: Children perform similarly with allowed and unallowed doublets, averaging across grade.
 
 --
 
-$H_{0.1}$: $\bar{x}_K = \bar{x}_{1st}$
+$H_{0.1}$: $\mu_K = \mu_{1st}$
 
-$H_{0.2}$: $\bar{x}_{allowed} = \bar{x}_{unallowed}$
+$H_{0.2}$: $\mu_{allowed} = \mu_{unallowed}$
 
 ---
 ## Null Hypothesis for "Main Effects" 
 
-$H_{0.1}$: $\bar{x}_K = \bar{x}_{1st}$
+$H_{0.1}$: $\mu_K = \mu_{1st}$
 
-$H_{0.2}$: $\bar{x}_{allowed} = \bar{x}_{unallowed}$
+$H_{0.2}$: $\mu_{allowed} = \mu_{unallowed}$
 ```{r}
 (grandmean <- mean(data$correct))
 (groupmeans <- aggregate(correct ~ grade + doublet, data, mean))
@@ -113,7 +114,7 @@ $H_{0.2}$: $\bar{x}_{allowed} = \bar{x}_{unallowed}$
 
 - **Two Restricted Models:** reflects what we are testing *against*. 
   - grand mean is our best guess for the main effect of grade
-  - grand mean is our best guess for the main effect of doublet position
+  - grand mean is our best guess for the main effect of doublet legality
 
 
 --
@@ -296,28 +297,70 @@ $$SS_{error} = SS_{Total} - SS_{grade} - SS_{doublet}$$
 
 ## Calculating SS error (Full Model perspective)
 
-Our full model allows for a grade effect and a doublet effect. 
+Our full model allows for a grade effect and a doublet effect, and they simply **add together** (no interaction yet).
 
 So from the full model perspective, the best guess for any student is...
+
+--
+
+$$\text{prediction} = \text{grand mean} + \text{grade effect} + \text{doublet effect}$$
+
+- **Effect** = how far that group's mean sits from the grand mean
+
+---
+
+## The effects
+
+```{r}
+# grade effect = grade mean - grand mean
+(grade_eff <- setNames(grade_means$correct - grandmean, grade_means$grade))
+
+# doublet effect = doublet mean - grand mean
+(dbl_eff <- setNames(dbl_means$correct - grandmean, dbl_means$doublet))
+```
+
+- Within each factor, the effects sum to zero
+- They are deviation scores from the grand mean!
+
+
+---
+
+## The full model's predictions
+
+| Cell | Grand mean | + grade effect | + doublet effect | = Prediction |
+|---|---|---|---|---|
+| K, allowed | 6.0625 | − 2.9375 | − 0.4375 | 2.6875 |
+| K, unallowed | 6.0625 | − 2.9375 | + 0.4375 | 3.5625 |
+| 1st, allowed | 6.0625 | + 2.9375 | − 0.4375 | 8.5625 |
+| 1st, unallowed | 6.0625 | + 2.9375 | + 0.4375 | 9.4375 |
+
+Compare to the actual cell means (2.75, 3.50, 8.50, 9.50): close, but not identical. The additive model forces the doublet difference to be the same in both grades.
 
 ---
 
 ## Calculating SS error
 
 ```{r echo=FALSE}
-
 (full_error <- data %>%
-   mutate(prediction = c(rep(groupmeans[2,3], 4),
-                         rep(groupmeans[4,3], 4),
-                         rep(groupmeans[1,3], 4),
-                         rep(groupmeans[3,3], 4)),
-         deviationScores = correct - prediction,
-         dev2 = deviationScores ^ 2))
+   mutate(prediction = grandmean + unname(grade_eff[grade]) + unname(dbl_eff[doublet]),
+          deviationScores = correct - prediction,
+          dev2 = deviationScores ^ 2))
 ```
 
 ```{r}
 (SSe <- sum(full_error$dev2))
 ```
+
+---
+
+## Check: the pieces add up
+
+```{r}
+(SS_total <- Er_grade)            # deviations from the grand mean
+SS_grade + SS_dbl + SSe
+```
+
+$$SS_{Total} = SS_{grade} + SS_{doublet} + SS_{error}$$
 
 ---
 ## Degrees of Freedom in two factor between subjects
@@ -358,18 +401,47 @@ $df_w = 16 - 2 - 2 + 1 = 13$
 ---
 ## F Table
 
-![an image caption Source: Ftable](22-btwn_subj_fctr_lecture_files/figure-html/F5.png)
+```{r echo=FALSE}
+# F table with SS and df filled in (replaces F5.png)
+f5_tab <- data.frame(
+  Source = c("Grade", "Doublet", "Error (residual)"),
+  SS = c(paste0("SS<sub>grade</sub> = ", round(SS_grade, 4)),
+         paste0("SS<sub>doublet</sub> = ", round(SS_dbl, 4)),
+         paste0("SS<sub>w</sub> = ", round(SSe, 4))),
+  df = c("df<sub>grade</sub> = 1", "df<sub>doublet</sub> = 1", "df<sub>w</sub> = 13"),
+  MS = c("SS<sub>grade</sub> / df<sub>grade</sub>",
+         "SS<sub>doublet</sub> / df<sub>doublet</sub>",
+         "SS<sub>w</sub> / df<sub>w</sub>"),
+  F = c("MS<sub>grade</sub> / MS<sub>w</sub>", "MS<sub>doublet</sub> / MS<sub>w</sub>", "")
+)
+kable(f5_tab, format = "html", escape = FALSE, align = "lcccc") %>%
+  kable_styling(font_size = 20)
+```
+
 
 ---
 
 ## F Table
-![an image caption Source: Ftable](22-btwn_subj_fctr_lecture_files/figure-html/F6.png)
+```{r echo=FALSE}
+# Complete F table (replaces F6.png)
+MSw <- SSe / 13
+f6_tab <- data.frame(
+  Source = c("Grade", "Doublet", "Error (residual)"),
+  SS = round(c(SS_grade, SS_dbl, SSe), 4),
+  df = c(1, 1, 13),
+  MS = round(c(SS_grade / 1, SS_dbl / 1, MSw), 3),
+  F  = c(round((SS_grade / 1) / MSw, 2), round((SS_dbl / 1) / MSw, 2), "")
+)
+kable(f6_tab, format = "html", align = "lcccc") %>%
+  kable_styling(font_size = 22)
+```
+
 
 ---
 
 ## Without stars
 
-1. We know that when F > 1, effect is significant (generally)
+1. We know that when F > 1, effect at least stands a chance of being significant  
 
 --
 
@@ -379,9 +451,21 @@ $df_w = 16 - 2 - 2 + 1 = 13$
 (F_crit = qf(.05, df1 = 1, df2 = 13, lower.tail = F))
 ```
 
-$F_{grade} = 184.08$ is more extreme than our $F_{crit} = 4.67$ so we reject our $H_{0.1}$
+$F_{grade} = `r round((SS_grade / 1) / (SSe / 13), 2)`$ is more extreme than our $F_{crit} = 4.67$ so we reject our $H_{0.1}$
 
-$F_{dbl} = 4.08$ is *not* more extreme than our $F_{crit} = 4.67$ so we fail to reject our $H_{0.2}$
+$F_{dbl} = `r round((SS_dbl / 1) / (SSe / 13), 2)`$ is *not* more extreme than our $F_{crit} = 4.67$ so we fail to reject our $H_{0.2}$
+
+---
+
+We tested grade by comparing the grand mean to the grade means. Strictly, the comparison our *F* uses is:
+
+- **Restricted:** doublet only &nbsp;&nbsp; **Full:** grade + doublet
+
+```{r}
+anova(lm(correct ~ doublet, data), lm(correct ~ grade + doublet, data))
+```
+
+Same SS for grade (138.06). This shortcut works **because the design is balanced**. With unequal cell sizes, it doesn't. Always compare a model *with* the factor to a model *without* it, keeping everything else in.
 
 ---
 
@@ -397,7 +481,9 @@ summary(aov(correct ~ grade + doublet, data))
 class: inverse
 
 ## Next time
+- Eirini will talk about multiple comparisons
 
+Then:
 - What if we expect performance to depend on **both** factors? 
 - We would add an *interaction* to our ANOVA: grade x doublet
 - We will translate all of this into formal equations (eek!)

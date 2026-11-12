@@ -1,0 +1,410 @@
+---
+title: 'Two Between-Subjects Factors'
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["xaringan-themer.css", "my-theme.css"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_mono_accent(base_color = "#17139C",link_color = "#DD3E3E")
+
+```
+
+```{r packagesAndData, include=FALSE, warning=FALSE}
+library(tidyverse)
+library(ggpubr)
+library(knitr)
+library(kableExtra)
+colors = RColorBrewer::brewer.pal(4, "Set2")
+```
+
+## Recap
+
+  * We've taken a model comparison approach to comparing group means with ANOVA
+    * Restricted 
+    * Full 
+    * _F_ test
+    
+  * Translated it into classic terminology
+    * Sum of Squares & Mean Square **Between**
+    * Sum of Squares & Mean Square **Within**
+    
+
+---
+
+## This time
+
+* Adding another independent variable: 
+
+**Between Subjects Factors**
+
+---
+
+name: one
+
+## (G)nomenclature
+
+![](22-btwn_subj_fctr_lecture_files/figure-html/gardengnome.jpg)
+
+---
+
+## Consider the following design
+
+**Kindergarten and 1st Graders' knowledge of double letters in words**
+
+.pull-left[
+Allowed doubles
+- *baff*
+- *holl* 
+- *dess*]
+
+.pull-right[
+Unallowed doubles
+- *bbaf*
+- *hhol*
+- *ddes*]
+
+--
+
+Two-way between-subjects, completely crossed (balanced) 
+```{r echo=FALSE}
+data <- data.frame(grade = (c(rep("K", times = 8),
+                              rep("1", times = 8))),
+                   doublet = (c(rep("allowed", times = 4),
+                                    rep("unallowed", times = 4),
+                                    rep("allowed", times = 4),
+                                    rep("unallowed", times = 4))),
+                   correct = c(2, 3, 4, 2, 3, 4, 3, 4,
+                               8, 9, 7, 10, 9, 10, 9, 10))
+xtabs(~ grade + doublet, data)
+```
+---
+## Null Hypothesis for "Main Effects" 
+
+$H_{0.1}$: Main effect of grade: The two grade groups perform similarly, regardless of doublet type.
+
+$H_{0.2}$: Main effect of doublet legality: Children perform similarly with allowed and unallowed doublets, regardless of what grade they are in.
+
+--
+
+$H_{0.1}$: $\mu_K = \mu_{1st}$
+
+$H_{0.2}$: $\mu_{allowed} = \mu_{unallowed}$
+
+---
+## Null Hypothesis for "Main Effects" 
+
+$H_{0.1}$: $\mu_K = \mu_{1st}$
+
+$H_{0.2}$: $\mu_{allowed} = \mu_{unallowed}$
+```{r}
+(grandmean <- mean(data$correct))
+(groupmeans <- aggregate(correct ~ grade + doublet, data, mean))
+```
+
+---
+
+## Model Comparison Approach for Main Effects
+
+- **Two Restricted Models:** reflects what we are testing *against*. 
+  - grand mean is our best guess for the main effect of grade
+  - grand mean is our best guess for the main effect of doublet position
+
+
+--
+
+- **Two Full Models:** allows us to fully include all information we might have.
+  - best way of minimizing errors is to use grade-specific mean
+  - best way of minimizing errors is to use doublet-specific mean
+
+---
+
+## F Table 
+
+![an image caption Source: Ftable](22-btwn_subj_fctr_lecture_files/figure-html/F2.png)
+---
+
+## The variance tree
+
+![Variance Tree 1](22-btwn_subj_fctr_lecture_files/figure-html/SS1.png)
+---
+## The variance tree
+
+![Variance Tree 2](22-btwn_subj_fctr_lecture_files/figure-html/SS2.png)
+
+---
+## The variance tree
+
+![Variance Tree 3](22-btwn_subj_fctr_lecture_files/figure-html/SS3.png)
+
+---
+
+## Let's start with Grade!
+
+$SS_{grade} = E_R - E_F$
+
+Restricted: our best guess for any student is the grand mean + some error
+
+Full: our best guess for any student is their grade's mean + some error
+---
+
+### Step 1: The Restricted Model for Grade
+
+
+```{r, echo=FALSE}
+data$prediction <- grandmean
+(restricted_grade <- data %>%
+  mutate(dev = correct - prediction,
+         dev2 = dev ^ 2))
+(Er_grade <- sum(restricted_grade$dev2))
+```
+
+
+
+
+---
+
+### Step 2: The Full Model for Grade
+
+Get Ef for grade. Our best guess is the group's mean. 
+
+```{r}
+(grade_means <- aggregate(correct ~ grade, data, mean))
+```
+
+---
+### Step 2: The Full Model for Grade
+
+```{r echo=FALSE}
+(full_grade <- data %>%
+  mutate(prediction = c(rep(filter(grade_means, grade == "K")$correct, 8),
+                        rep(filter(grade_means, grade == "1")$correct, 8)),
+         dev = correct - prediction,
+         dev2 = dev ^ 2))
+(Ef_grade <- sum(full_grade$dev2))
+```
+---
+## Step 3: Calculate SS. 
+
+$SS_{grade} = E_r - E_f$
+
+```{r}
+(SS_grade <- Er_grade - Ef_grade)
+```
+
+---
+## Step 4: Determine the degrees of freedom. 
+
+- $df_{grade} = k_{grade}-1$
+- where $k$ = number of levels in the factor
+
+---
+
+## F Table
+
+![an image caption Source: Ftable](22-btwn_subj_fctr_lecture_files/figure-html/F3.png)
+
+---
+
+## Rinse and repeat for doublet legality
+
+$SS_{doublet} = E_R - E_F$
+
+Restricted: our best guess for any student is the grand mean + some error
+- that is, regardless of whether students saw allowable or unallowable doublets, they have the same predicted number of correct items
+
+Full: our best guess for any student is their doublet type group's mean + some error
+
+---
+
+### Step 1: The Restricted Model for Doublet Type
+
+```{r, echo=FALSE}
+data$prediction <- grandmean
+(restricted_dbl<- data %>%
+  mutate(dev = correct - prediction,
+         dev2 = dev ^ 2))
+(Er_dbl <- sum(restricted_dbl$dev2))
+```
+
+
+
+---
+
+### Step 2: The Full Model for Doublet
+
+```{r}
+(dbl_means <- aggregate(correct ~ doublet, data, mean))
+```
+
+---
+### Step 2: The Full Model for Doublet
+
+```{r echo=FALSE}
+(full_dbl <- data %>%
+   arrange(doublet) %>%
+   mutate(prediction = c(rep(filter(dbl_means, doublet == "allowed")$correct, 8),
+                         rep(filter(dbl_means, doublet == "unallowed")$correct, 8)),
+         dev = correct - prediction,
+         dev2 = dev ^ 2))
+(Ef_dbl <- sum(full_dbl$dev2))
+```
+---
+## Step 3: Calculate SS
+
+$SS_{dbl} = E_r - E_f$
+
+```{r}
+(SS_dbl <- Er_dbl - Ef_dbl)
+```
+
+---
+## Step 4: Determine the degrees of freedom
+
+- $df_{dbl} = k_{dbl}-1$
+- where $k$ = number of levels in the factor
+
+---
+
+## F Table
+
+![an image caption Source: Ftable](22-btwn_subj_fctr_lecture_files/figure-html/F4.png)
+
+---
+
+## What about that Error? 
+
+![an image caption Source: variance](22-btwn_subj_fctr_lecture_files/figure-html/SS5.png)
+This is our **leftover variation** after taking our grade and doublet variables into account. 
+
+---
+## Calculating SS error
+
+$$SS_{Total} = SS_{grade} + SS_{doublet} + SS_{error}$$
+--
+
+**Conceptually: **
+
+$$SS_{error} = SS_{Total} - SS_{grade} - SS_{doublet}$$
+
+---
+
+## Calculating SS error (Full Model perspective)
+
+Our full model allows for a grade effect and a doublet effect. 
+
+So from the full model perspective, the best guess for any student is...
+
+---
+
+## Calculating SS error
+
+```{r echo=FALSE}
+
+(full_error <- data %>%
+   mutate(prediction = c(rep(groupmeans[2,3], 4),
+                         rep(groupmeans[4,3], 4),
+                         rep(groupmeans[1,3], 4),
+                         rep(groupmeans[3,3], 4)),
+         deviationScores = correct - prediction,
+         dev2 = deviationScores ^ 2))
+```
+
+```{r}
+(SSe <- sum(full_error$dev2))
+```
+
+---
+## Degrees of Freedom in two factor between subjects
+
+** $df_\text{Between}$ **
+
+- For *each* factor: 
+  - $df_{factor} = \text{Levels of factor} - 1$
+  - e.g., grade has **2 levels** (K, first)
+    - $df_{grade} = 2 - 1 = 1$
+
+---
+## Degrees of Freedom in two factor between subjects
+
+** $df_{within/error/residual}$ **
+
+.pull-left[
+16 observations, 1 additional mean for grade factor, 1 additional mean for doublet factor, and 1 grand mean
+
+$$\small{df_w = N - (\text{Levels of }F_1 - 1) - \\
+(\text{Levels of }F_2 - 1)- 1}$$
+
+simplifies to $N - \text{Levels of }F_1 - \text{Levels of }F_2 + 1$
+]
+
+.pull-right[
+$df_w = 16 - 1 - 1 - 1 = 13$
+
+$df_w = 16 - (2 - 1) - (2 - 1) - \\ 1 = 13$
+
+$df_w = 16 - 2 - 2 + 1 = 13$
+]
+
+---
+## Putting the pieces together
+
+![an image caption Source: Ftable](22-btwn_subj_fctr_lecture_files/figure-html/F1.png)
+---
+## F Table
+
+![an image caption Source: Ftable](22-btwn_subj_fctr_lecture_files/figure-html/F5.png)
+
+---
+
+## F Table
+![an image caption Source: Ftable](22-btwn_subj_fctr_lecture_files/figure-html/F6.png)
+
+---
+
+## Without stars
+
+1. We know that when F > 1, effect at least stands a chance of being significant  
+
+--
+
+2. Use a critical value to determine whether to reject the null. 
+
+```{r}
+(F_crit = qf(.05, df1 = 1, df2 = 13, lower.tail = F))
+```
+
+$F_{grade} = 184.08$ is more extreme than our $F_{crit} = 4.67$ so we reject our $H_{0.1}$
+
+$F_{dbl} = 4.08$ is *not* more extreme than our $F_{crit} = 4.67$ so we fail to reject our $H_{0.2}$
+
+---
+
+## Is it always this painful? 
+
+No, because we have `R`! 
+
+```{r}
+summary(aov(correct ~ grade + doublet, data))
+```
+
+---
+class: inverse
+
+## Next time
+- Eirini will talk about multiple comparisons
+
+Then:
+- What if we expect performance to depend on **both** factors? 
+- We would add an *interaction* to our ANOVA: grade x doublet
+- We will translate all of this into formal equations (eek!)
+
+
+
+

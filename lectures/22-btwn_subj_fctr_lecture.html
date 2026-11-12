@@ -3,7 +3,9 @@
   <head>
     <title>Two Between-Subjects Factors</title>
     <meta charset="utf-8" />
-    <script src="libs/header-attrs-2.27/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.31/header-attrs.js"></script>
+    <script src="libs/kePrint-0.0.1/kePrint.js"></script>
+    <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
     <link rel="stylesheet" href="my-theme.css" type="text/css" />
   </head>
@@ -29,9 +31,10 @@ class: center, middle, inverse, title-slide
     * Full 
     * _F_ test
     
-  * Explored different approaches to comparing means
-    * Multiple comparisons
-    * Contrast coefficients
+  * Translated it into classic terminology
+    * Sum of Squares &amp; Mean Square **Between**
+    * Sum of Squares &amp; Mean Square **Within**
+    
 
 ---
 
@@ -45,7 +48,7 @@ class: center, middle, inverse, title-slide
 
 name: one
 
-## Nomenclature
+## (G)nomenclature
 
 ![](22-btwn_subj_fctr_lecture_files/figure-html/gardengnome.jpg)
 
@@ -80,22 +83,22 @@ Two-way between-subjects, completely crossed (balanced)
 ---
 ## Null Hypothesis for "Main Effects" 
 
-`\(H_{0.1}\)`: Main effect of grade: The two grade groups perform similarly, regardless of doublet type.
+`\(H_{0.1}\)`: Main effect of grade: The two grade groups perform similarly, averaging across doublet type.
 
-`\(H_{0.2}\)`: Main effect of doublet legality: Children perform similarly with allowed and unallowed doublets, regardless of what grade they are in.
+`\(H_{0.2}\)`: Main effect of doublet legality: Children perform similarly with allowed and unallowed doublets, averaging across grade.
 
 --
 
-`\(H_{0.1}\)`: `\(\bar{x}_K = \bar{x}_{1st}\)`
+`\(H_{0.1}\)`: `\(\mu_K = \mu_{1st}\)`
 
-`\(H_{0.2}\)`: `\(\bar{x}_{allowed} = \bar{x}_{unallowed}\)`
+`\(H_{0.2}\)`: `\(\mu_{allowed} = \mu_{unallowed}\)`
 
 ---
 ## Null Hypothesis for "Main Effects" 
 
-`\(H_{0.1}\)`: `\(\bar{x}_K = \bar{x}_{1st}\)`
+`\(H_{0.1}\)`: `\(\mu_K = \mu_{1st}\)`
 
-`\(H_{0.2}\)`: `\(\bar{x}_{allowed} = \bar{x}_{unallowed}\)`
+`\(H_{0.2}\)`: `\(\mu_{allowed} = \mu_{unallowed}\)`
 
 ``` r
 (grandmean &lt;- mean(data$correct))
@@ -123,7 +126,7 @@ Two-way between-subjects, completely crossed (balanced)
 
 - **Two Restricted Models:** reflects what we are testing *against*. 
   - grand mean is our best guess for the main effect of grade
-  - grand mean is our best guess for the main effect of doublet position
+  - grand mean is our best guess for the main effect of doublet legality
 
 
 --
@@ -395,9 +398,57 @@ This is our **leftover variation** after taking our grade and doublet variables 
 
 ## Calculating SS error (Full Model perspective)
 
-Our full model allows for a grade effect and a doublet effect. 
+Our full model allows for a grade effect and a doublet effect, and they simply **add together** (no interaction yet).
 
 So from the full model perspective, the best guess for any student is...
+
+--
+
+`$$\text{prediction} = \text{grand mean} + \text{grade effect} + \text{doublet effect}$$`
+
+- **Effect** = how far that group's mean sits from the grand mean
+
+---
+
+## The effects
+
+
+``` r
+# grade effect = grade mean - grand mean
+(grade_eff &lt;- setNames(grade_means$correct - grandmean, grade_means$grade))
+```
+
+```
+##       1       K 
+##  2.9375 -2.9375
+```
+
+``` r
+# doublet effect = doublet mean - grand mean
+(dbl_eff &lt;- setNames(dbl_means$correct - grandmean, dbl_means$doublet))
+```
+
+```
+##   allowed unallowed 
+##   -0.4375    0.4375
+```
+
+- Within each factor, the effects sum to zero
+- They are deviation scores from the grand mean!
+
+
+---
+
+## The full model's predictions
+
+| Cell | Grand mean | + grade effect | + doublet effect | = Prediction |
+|---|---|---|---|---|
+| K, allowed | 6.0625 | − 2.9375 | − 0.4375 | 2.6875 |
+| K, unallowed | 6.0625 | − 2.9375 | + 0.4375 | 3.5625 |
+| 1st, allowed | 6.0625 | + 2.9375 | − 0.4375 | 8.5625 |
+| 1st, unallowed | 6.0625 | + 2.9375 | + 0.4375 | 9.4375 |
+
+Compare to the actual cell means (2.75, 3.50, 8.50, 9.50): close, but not identical. The additive model forces the doublet difference to be the same in both grades.
 
 ---
 
@@ -405,23 +456,23 @@ So from the full model perspective, the best guess for any student is...
 
 
 ```
-##    grade   doublet correct prediction deviationScores   dev2
-## 1      K   allowed       2       2.75           -0.75 0.5625
-## 2      K   allowed       3       2.75            0.25 0.0625
-## 3      K   allowed       4       2.75            1.25 1.5625
-## 4      K   allowed       2       2.75           -0.75 0.5625
-## 5      K unallowed       3       3.50           -0.50 0.2500
-## 6      K unallowed       4       3.50            0.50 0.2500
-## 7      K unallowed       3       3.50           -0.50 0.2500
-## 8      K unallowed       4       3.50            0.50 0.2500
-## 9      1   allowed       8       8.50           -0.50 0.2500
-## 10     1   allowed       9       8.50            0.50 0.2500
-## 11     1   allowed       7       8.50           -1.50 2.2500
-## 12     1   allowed      10       8.50            1.50 2.2500
-## 13     1 unallowed       9       9.50           -0.50 0.2500
-## 14     1 unallowed      10       9.50            0.50 0.2500
-## 15     1 unallowed       9       9.50           -0.50 0.2500
-## 16     1 unallowed      10       9.50            0.50 0.2500
+##    grade   doublet correct prediction deviationScores       dev2
+## 1      K   allowed       2     2.6875         -0.6875 0.47265625
+## 2      K   allowed       3     2.6875          0.3125 0.09765625
+## 3      K   allowed       4     2.6875          1.3125 1.72265625
+## 4      K   allowed       2     2.6875         -0.6875 0.47265625
+## 5      K unallowed       3     3.5625         -0.5625 0.31640625
+## 6      K unallowed       4     3.5625          0.4375 0.19140625
+## 7      K unallowed       3     3.5625         -0.5625 0.31640625
+## 8      K unallowed       4     3.5625          0.4375 0.19140625
+## 9      1   allowed       8     8.5625         -0.5625 0.31640625
+## 10     1   allowed       9     8.5625          0.4375 0.19140625
+## 11     1   allowed       7     8.5625         -1.5625 2.44140625
+## 12     1   allowed      10     8.5625          1.4375 2.06640625
+## 13     1 unallowed       9     9.4375         -0.4375 0.19140625
+## 14     1 unallowed      10     9.4375          0.5625 0.31640625
+## 15     1 unallowed       9     9.4375         -0.4375 0.19140625
+## 16     1 unallowed      10     9.4375          0.5625 0.31640625
 ```
 
 
@@ -430,8 +481,31 @@ So from the full model perspective, the best guess for any student is...
 ```
 
 ```
-## [1] 9.75
+## [1] 9.8125
 ```
+
+---
+
+## Check: the pieces add up
+
+
+``` r
+(SS_total &lt;- Er_grade)            # deviations from the grand mean
+```
+
+```
+## [1] 150.9375
+```
+
+``` r
+SS_grade + SS_dbl + SSe
+```
+
+```
+## [1] 150.9375
+```
+
+`$$SS_{Total} = SS_{grade} + SS_{doublet} + SS_{error}$$`
 
 ---
 ## Degrees of Freedom in two factor between subjects
@@ -472,18 +546,86 @@ simplifies to `\(N - \text{Levels of }F_1 - \text{Levels of }F_2 + 1\)`
 ---
 ## F Table
 
-![an image caption Source: Ftable](22-btwn_subj_fctr_lecture_files/figure-html/F5.png)
+&lt;table class="table" style="font-size: 20px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Source &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; SS &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; df &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; MS &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; F &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Grade &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; SS&lt;sub&gt;grade&lt;/sub&gt; = 138.0625 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; df&lt;sub&gt;grade&lt;/sub&gt; = 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; SS&lt;sub&gt;grade&lt;/sub&gt; / df&lt;sub&gt;grade&lt;/sub&gt; &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; MS&lt;sub&gt;grade&lt;/sub&gt; / MS&lt;sub&gt;w&lt;/sub&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Doublet &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; SS&lt;sub&gt;doublet&lt;/sub&gt; = 3.0625 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; df&lt;sub&gt;doublet&lt;/sub&gt; = 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; SS&lt;sub&gt;doublet&lt;/sub&gt; / df&lt;sub&gt;doublet&lt;/sub&gt; &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; MS&lt;sub&gt;doublet&lt;/sub&gt; / MS&lt;sub&gt;w&lt;/sub&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Error (residual) &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; SS&lt;sub&gt;w&lt;/sub&gt; = 9.8125 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; df&lt;sub&gt;w&lt;/sub&gt; = 13 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; SS&lt;sub&gt;w&lt;/sub&gt; / df&lt;sub&gt;w&lt;/sub&gt; &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
 
 ---
 
 ## F Table
-![an image caption Source: Ftable](22-btwn_subj_fctr_lecture_files/figure-html/F6.png)
+&lt;table class="table" style="font-size: 22px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Source &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; SS &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; df &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; MS &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; F &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Grade &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 138.0625 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 138.062 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 182.91 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Doublet &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3.0625 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3.062 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 4.06 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Error (residual) &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 9.8125 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 13 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0.755 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
 
 ---
 
 ## Without stars
 
-1. We know that when F &gt; 1, effect is significant (generally)
+1. We know that when F &gt; 1, effect at least stands a chance of being significant  
 
 --
 
@@ -498,9 +640,34 @@ simplifies to `\(N - \text{Levels of }F_1 - \text{Levels of }F_2 + 1\)`
 ## [1] 4.667193
 ```
 
-`\(F_{grade} = 184.08\)` is more extreme than our `\(F_{crit} = 4.67\)` so we reject our `\(H_{0.1}\)`
+`\(F_{grade} = 182.91\)` is more extreme than our `\(F_{crit} = 4.67\)` so we reject our `\(H_{0.1}\)`
 
-`\(F_{dbl} = 4.08\)` is *not* more extreme than our `\(F_{crit} = 4.67\)` so we fail to reject our `\(H_{0.2}\)`
+`\(F_{dbl} = 4.06\)` is *not* more extreme than our `\(F_{crit} = 4.67\)` so we fail to reject our `\(H_{0.2}\)`
+
+---
+
+We tested grade by comparing the grand mean to the grade means. Strictly, the comparison our *F* uses is:
+
+- **Restricted:** doublet only &amp;nbsp;&amp;nbsp; **Full:** grade + doublet
+
+
+``` r
+anova(lm(correct ~ doublet, data), lm(correct ~ grade + doublet, data))
+```
+
+```
+## Analysis of Variance Table
+## 
+## Model 1: correct ~ doublet
+## Model 2: correct ~ grade + doublet
+##   Res.Df     RSS Df Sum of Sq      F    Pr(&gt;F)    
+## 1     14 147.875                                  
+## 2     13   9.812  1    138.06 182.91 4.918e-09 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+Same SS for grade (138.06). This shortcut works **because the design is balanced**. With unequal cell sizes, it doesn't. Always compare a model *with* the factor to a model *without* it, keeping everything else in.
 
 ---
 
@@ -526,7 +693,9 @@ summary(aov(correct ~ grade + doublet, data))
 class: inverse
 
 ## Next time
+- Eirini will talk about multiple comparisons
 
+Then:
 - What if we expect performance to depend on **both** factors? 
 - We would add an *interaction* to our ANOVA: grade x doublet
 - We will translate all of this into formal equations (eek!)
@@ -538,9 +707,9 @@ class: inverse
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"highlightStyle": "github",
-"highlightLines": true,
-"countIncrementalSlides": false
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
