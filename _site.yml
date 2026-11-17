@@ -47,6 +47,8 @@ navbar:
         href: "lectures/20-onewayanova.html"
       - text: "20-Twoway ANVOA"
         href: "lectures/22-btwn_subj_fctr_lecture.html"
+      - text: "21-MultipleComparisons"
+        href: "lectures/21-multiplecomparisons_EZ.html"
     - text: PDF Slides
       menu:
       - text: "1-Intro"
@@ -89,6 +91,8 @@ navbar:
         href: "lectures/20-onewayanova.pdf"
       - text: "20-Twoway ANVOA"
         href: "lectures/22-btwn_subj_fctr_lecture.pdf"
+      - text: "21-MultipleComparisons"
+        href: "lectures/21-multiplecomparisons_EZ.pdf"
     - text: Homework
       href: homework.html
   right:
