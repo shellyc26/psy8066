@@ -1,0 +1,947 @@
+---
+title: 'Two Between-Subjects Factors with Interactions'
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["xaringan-themer.css", "my-theme.css"]
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_mono_accent(base_color = "#17139C",link_color = "#DD3E3E")
+```
+
+```{r packagesAndData, include=FALSE, warning=FALSE}
+library(tidyverse)
+library(knitr)
+colors = RColorBrewer::brewer.pal(4, "Set2")
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r compute, include=FALSE}
+# Everything on the hand-calculation slides is computed here from the data,
+# so the tables can never drift away from the numbers R gives at the end.
+# (Strings that R prints into tables/plots are kept plain ASCII on purpose.)
+mp <- read.csv(here::here("data/mathproblem.csv"), fileEncoding = "UTF-8-BOM")
+mp$Age[mp$Age == "EIght"] <- "Eight"          # fix the typo for the hand calculations
+mp$Age     <- factor(mp$Age, levels = c("Eight", "Nine"))
+mp$Problem <- factor(mp$Problem, levels = c("Normal", "Tricky"))
+mp <- arrange(mp, Age, Problem)
+
+n_cell <- 4
+N      <- nrow(mp)
+grand  <- mean(mp$Score)
+
+cells <- mp %>%
+  group_by(Age, Problem) %>%
+  summarize(cell = mean(Score), .groups = "drop") %>%
+  left_join(mp %>% group_by(Age) %>% summarize(row = mean(Score)), by = "Age") %>%
+  left_join(mp %>% group_by(Problem) %>% summarize(col = mean(Score)), by = "Problem") %>%
+  mutate(grand    = grand,
+         a_eff    = row - grand,                     # alpha-hat_j
+         b_eff    = col - grand,                     # beta-hat_k
+         additive = row + col - grand,               # restricted (no-interaction) prediction
+         ix       = cell - row - col + grand)        # (alpha beta)-hat_jk
+
+mp <- left_join(mp, cells, by = c("Age", "Problem"))
+
+age_lab <- c(Eight = "8-9", Nine = "9-10")
+mp$label    <- paste0(age_lab[as.character(mp$Age)], ", ", mp$Problem)
+cells$label <- paste0(age_lab[as.character(cells$Age)], ", ", cells$Problem)
+
+# Errors (sum of squared errors) for each model
+E_grand  <- sum((mp$Score - grand)^2)                 # grand mean only (= SS total)
+E_age    <- sum((mp$Score - mp$row)^2)                # age means only
+E_prob   <- sum((mp$Score - mp$col)^2)                # problem means only
+E_full   <- sum((mp$Score - mp$cell)^2)               # cell means (full model)
+E_noAge  <- sum((mp$Score - (mp$cell - mp$a_eff))^2) # full model with Age removed
+
+SS_age  <- E_grand - E_age
+SS_prob <- E_grand - E_prob
+SS_ix   <- n_cell * sum(cells$ix^2)
+SS_w    <- E_full
+MS_w    <- SS_w / (N - 4)
+
+# Cell means in a 2 x 2 for quick reference
+m <- function(a, p) cells$cell[cells$Age == a & cells$Problem == p]
+age_gap_N  <- m("Nine", "Normal") - m("Eight", "Normal")
+age_gap_T  <- m("Nine", "Tricky") - m("Eight", "Tricky")
+prob_gap_8 <- m("Eight", "Normal") - m("Eight", "Tricky")
+prob_gap_9 <- m("Nine", "Normal") - m("Nine", "Tricky")
+
+f2 <- function(x) formatC(x, format = "f", digits = 2)
+f3 <- function(x) formatC(x, format = "f", digits = 3)
+
+# Error table: one row per cell, showing all 4 children's scores and errors
+err_table <- function(pred) {
+  tab <- mp %>%
+    mutate(pred = pred, e = Score - pred) %>%
+    group_by(label) %>%
+    summarize(Scores     = paste(Score, collapse = ", "),
+              Prediction = paste(unique(f3(pred)), collapse = ", "),
+              Errors     = paste(f3(e), collapse = ", "),
+              SSE        = formatC(sum(e^2), format = "f", digits = 4),
+              .groups = "drop")
+  tab <- bind_rows(tab, tibble(label = "<b>Total</b>", Scores = "", Prediction = "",
+                               Errors = "",
+                               SSE = paste0("<b>", f2(sum((mp$Score - pred)^2)), "</b>")))
+  kable(tab, format = "html", escape = FALSE, align = "llllr",
+        col.names = c("Cell", "Scores (Y)", "Prediction", "Errors (Y - Prediction)",
+                      "Sum of squared errors"))
+}
+```
+
+```{css, echo=FALSE}
+.small-table table { font-size: 70%; }
+.small-table td, .small-table th { padding: 3px 10px; }
+.mid-table table { font-size: 80%; }
+.mid-table td, .mid-table th { padding: 4px 12px; }
+.small-text { font-size: 80%; }
+```
+
+### Last time
+
+Eirini's great talk about multiple comparisons
+- Bonferonni Corrections
+- FDR
+- Question: "are you really ok with potential Type I error rate?"
+
+Multiple Comparisons for ANOVA
+- Zoom out
+
+--
+
+### This time
+- What happens when the effect of one variable on the outcome **depends on** the level of the other variable?
+- That is an **interaction**
+
+---
+
+## Math is hard
+
+Here are our data...
+
+![](images/trickydata.png)
+
+---
+
+## Math is hard: Null Hypotheses for **Main Effects**
+
+.pull-left[
+
+$H_{0.1}$ : The two age groups perform similarly, *averaging across* the two kinds of math problems
+
+
+$H_{0.1}: \mu_{8} = \mu_{9}$
+
+]
+
+.pull-right[
+
+$H_{0.2}$ : Children perform similarly on normal and tricky math problems, *averaging across* the two age groups
+
+
+$H_{0.2}: \mu_{\text{Normal}} = \mu_{\text{Tricky}}$
+
+]
+
+--
+
+These are **marginal** means: each one averages over the levels of the other factor (the margins of the table on the next slide).
+
+---
+
+## Math is hard
+
+![](images/cellmeans.png)
+
+---
+
+## Math is hard: Means on means
+
+How much better do the older kids do, **separately for each kind of problem**?
+
+.mid-table[
+
+| | Normal | Tricky |
+|:--|--:|--:|
+| 8–9 year olds | `r f2(m("Eight","Normal"))` | `r f2(m("Eight","Tricky"))` |
+| 9–10 year olds | `r f2(m("Nine","Normal"))` | `r f2(m("Nine","Tricky"))` |
+| **Age difference (9–10 minus 8–9)** | **`r f2(age_gap_N)`** | **`r f2(age_gap_T)`** |
+
+]
+
+--
+
+The age difference is small for normal problems and large for tricky problems.
+
+**Difference of the differences:** $`r f2(age_gap_T)` - `r f2(age_gap_N)` = `r f2(age_gap_T - age_gap_N)`$
+
+---
+
+## Math is hard: Means on means
+
+Now the other direction: how much harder are tricky problems, **separately for each age group**?
+
+.mid-table[
+
+| | Normal | Tricky | **Normal minus Tricky** |
+|:--|--:|--:|--:|
+| 8–9 year olds | `r f2(m("Eight","Normal"))` | `r f2(m("Eight","Tricky"))` | **`r f2(prob_gap_8)`** |
+| 9–10 year olds | `r f2(m("Nine","Normal"))` | `r f2(m("Nine","Tricky"))` | **`r f2(prob_gap_9)`** |
+
+]
+
+--
+
+**Difference of the differences:** $`r f2(prob_gap_8)` - `r f2(prob_gap_9)` = `r f2(prob_gap_8 - prob_gap_9)`$
+
+`r f2(age_gap_T - age_gap_N)` again! It does not matter which way you slice the table: the difference of differences is the same number.
+
+---
+
+## A 3rd effect: the **Interaction**
+
+An **interaction** means the effect of one factor on the outcome *depends on the level of the other factor*.
+
+- The effect of age depends on problem type (small for normal, large for tricky)
+- Equivalently, the effect of problem type depends on age (bigger penalty for younger kids)
+
+--
+
+**Careful:** an interaction is *not* "age affects problem type" or "the factors depend on each other." In this design, age and problem type are unrelated (every age group did every problem type). An interaction is about how the two factors *combine* to affect the **score**.
+
+---
+
+## Adding a 3rd Null Hypothesis
+
+$H_{0.3}$ : *The age difference is the same for normal and tricky problems*
+
+$$H_{0.3}: (\mu_{9,\text{Normal}} - \mu_{8,\text{Normal}}) = (\mu_{9,\text{Tricky}} - \mu_{8,\text{Tricky}})$$
+
+--
+
+$H_{0.3}$ : *The tricky-problem penalty is the same for both age groups*
+
+$$H_{0.3}: (\mu_{8,\text{Normal}} - \mu_{8,\text{Tricky}}) = (\mu_{9,\text{Normal}} - \mu_{9,\text{Tricky}})$$
+
+--
+
+☝️ These are the same hypothesis: rearrange either equation and you get the other. That is why we got `r f2(age_gap_T - age_gap_N)` both ways.
+
+---
+
+## Picturing an interaction
+
+```{r interactionPicture, echo=FALSE, fig.width=10, fig.height=4.8, out.width="100%", dpi=150}
+pic <- bind_rows(
+  cells %>% transmute(Age, Problem, Score = additive,
+                      model = "Restricted: NO interaction\n(same age gap forced in both)"),
+  cells %>% transmute(Age, Problem, Score = cell,
+                      model = "Full: WITH interaction\n(the actual cell means)")
+) %>%
+  mutate(model = factor(model, levels = unique(model)),
+         Age = factor(age_lab[as.character(Age)], levels = age_lab),
+         hj  = ifelse(Problem == "Normal", 1.35, -0.35))
+
+ggplot(pic, aes(x = Problem, y = Score, color = Age, group = Age)) +
+  geom_line(linewidth = 1.5) +
+  geom_point(size = 4) +
+  geom_text(aes(label = f3(Score), hjust = hj), size = 5, show.legend = FALSE) +
+  facet_wrap(~ model) +
+  scale_color_manual(values = colors[1:2], name = "Age group") +
+  scale_x_discrete(expand = expansion(add = .7)) +
+  scale_y_continuous(limits = c(0, 4.3)) +
+  labs(x = "Problem type", y = "Mean score") +
+  theme_classic(base_size = 18) +
+  theme(strip.background = element_blank(),
+        strip.text = element_text(face = "bold"))
+```
+
+**Parallel lines = no interaction.** The interaction test asks: are the real lines further from parallel than we'd expect by chance?
+
+---
+
+## Equations: a reminder from one-way ANOVA
+
+One factor (e.g., Age). $i$ = child, $j$ = age group:
+
+$$\text{Restricted: } Y_{ij} = \mu + \varepsilon_{ij} \qquad \text{Full: } Y_{ij} = \mu + \alpha_j + \varepsilon_{ij}$$
+
+--
+
+- $\mu$ = the grand mean
+- $\alpha_j = \mu_j - \mu$ = the **effect** of being in age group $j$ (how far that group's mean is from the grand mean)
+- $\varepsilon_{ij}$ = error (whatever the model doesn't explain about child $i$)
+
+--
+
+$H_0$: every $\alpha_j = 0$. The restricted model is the full model with that term removed.
+
+---
+
+## Equations: the two-way model
+
+$i$ = child, $j$ = age group, $k$ = problem type. The **full** model:
+
+$$Y_{ijk} = \mu + \alpha_j + \beta_k + (\alpha\beta)_{jk} + \varepsilon_{ijk}$$
+
+--
+
+.mid-table[
+
+| Term | Meaning | Definition |
+|:--|:--|:--|
+| $\mu$ | grand mean | |
+| $\alpha_j$ | effect of age group $j$ | $\mu_{j\cdot} - \mu$ |
+| $\beta_k$ | effect of problem type $k$ | $\mu_{\cdot k} - \mu$ |
+| $(\alpha\beta)_{jk}$ | **interaction**: what's left in cell $jk$ after both main effects | $\mu_{jk} - \mu_{j\cdot} - \mu_{\cdot k} + \mu$ |
+| $\varepsilon_{ijk}$ | error | |
+
+]
+
+.small-text[
+A dot means "averaged over": $\mu_{j\cdot}$ is age group $j$ averaged over problem types. $(\alpha\beta)_{jk}$ is **one symbol**, not $\alpha$ times $\beta$.
+]
+
+---
+
+## Cell mean = sum of the effects
+
+Estimates ( $\hat{\mu}$, $\hat{\alpha}_j$, $\hat{\beta}_k$, $\widehat{(\alpha\beta)}_{jk}$; hats mean "estimated from the sample"):
+
+.small-table[
+
+```{r decomp, echo=FALSE}
+cells %>%
+  transmute(Cell = label,
+            `Cell mean` = f3(cell),
+            `= Grand mean` = f3(grand),
+            `+ Age effect` = f3(a_eff),
+            `+ Problem effect` = f3(b_eff),
+            `+ Interaction` = f3(ix)) %>%
+  kable(format = "html", align = "lrrrrr")
+```
+
+]
+
+--
+
+First row: $`r f3(grand)` + (`r f3(cells$a_eff[1])`) + `r f3(cells$b_eff[1])` + `r f3(cells$ix[1])` = `r f3(cells$cell[1])`$
+
+In a 2x2, each interaction term is $\pm$ (difference of differences) / 4 $= `r f2(age_gap_T - age_gap_N)` / 4 = `r f3(abs(cells$ix[1]))`$
+
+---
+
+## Three Restricted Models
+
+Each test removes **one** term from the full model:
+
+Testing the **Age** main effect ( $H_0$: every $\alpha_j = 0$ )
+
+$$\text{Restricted: } Y_{ijk} = \mu + \beta_k + (\alpha\beta)_{jk} + \varepsilon_{ijk}$$
+
+Testing the **Problem** main effect ( $H_0$: every $\beta_k = 0$ )
+
+$$\text{Restricted: } Y_{ijk} = \mu + \alpha_j + (\alpha\beta)_{jk} + \varepsilon_{ijk}$$
+
+Testing the **interaction** ( $H_0$: every $(\alpha\beta)_{jk} = 0$ )
+
+$$\text{Restricted: } Y_{ijk} = \mu + \alpha_j + \beta_k + \varepsilon_{ijk}$$
+
+---
+
+## Diagrams
+
+<center>
+<img src="images/diagrams.png" width="55%">
+</center>
+
+- $SS_{\text{within}}$ = $E_F$ for the full model (error left over after using the cell means)
+- $SS_{\text{between}}$ = $E_R - E_F$ for the grand-mean-only model vs. the full model. It splits into Age, Problem, and A×P
+- $MS_{\text{within}}$ is the denominator for all three *F*-tests
+
+---
+
+## ANOVA (Source) Table
+
+| Source | SS | df | MS | F |
+|:--|:--|:--|:--|:--|
+| Age | $SS_{A}$ | | | |
+| Problem | $SS_{P}$ | | | |
+| Age × Problem | $SS_{A \times P}$ | | | |
+| Error / Within | $SS_{W}$ | | | |
+
+---
+
+## ANOVA (Source) Table
+
+Fill in the easy stuff first. $a$ = number of age groups, $p$ = number of problem types
+
+.mid-table[
+
+| Source | SS | df | MS | F |
+|:--|:--|:--|:--|:--|
+| Age | $SS_{A}$ | $a - 1$ | $SS_{A} / df_{A}$ | $MS_{A} / MS_{W}$ |
+| Problem | $SS_{P}$ | $p - 1$ | $SS_{P} / df_{P}$ | $MS_{P} / MS_{W}$ |
+| Age × Problem | $SS_{A \times P}$ | $(a - 1)(p - 1)$ | $SS_{A \times P} / df_{A \times P}$ | $MS_{A \times P} / MS_{W}$ |
+| Error / Within | $SS_{W}$ | ? | $SS_{W} / df_{W}$ | |
+
+]
+
+---
+
+## df for the Full Model
+
+Always: (number of participants) − (number of parameters estimated in the full model)
+
+How many means did we calculate for the full model?
+
+--
+
+One per cell: $a \times p = 2 \times 2 = 4$ cell means. With $N = 16$ children and $n = 4$ per cell:
+
+$$\begin{aligned}
+df_{W} &= N - ap \\
+&= 16 - (2)(2) \\
+&= 12
+\end{aligned}$$
+
+--
+
+Same thing, counted cell by cell: each cell has $n - 1$ df, so $df_{W} = ap(n-1) = 4 \times 3 = 12$
+
+---
+
+## ANOVA (Source) Table
+
+| Source | SS | df | MS | F |
+|:--|:--|:--|:--|:--|
+| Age | $SS_{A}$ | 1 | $SS_{A} / 1$ | $MS_{A} / MS_{W}$ |
+| Problem | $SS_{P}$ | 1 | $SS_{P} / 1$ | $MS_{P} / MS_{W}$ |
+| Age × Problem | $SS_{A \times P}$ | 1 | $SS_{A \times P} / 1$ | $MS_{A \times P} / MS_{W}$ |
+| Error / Within | $SS_{W}$ | 12 | $SS_{W} / 12$ | |
+
+---
+
+## How to calculate $SS_{\text{Age}}$
+
+Formally: compare the full model to the same model with Age removed
+
+$$\text{Full: } Y_{ijk} = \mu + \alpha_j + \beta_k + (\alpha\beta)_{jk} + \varepsilon_{ijk}$$
+
+$$\text{Restricted: } Y_{ijk} = \mu + \beta_k + (\alpha\beta)_{jk} + \varepsilon_{ijk}$$
+
+--
+
+**Shortcut:** every cell has the same $n$ (a *balanced* design). Then $E_R - E_F$ for Age is the same whether or not Problem and the interaction are in both models. So we can use the simpler one-way comparison:
+
+$$\text{Restricted: } Y_{ijk} = \mu + \varepsilon_{ijk} \qquad \text{Full: } Y_{ijk} = \mu + \alpha_j + \varepsilon_{ijk}$$
+
+---
+
+## Get the $E_R$ for Age
+
+Restricted model: every child is predicted by the grand mean, $\hat{Y} = `r f3(grand)`$
+
+.small-table[
+
+```{r erAge, echo=FALSE}
+err_table(rep(grand, N))
+```
+
+]
+
+$$E_R = \sum (Y - \hat{Y})^2 = `r f2(E_grand)`$$
+
+---
+
+## Get the $E_F$ for Age
+
+Full model: every child is predicted by their age group's mean ( $`r f3(cells$row[1])`$ or $`r f3(cells$row[3])`$ )
+
+.small-table[
+
+```{r efAge, echo=FALSE}
+err_table(mp$row)
+```
+
+]
+
+$$E_F = \sum (Y - \hat{Y})^2 = `r f2(E_age)`$$
+
+---
+
+## How to calculate $SS_{\text{Age}}$
+
+$SS_{\text{Age}} = E_R - E_F$
+
+```{r}
+35.75 - 31.75
+```
+
+--
+
+.small-text[
+**Check:** the formal comparison (full model vs. full model without Age) gives $`r f2(E_noAge)` - `r f2(E_full)` = `r f2(E_noAge - E_full)`$. Same answer.
+]
+
+--
+
+$SS_{\text{Problem}}$ works the same way, using the problem-type means ( $`r f3(cells$col[1])`$ and $`r f3(cells$col[2])`$ ) as the full model:
+
+$SS_{\text{Problem}} = E_R - E_F = `r f2(E_grand)` - `r f2(E_prob)` = `r f2(SS_prob)`$
+
+---
+
+## ANOVA (Source) Table
+
+| Source | SS | df | MS | F |
+|:--|:--|:--|:--|:--|
+| Age | **`r f2(SS_age)`** | 1 | **`r f2(SS_age)`** | $`r f2(SS_age)` / MS_{W}$ |
+| Problem | **`r f2(SS_prob)`** | 1 | **`r f2(SS_prob)`** | $`r f2(SS_prob)` / MS_{W}$ |
+| Age × Problem | $SS_{A \times P}$ | 1 | $SS_{A \times P} / 1$ | $MS_{A \times P} / MS_{W}$ |
+| Error / Within | $SS_{W}$ | 12 | $SS_{W} / 12$ | |
+
+---
+
+## The Interaction: $SS_{A \times P}$
+
+$H_{0.3}$ : *The age difference is the same for normal and tricky problems*
+
+$H_{0.3}$ : *The tricky-problem penalty is the same for both age groups*
+
+Restricted model (no interaction):
+
+$$Y_{ijk} = \mu + \alpha_j + \beta_k + \varepsilon_{ijk}$$
+
+---
+
+### What does the restricted model predict?
+
+Grand Mean + (Row Mean − Grand Mean) + (Column Mean − Grand Mean)
+
+= **Row Mean + Column Mean − Grand Mean** &nbsp;&nbsp; (rows = age, columns = problem)
+
+--
+
+.pull-left[
+**Restricted** (no interaction)
+
+.mid-table[
+
+| | Normal | Tricky |
+|:--|--:|--:|
+| 8–9 | `r f3(cells$additive[1])` | `r f3(cells$additive[2])` |
+| 9–10 | `r f3(cells$additive[3])` | `r f3(cells$additive[4])` |
+| **Age gap** | **`r f2(cells$additive[3] - cells$additive[1])`** | **`r f2(cells$additive[4] - cells$additive[2])`** |
+
+]
+]
+
+.pull-right[
+**Full** (actual cell means)
+
+.mid-table[
+
+| | Normal | Tricky |
+|:--|--:|--:|
+| 8–9 | `r f3(cells$cell[1])` | `r f3(cells$cell[2])` |
+| 9–10 | `r f3(cells$cell[3])` | `r f3(cells$cell[4])` |
+| **Age gap** | **`r f2(age_gap_N)`** | **`r f2(age_gap_T)`** |
+
+]
+]
+
+The restricted model forces the same age gap in both columns (parallel lines).
+
+---
+
+## Interaction Effect
+
+$SS_{A \times P}$ = how far the actual cell means are from the restricted model's predictions: square, add up, and count each of the $n$ children in the cell
+
+--
+
+$$\begin{aligned}
+SS_{A \times P} &= n \sum_{j}\sum_{k} \left(\text{Cell mean} - \text{Predicted}\right)^2 \\
+&= n \sum_{j}\sum_{k} \left(\bar{Y}_{jk} - \bar{Y}_{j\cdot} - \bar{Y}_{\cdot k} + \bar{Y}_{\cdot\cdot}\right)^2
+\end{aligned}$$
+
+$\bar{Y}_{jk}$ = cell mean, $\bar{Y}_{j\cdot}$ = row (age) mean, $\bar{Y}_{\cdot k}$ = column (problem) mean, $\bar{Y}_{\cdot\cdot}$ = grand mean
+
+--
+
+The thing being squared is exactly $\widehat{(\alpha\beta)}_{jk}$, the estimated interaction term for each cell.
+
+---
+
+## Marginal Means
+
+![](images/margmeans.png)
+
+---
+
+## Calculating the Interaction Effect
+
+.small-text[
+- Restricted prediction: Row **+** Column **−** Grand
+- Interaction = what it misses: Cell **− (** Row + Column − Grand **)**
+- The minus in front of the parentheses flips every sign inside: Cell **−** Row **−** Column **+** Grand
+]
+
+.small-table[
+
+```{r ix1, echo=FALSE}
+cells %>%
+  transmute(Cell = label,
+            `Cell mean` = f3(cell),
+            `- Row (age) mean` = f3(row),
+            `- Column (problem) mean` = f3(col),
+            `+ Grand mean` = f3(grand),
+            `= Interaction` = f3(ix)) %>%
+  kable(format = "html", align = "lrrrrr")
+```
+
+]
+
+--
+
+.small-text[
+**The interaction terms add up to 0 in every row and every column**, so in a 2x2 one value determines all four. That's why $df_{A \times P} = 1$.
+]
+
+---
+
+## Calculating the Interaction Effect
+
+.mid-table[
+
+```{r ix2, echo=FALSE}
+cells %>%
+  transmute(Cell = label,
+            `Cell mean` = f3(cell),
+            `- Row (age) mean` = f3(row),
+            `- Column (problem) mean` = f3(col),
+            `+ Grand mean` = f3(grand),
+            `= Interaction` = f3(ix),
+            Squared = formatC(ix^2, format = "f", digits = 6)) %>%
+  kable(format = "html", align = "lrrrrrr")
+```
+
+]
+
+--
+
+Sum them up: $`r formatC(sum(cells$ix^2), format = "f", digits = 4)`$
+
+Multiply by $n$ per cell: $`r formatC(sum(cells$ix^2), format = "f", digits = 4)` \times `r n_cell` = `r f2(SS_ix)`$
+
+---
+
+## What we just did
+
+- Found the mean of each cell in our 2x2 design
+
+- Subtracted the row (age) mean and the column (problem) mean
+
+- Added back the grand mean (we subtracted it twice, since it's inside both the row mean and the column mean)
+
+- *What's left in each cell is how far that cell is from what the no-interaction model predicts. Squared, summed, and multiplied by $n$, that is the difference between the model without an interaction (Restricted) and the model with one (Full)*
+
+---
+
+## ANOVA (Source) Table
+
+| Source | SS | df | MS | F |
+|:--|:--|:--|:--|:--|
+| Age | `r f2(SS_age)` | 1 | `r f2(SS_age)` | $`r f2(SS_age)` / MS_{W}$ |
+| Problem | `r f2(SS_prob)` | 1 | `r f2(SS_prob)` | $`r f2(SS_prob)` / MS_{W}$ |
+| Age × Problem | **`r f2(SS_ix)`** | 1 | **`r f2(SS_ix)`** | $`r f2(SS_ix)` / MS_{W}$ |
+| Error / Within | $SS_{W}$ | 12 | $SS_{W} / 12$ | |
+
+---
+
+### $SS_{\text{within}}$
+
+Error from the full model
+
+The full model allows for the Age effect, the Problem effect, and the Interaction effect.
+
+So from the full model's perspective, the best guess for each child is...
+
+--
+
+**their cell mean**: $\hat{Y}_{ijk} = \bar{Y}_{jk}$
+
+---
+
+## $SS_{\text{within}}$
+
+Full model: every child is predicted by their cell mean
+
+.small-table[
+
+```{r ef, echo=FALSE}
+err_table(mp$cell)
+```
+
+]
+
+$$E_F = SS_{W} = \sum (Y - \hat{Y})^2 = `r f2(SS_w)`$$
+
+---
+
+## ANOVA (Source) Table
+
+| Source | SS | df | MS | F |
+|:--|:--|:--|:--|:--|
+| Age | `r f2(SS_age)` | 1 | `r f2(SS_age)` | $MS_{A} / MS_{W}$ |
+| Problem | `r f2(SS_prob)` | 1 | `r f2(SS_prob)` | $MS_{P} / MS_{W}$ |
+| Age × Problem | `r f2(SS_ix)` | 1 | `r f2(SS_ix)` | $MS_{A \times P} / MS_{W}$ |
+| Error / Within | **`r f2(SS_w)`** | 12 | $SS_{W} / 12$ | |
+
+---
+
+## ANOVA (Source) Table
+
+| Source | SS | df | MS | F |
+|:--|:--|:--|:--|:--|
+| Age | `r f2(SS_age)` | 1 | `r f2(SS_age)` | $MS_{A} / MS_{W}$ |
+| Problem | `r f2(SS_prob)` | 1 | `r f2(SS_prob)` | $MS_{P} / MS_{W}$ |
+| Age × Problem | `r f2(SS_ix)` | 1 | `r f2(SS_ix)` | $MS_{A \times P} / MS_{W}$ |
+| Error / Within | `r f2(SS_w)` | 12 | **`r f3(MS_w)`** | |
+
+---
+
+## ANOVA (Source) Table
+
+| Source | SS | df | MS | F |
+|:--|:--|:--|:--|:--|
+| Age | `r f2(SS_age)` | 1 | `r f2(SS_age)` | **`r f3(SS_age / MS_w)`** |
+| Problem | `r f2(SS_prob)` | 1 | `r f2(SS_prob)` | **`r f3(SS_prob / MS_w)`** |
+| Age × Problem | `r f2(SS_ix)` | 1 | `r f2(SS_ix)` | **`r f3(SS_ix / MS_w)`** |
+| Error / Within | `r f2(SS_w)` | 12 | `r f3(MS_w)` | |
+
+Critical value of *F* with 1 and 12 df, $\alpha = .05$:
+
+```{r}
+qf(p = .05, df1 = 1, df2 = 12, lower.tail = FALSE)
+```
+
+---
+
+## What do we conclude?
+
+We reject all 3 null hypotheses. We interpret:
+
+1) **Main effect of age:** *averaging across problem types*, 9–10 year olds scored higher than 8–9 year olds ( `r f3(cells$row[3])` vs. `r f3(cells$row[1])` )
+
+2) **Main effect of problem type:** *averaging across age groups*, normal problems were easier than tricky ones ( `r f3(cells$col[1])` vs. `r f3(cells$col[2])` )
+
+3) **Interaction:** the age difference depends on problem type: small for normal problems ( `r f2(age_gap_N)` ), large for tricky problems ( `r f2(age_gap_T)` ). Equivalently, the tricky-problem penalty is bigger for the younger kids ( `r f2(prob_gap_8)` vs. `r f2(prob_gap_9)` )
+
+---
+
+## Main effects when there's an interaction
+
+**Because the interaction is significant, interpret the main effects with care.**
+
+- The age main effect ( `r f2(cells$row[3] - cells$row[1])` ) is an *average* of a tiny age difference ( `r f2(age_gap_N)` ) and a big one ( `r f2(age_gap_T)` )
+- So "older kids do better" is mostly a story about tricky problems
+
+--
+
+The natural follow-up: test the age difference *separately* within each problem type (**simple effects**).
+
+---
+
+## In `R`
+
+```{r warning=FALSE, message=FALSE}
+library(here)
+# fileEncoding: the file starts with an invisible character that
+# can turn the first column name into "X...Score"
+mathproblem = read.csv(here("data/mathproblem.csv"),
+                       fileEncoding = "UTF-8-BOM")
+mathproblem
+```
+
+---
+
+## In `R` - No Interaction
+
+```{r}
+summary(aov(Score ~ Age + Problem, data = mathproblem))
+```
+
+--
+
+**What's wrong with this?**
+
+--
+
+Age has **2** df, but we only have 2 age groups (1 df). Look at row 2 of the data: `"EIght"`. R treats it as a third age group.
+
+---
+
+## In `R` - No Interaction
+
+```{r}
+# Fix the typo: replace "EIght" with "Eight"
+mathproblem$Age[mathproblem$Age == "EIght"] <- "Eight"
+
+# Make the grouping variables factors
+mathproblem$Age <- factor(mathproblem$Age)
+mathproblem$Problem <- factor(mathproblem$Problem)
+
+summary(aov(Score ~ Age + Problem, data = mathproblem))
+```
+
+Without the interaction term, its SS (2.25) ends up in the error term ( $SS_{W}$ = 6.75 instead of 4.50).
+
+---
+
+## In `R` - With Interaction
+
+```{r}
+summary(aov(Score ~ Age + Problem + Age:Problem,
+            data = mathproblem))
+summary(aov(Score ~ Age * Problem, data = mathproblem))
+```
+
+---
+
+## In `R` - With Interaction
+
+- `Age:Problem` is the interaction term by itself
+- `Age * Problem` is shorthand for `Age + Problem + Age:Problem`, so the two models on the previous slide are identical
+- Same SS, df, MS, and *F* as our hand calculations
+
+
+---
+
+## Plotting
+
+```{r plotMeans, warning = FALSE, message = FALSE, echo = FALSE, fig.width=8, fig.height=5, out.width="85%", dpi=150}
+summarizedData = mathproblem %>%
+  group_by(Age, Problem) %>%
+  summarize(meanScore = mean(Score),
+            seScore = sd(Score) / sqrt(n()),
+            .groups = "drop") %>%
+  mutate(upperSE = meanScore + seScore,
+         lowerSE = meanScore - seScore)
+
+dodge = position_dodge(width = .15)
+
+ggplot(summarizedData, aes(x = Problem, y = meanScore, color = Age, group = Age)) +
+  geom_point(data = mathproblem, aes(x = Problem, y = Score, color = Age),
+             inherit.aes = FALSE, size = 3, alpha = .4,
+             position = position_jitterdodge(jitter.width = .1,
+                                             jitter.height = .05,
+                                             dodge.width = .15,
+                                             seed = 1)) +
+  geom_line(position = dodge, linewidth = 1.2) +
+  geom_point(position = dodge, size = 4) +
+  geom_errorbar(aes(ymin = lowerSE, ymax = upperSE),
+                position = dodge, width = .08, linewidth = 1) +
+  scale_color_manual(values = colors[1:2],
+                     labels = c("8-9 year olds", "9-10 year olds"),
+                     name = "Age group") +
+  theme_classic(base_size = 16) +
+  labs(x = "Problem type",
+       y = "Score",
+       title = "2x2 ANOVA with Interaction",
+       subtitle = "Cell means +/- 1 SE; faded points are individual children")
+```
+
+Non-parallel lines: the age gap is much bigger for tricky problems.
+
+---
+
+class: inverse, center, middle
+
+# Effect sizes
+
+### $\eta^2$ and partial $\eta^2$
+
+---
+
+## Effect Sizes
+
+![](images/diagrams.png)
+
+---
+
+## Eta-squared
+
+$\eta^2 = \frac{SS_{\text{Effect}}}{SS_{\text{Total}}}$
+
+.pull-left[
+<img src="images/etasq.png" width="100%">
+]
+
+.pull-right[
+
+$\eta^2_{\text{Age}} = \frac{`r f2(SS_age)`}{`r f2(E_grand)`} = `r f3(SS_age / E_grand)`$
+]
+
+Proportion of the *total* variation in Y that is associated with membership in the groups defined by X. How much variance in our outcome is associated with Age? `r round(100 * SS_age / E_grand, 1)`% of the *total* variance.
+
+---
+
+## Eta-squared
+
+$\eta^2 = \frac{SS_{\text{Effect}}}{SS_{\text{Total}}}$
+
+.pull-left[
+<img src="images/etasq.png" width="100%">
+]
+
+.pull-right[
+
+$\eta^2_{\text{Age}} = \frac{`r f2(SS_age)`}{`r f2(E_grand)`} = `r f3(SS_age / E_grand)`$
+]
+
+Hard to compare across studies because it depends on everything else in the study: adding another factor that explains a lot of variance makes $SS_{\text{Total}}$ bigger and every other $\eta^2$ smaller.
+
+---
+
+### Partial eta-squared
+
+$\eta_p^2 = \frac{SS_{\text{Effect}}}{SS_{\text{Effect}} + SS_{\text{Error}}}$
+
+.pull-left[
+<img src="images/petasq.png" width="100%">
+]
+
+.pull-right[
+
+$\eta^2_{p,\text{Age}} = \frac{`r f2(SS_age)`}{`r f2(SS_age)` + `r f2(SS_w)`} = `r f3(SS_age / (SS_age + SS_w))`$
+]
+
+Leaves the other effects out of the denominator. Of the variance in Y *not* explained by Problem or the interaction, `r round(100 * SS_age / (SS_age + SS_w), 1)`% is associated with Age.
+
+.small-text[
+In one-way ANOVA, $\eta^2 = \eta^2_p$. With more factors, $\eta^2_p \geq \eta^2$, so they aren't interchangeable: say which one you report, and don't compare your $\eta^2_p$ to someone else's $\eta^2$.
+]
+
+---
+
+class: inverse
+
+## Next time
+
+- Random soapboxes (within-subjects ANOVA)
+
+- THANKSGIVING! No class 11/26
+
+- 12/1 Lab Assignment 3
+
+- 12/3 last EXAM!

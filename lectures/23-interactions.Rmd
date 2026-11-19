@@ -515,11 +515,12 @@ class: inverse
 
 ## Next time
 
-- Within-subjects designs
+- Random soapboxes (within-subjects ANOVA)
 
-- Validity
+- THANKSGIVING! No class 11/26
 
-- Exam 3 review
+- 12/1 Lab Assignment 3
 
-- Teary goodbyes (until next semester)
+- 12/3 last EXAM!
+
 

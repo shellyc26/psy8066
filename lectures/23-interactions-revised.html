@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Two Between-Subjects Factors with Interactions</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs-2.31/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Two Between-Subjects Factors with Interactions
+]
+
+---
+
+
+
+
+
+
+
+
+
+&lt;style type="text/css"&gt;
+.small-table table { font-size: 70%; }
+.small-table td, .small-table th { padding: 3px 10px; }
+.mid-table table { font-size: 80%; }
+.mid-table td, .mid-table th { padding: 4px 12px; }
+.small-text { font-size: 80%; }
+&lt;/style&gt;
+
+### Last time
+
+Eirini's great talk about multiple comparisons
+- Bonferonni Corrections
+- FDR
+- Question: "are you really ok with potential Type I error rate?"
+
+Multiple Comparisons for ANOVA
+- Zoom out
+
+--
+
+### This time
+- What happens when the effect of one variable on the outcome **depends on** the level of the other variable?
+- That is an **interaction**
+
+---
+
+## Math is hard
+
+Here are our data...
+
+![](images/trickydata.png)
+
+---
+
+## Math is hard: Null Hypotheses for **Main Effects**
+
+.pull-left[
+
+`\(H_{0.1}\)` : The two age groups perform similarly, *averaging across* the two kinds of math problems
+
+
+`\(H_{0.1}: \mu_{8} = \mu_{9}\)`
+
+]
+
+.pull-right[
+
+`\(H_{0.2}\)` : Children perform similarly on normal and tricky math problems, *averaging across* the two age groups
+
+
+`\(H_{0.2}: \mu_{\text{Normal}} = \mu_{\text{Tricky}}\)`
+
+]
+
+--
+
+These are **marginal** means: each one averages over the levels of the other factor (the margins of the table on the next slide).
+
+---
+
+## Math is hard
+
+![](images/cellmeans.png)
+
+---
+
+## Math is hard: Means on means
+
+How much better do the older kids do, **separately for each kind of problem**?
+
+.mid-table[
+
+| | Normal | Tricky |
+|:--|--:|--:|
+| 8–9 year olds | 3.50 | 0.25 |
+| 9–10 year olds | 3.75 | 2.00 |
+| **Age difference (9–10 minus 8–9)** | **0.25** | **1.75** |
+
+]
+
+--
+
+The age difference is small for normal problems and large for tricky problems.
+
+**Difference of the differences:** `\(1.75 - 0.25 = 1.50\)`
+
+---
+
+## Math is hard: Means on means
+
+Now the other direction: how much harder are tricky problems, **separately for each age group**?
+
+.mid-table[
+
+| | Normal | Tricky | **Normal minus Tricky** |
+|:--|--:|--:|--:|
+| 8–9 year olds | 3.50 | 0.25 | **3.25** |
+| 9–10 year olds | 3.75 | 2.00 | **1.75** |
+
+]
+
+--
+
+**Difference of the differences:** `\(3.25 - 1.75 = 1.50\)`
+
+1.50 again! It does not matter which way you slice the table: the difference of differences is the same number.
+
+---
+
+## A 3rd effect: the **Interaction**
+
+An **interaction** means the effect of one factor on the outcome *depends on the level of the other factor*.
+
+- The effect of age depends on problem type (small for normal, large for tricky)
+- Equivalently, the effect of problem type depends on age (bigger penalty for younger kids)
+
+--
+
+**Careful:** an interaction is *not* "age affects problem type" or "the factors depend on each other." In this design, age and problem type are unrelated (every age group did every problem type). An interaction is about how the two factors *combine* to affect the **score**.
+
+---
+
+## Adding a 3rd Null Hypothesis
+
+`\(H_{0.3}\)` : *The age difference is the same for normal and tricky problems*
+
+`$$H_{0.3}: (\mu_{9,\text{Normal}} - \mu_{8,\text{Normal}}) = (\mu_{9,\text{Tricky}} - \mu_{8,\text{Tricky}})$$`
+
+--
+
+`\(H_{0.3}\)` : *The tricky-problem penalty is the same for both age groups*
+
+`$$H_{0.3}: (\mu_{8,\text{Normal}} - \mu_{8,\text{Tricky}}) = (\mu_{9,\text{Normal}} - \mu_{9,\text{Tricky}})$$`
+
+--
+
+☝️ These are the same hypothesis: rearrange either equation and you get the other. That is why we got 1.50 both ways.
+
+---
+
+## Picturing an interaction
+
+&lt;img src="23-interactions-revised_files/figure-html/interactionPicture-1.png" alt="" width="100%" /&gt;
+
+**Parallel lines = no interaction.** The interaction test asks: are the real lines further from parallel than we'd expect by chance?
+
+---
+
+## Equations: a reminder from one-way ANOVA
+
+One factor (e.g., Age). `\(i\)` = child, `\(j\)` = age group:
+
+`$$\text{Restricted: } Y_{ij} = \mu + \varepsilon_{ij} \qquad \text{Full: } Y_{ij} = \mu + \alpha_j + \varepsilon_{ij}$$`
+
+--
+
+- `\(\mu\)` = the grand mean
+- `\(\alpha_j = \mu_j - \mu\)` = the **effect** of being in age group `\(j\)` (how far that group's mean is from the grand mean)
+- `\(\varepsilon_{ij}\)` = error (whatever the model doesn't explain about child `\(i\)`)
+
+--
+
+`\(H_0\)`: every `\(\alpha_j = 0\)`. The restricted model is the full model with that term removed.
+
+---
+
+## Equations: the two-way model
+
+`\(i\)` = child, `\(j\)` = age group, `\(k\)` = problem type. The **full** model:
+
+`$$Y_{ijk} = \mu + \alpha_j + \beta_k + (\alpha\beta)_{jk} + \varepsilon_{ijk}$$`
+
+--
+
+.mid-table[
+
+| Term | Meaning | Definition |
+|:--|:--|:--|
+| `\(\mu\)` | grand mean | |
+| `\(\alpha_j\)` | effect of age group `\(j\)` | `\(\mu_{j\cdot} - \mu\)` |
+| `\(\beta_k\)` | effect of problem type `\(k\)` | `\(\mu_{\cdot k} - \mu\)` |
+| `\((\alpha\beta)_{jk}\)` | **interaction**: what's left in cell `\(jk\)` after both main effects | `\(\mu_{jk} - \mu_{j\cdot} - \mu_{\cdot k} + \mu\)` |
+| `\(\varepsilon_{ijk}\)` | error | |
+
+]
+
+.small-text[
+A dot means "averaged over": `\(\mu_{j\cdot}\)` is age group `\(j\)` averaged over problem types. `\((\alpha\beta)_{jk}\)` is **one symbol**, not `\(\alpha\)` times `\(\beta\)`.
+]
+
+---
+
+## Cell mean = sum of the effects
+
+Estimates ( `\(\hat{\mu}\)`, `\(\hat{\alpha}_j\)`, `\(\hat{\beta}_k\)`, `\(\widehat{(\alpha\beta)}_{jk}\)`; hats mean "estimated from the sample"):
+
+.small-table[
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Cell &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Cell mean &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; = Grand mean &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; + Age effect &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; + Problem effect &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; + Interaction &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8-9, Normal &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.500 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.375 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.500 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.250 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.375 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8-9, Tricky &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.250 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.375 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.500 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.250 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.375 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 9-10, Normal &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.750 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.375 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.500 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.250 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.375 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 9-10, Tricky &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.375 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.500 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.250 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.375 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+]
+
+--
+
+First row: `\(2.375 + (-0.500) + 1.250 + 0.375 = 3.500\)`
+
+In a 2x2, each interaction term is `\(\pm\)` (difference of differences) / 4 `\(= 1.50 / 4 = 0.375\)`
+
+---
+
+## Three Restricted Models
+
+Each test removes **one** term from the full model:
+
+Testing the **Age** main effect ( `\(H_0\)`: every `\(\alpha_j = 0\)` )
+
+`$$\text{Restricted: } Y_{ijk} = \mu + \beta_k + (\alpha\beta)_{jk} + \varepsilon_{ijk}$$`
+
+Testing the **Problem** main effect ( `\(H_0\)`: every `\(\beta_k = 0\)` )
+
+`$$\text{Restricted: } Y_{ijk} = \mu + \alpha_j + (\alpha\beta)_{jk} + \varepsilon_{ijk}$$`
+
+Testing the **interaction** ( `\(H_0\)`: every `\((\alpha\beta)_{jk} = 0\)` )
+
+`$$\text{Restricted: } Y_{ijk} = \mu + \alpha_j + \beta_k + \varepsilon_{ijk}$$`
+
+---
+
+## Diagrams
+
+&lt;center&gt;
+&lt;img src="images/diagrams.png" width="55%"&gt;
+&lt;/center&gt;
+
+- `\(SS_{\text{within}}\)` = `\(E_F\)` for the full model (error left over after using the cell means)
+- `\(SS_{\text{between}}\)` = `\(E_R - E_F\)` for the grand-mean-only model vs. the full model. It splits into Age, Problem, and A×P
+- `\(MS_{\text{within}}\)` is the denominator for all three *F*-tests
+
+---
+
+## ANOVA (Source) Table
+
+| Source | SS | df | MS | F |
+|:--|:--|:--|:--|:--|
+| Age | `\(SS_{A}\)` | | | |
+| Problem | `\(SS_{P}\)` | | | |
+| Age × Problem | `\(SS_{A \times P}\)` | | | |
+| Error / Within | `\(SS_{W}\)` | | | |
+
+---
+
+## ANOVA (Source) Table
+
+Fill in the easy stuff first. `\(a\)` = number of age groups, `\(p\)` = number of problem types
+
+.mid-table[
+
+| Source | SS | df | MS | F |
+|:--|:--|:--|:--|:--|
+| Age | `\(SS_{A}\)` | `\(a - 1\)` | `\(SS_{A} / df_{A}\)` | `\(MS_{A} / MS_{W}\)` |
+| Problem | `\(SS_{P}\)` | `\(p - 1\)` | `\(SS_{P} / df_{P}\)` | `\(MS_{P} / MS_{W}\)` |
+| Age × Problem | `\(SS_{A \times P}\)` | `\((a - 1)(p - 1)\)` | `\(SS_{A \times P} / df_{A \times P}\)` | `\(MS_{A \times P} / MS_{W}\)` |
+| Error / Within | `\(SS_{W}\)` | ? | `\(SS_{W} / df_{W}\)` | |
+
+]
+
+---
+
+## df for the Full Model
+
+Always: (number of participants) − (number of parameters estimated in the full model)
+
+How many means did we calculate for the full model?
+
+--
+
+One per cell: `\(a \times p = 2 \times 2 = 4\)` cell means. With `\(N = 16\)` children and `\(n = 4\)` per cell:
+
+`$$\begin{aligned}
+df_{W} &amp;= N - ap \\
+&amp;= 16 - (2)(2) \\
+&amp;= 12
+\end{aligned}$$`
+
+--
+
+Same thing, counted cell by cell: each cell has `\(n - 1\)` df, so `\(df_{W} = ap(n-1) = 4 \times 3 = 12\)`
+
+---
+
+## ANOVA (Source) Table
+
+| Source | SS | df | MS | F |
+|:--|:--|:--|:--|:--|
+| Age | `\(SS_{A}\)` | 1 | `\(SS_{A} / 1\)` | `\(MS_{A} / MS_{W}\)` |
+| Problem | `\(SS_{P}\)` | 1 | `\(SS_{P} / 1\)` | `\(MS_{P} / MS_{W}\)` |
+| Age × Problem | `\(SS_{A \times P}\)` | 1 | `\(SS_{A \times P} / 1\)` | `\(MS_{A \times P} / MS_{W}\)` |
+| Error / Within | `\(SS_{W}\)` | 12 | `\(SS_{W} / 12\)` | |
+
+---
+
+## How to calculate `\(SS_{\text{Age}}\)`
+
+Formally: compare the full model to the same model with Age removed
+
+`$$\text{Full: } Y_{ijk} = \mu + \alpha_j + \beta_k + (\alpha\beta)_{jk} + \varepsilon_{ijk}$$`
+
+`$$\text{Restricted: } Y_{ijk} = \mu + \beta_k + (\alpha\beta)_{jk} + \varepsilon_{ijk}$$`
+
+--
+
+**Shortcut:** every cell has the same `\(n\)` (a *balanced* design). Then `\(E_R - E_F\)` for Age is the same whether or not Problem and the interaction are in both models. So we can use the simpler one-way comparison:
+
+`$$\text{Restricted: } Y_{ijk} = \mu + \varepsilon_{ijk} \qquad \text{Full: } Y_{ijk} = \mu + \alpha_j + \varepsilon_{ijk}$$`
+
+---
+
+## Get the `\(E_R\)` for Age
+
+Restricted model: every child is predicted by the grand mean, `\(\hat{Y} = 2.375\)`
+
+.small-table[
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Cell &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Scores (Y) &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Prediction &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Errors (Y - Prediction) &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Sum of squared errors &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8-9, Normal &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3, 4, 3, 4 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.375 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.625, 1.625, 0.625, 1.625 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.0625 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8-9, Tricky &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0, 0, 0, 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.375 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -2.375, -2.375, -2.375, -1.375 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18.8125 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 9-10, Normal &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4, 4, 4, 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.375 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.625, 1.625, 1.625, 0.625 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8.3125 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 9-10, Tricky &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2, 3, 2, 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.375 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -0.375, 0.625, -0.375, -1.375 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.5625 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;b&gt;Total&lt;/b&gt; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;b&gt;35.75&lt;/b&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+]
+
+`$$E_R = \sum (Y - \hat{Y})^2 = 35.75$$`
+
+---
+
+## Get the `\(E_F\)` for Age
+
+Full model: every child is predicted by their age group's mean ( `\(1.875\)` or `\(2.875\)` )
+
+.small-table[
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Cell &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Scores (Y) &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Prediction &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Errors (Y - Prediction) &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Sum of squared errors &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8-9, Normal &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3, 4, 3, 4 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.875 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.125, 2.125, 1.125, 2.125 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.5625 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8-9, Tricky &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0, 0, 0, 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.875 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -1.875, -1.875, -1.875, -0.875 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.3125 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 9-10, Normal &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4, 4, 4, 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.875 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1.125, 1.125, 1.125, 0.125 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.8125 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 9-10, Tricky &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2, 3, 2, 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.875 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -0.875, 0.125, -0.875, -1.875 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.0625 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;b&gt;Total&lt;/b&gt; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;b&gt;31.75&lt;/b&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+]
+
+`$$E_F = \sum (Y - \hat{Y})^2 = 31.75$$`
+
+---
+
+## How to calculate `\(SS_{\text{Age}}\)`
+
+`\(SS_{\text{Age}} = E_R - E_F\)`
+
+
+``` r
+35.75 - 31.75
+```
+
+```
+## [1] 4
+```
+
+--
+
+.small-text[
+**Check:** the formal comparison (full model vs. full model without Age) gives `\(8.50 - 4.50 = 4.00\)`. Same answer.
+]
+
+--
+
+`\(SS_{\text{Problem}}\)` works the same way, using the problem-type means ( `\(3.625\)` and `\(1.125\)` ) as the full model:
+
+`\(SS_{\text{Problem}} = E_R - E_F = 35.75 - 10.75 = 25.00\)`
+
+---
+
+## ANOVA (Source) Table
+
+| Source | SS | df | MS | F |
+|:--|:--|:--|:--|:--|
+| Age | **4.00** | 1 | **4.00** | `\(4.00 / MS_{W}\)` |
+| Problem | **25.00** | 1 | **25.00** | `\(25.00 / MS_{W}\)` |
+| Age × Problem | `\(SS_{A \times P}\)` | 1 | `\(SS_{A \times P} / 1\)` | `\(MS_{A \times P} / MS_{W}\)` |
+| Error / Within | `\(SS_{W}\)` | 12 | `\(SS_{W} / 12\)` | |
+
+---
+
+## The Interaction: `\(SS_{A \times P}\)`
+
+`\(H_{0.3}\)` : *The age difference is the same for normal and tricky problems*
+
+`\(H_{0.3}\)` : *The tricky-problem penalty is the same for both age groups*
+
+Restricted model (no interaction):
+
+`$$Y_{ijk} = \mu + \alpha_j + \beta_k + \varepsilon_{ijk}$$`
+
+---
+
+### What does the restricted model predict?
+
+Grand Mean + (Row Mean − Grand Mean) + (Column Mean − Grand Mean)
+
+= **Row Mean + Column Mean − Grand Mean** &amp;nbsp;&amp;nbsp; (rows = age, columns = problem)
+
+--
+
+.pull-left[
+**Restricted** (no interaction)
+
+.mid-table[
+
+| | Normal | Tricky |
+|:--|--:|--:|
+| 8–9 | 3.125 | 0.625 |
+| 9–10 | 4.125 | 1.625 |
+| **Age gap** | **1.00** | **1.00** |
+
+]
+]
+
+.pull-right[
+**Full** (actual cell means)
+
+.mid-table[
+
+| | Normal | Tricky |
+|:--|--:|--:|
+| 8–9 | 3.500 | 0.250 |
+| 9–10 | 3.750 | 2.000 |
+| **Age gap** | **0.25** | **1.75** |
+
+]
+]
+
+The restricted model forces the same age gap in both columns (parallel lines).
+
+---
+
+## Interaction Effect
+
+`\(SS_{A \times P}\)` = how far the actual cell means are from the restricted model's predictions: square, add up, and count each of the `\(n\)` children in the cell
+
+--
+
+`$$\begin{aligned}
+SS_{A \times P} &amp;= n \sum_{j}\sum_{k} \left(\text{Cell mean} - \text{Predicted}\right)^2 \\
+&amp;= n \sum_{j}\sum_{k} \left(\bar{Y}_{jk} - \bar{Y}_{j\cdot} - \bar{Y}_{\cdot k} + \bar{Y}_{\cdot\cdot}\right)^2
+\end{aligned}$$`
+
+`\(\bar{Y}_{jk}\)` = cell mean, `\(\bar{Y}_{j\cdot}\)` = row (age) mean, `\(\bar{Y}_{\cdot k}\)` = column (problem) mean, `\(\bar{Y}_{\cdot\cdot}\)` = grand mean
+
+--
+
+The thing being squared is exactly `\(\widehat{(\alpha\beta)}_{jk}\)`, the estimated interaction term for each cell.
+
+---
+
+## Marginal Means
+
+![](images/margmeans.png)
+
+---
+
+## Calculating the Interaction Effect
+
+.small-text[
+- Restricted prediction: Row **+** Column **−** Grand
+- Interaction = what it misses: Cell **− (** Row + Column − Grand **)**
+- The minus in front of the parentheses flips every sign inside: Cell **−** Row **−** Column **+** Grand
+]
+
+.small-table[
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Cell &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Cell mean &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; - Row (age) mean &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; - Column (problem) mean &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; + Grand mean &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; = Interaction &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8-9, Normal &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.500 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.875 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.625 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.375 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.375 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8-9, Tricky &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.250 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.875 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.125 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.375 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.375 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 9-10, Normal &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.750 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.875 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.625 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.375 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.375 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 9-10, Tricky &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.875 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.125 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.375 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.375 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+]
+
+--
+
+.small-text[
+**The interaction terms add up to 0 in every row and every column**, so in a 2x2 one value determines all four. That's why `\(df_{A \times P} = 1\)`.
+]
+
+---
+
+## Calculating the Interaction Effect
+
+.mid-table[
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Cell &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Cell mean &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; - Row (age) mean &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; - Column (problem) mean &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; + Grand mean &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; = Interaction &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Squared &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8-9, Normal &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.500 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.875 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.625 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.375 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.375 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.140625 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8-9, Tricky &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.250 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.875 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.125 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.375 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.375 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.140625 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 9-10, Normal &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.750 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.875 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.625 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.375 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.375 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.140625 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 9-10, Tricky &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.875 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.125 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.375 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.375 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.140625 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+]
+
+--
+
+Sum them up: `\(0.5625\)`
+
+Multiply by `\(n\)` per cell: `\(0.5625 \times 4 = 2.25\)`
+
+---
+
+## What we just did
+
+- Found the mean of each cell in our 2x2 design
+
+- Subtracted the row (age) mean and the column (problem) mean
+
+- Added back the grand mean (we subtracted it twice, since it's inside both the row mean and the column mean)
+
+- *What's left in each cell is how far that cell is from what the no-interaction model predicts. Squared, summed, and multiplied by `\(n\)`, that is the difference between the model without an interaction (Restricted) and the model with one (Full)*
+
+---
+
+## ANOVA (Source) Table
+
+| Source | SS | df | MS | F |
+|:--|:--|:--|:--|:--|
+| Age | 4.00 | 1 | 4.00 | `\(4.00 / MS_{W}\)` |
+| Problem | 25.00 | 1 | 25.00 | `\(25.00 / MS_{W}\)` |
+| Age × Problem | **2.25** | 1 | **2.25** | `\(2.25 / MS_{W}\)` |
+| Error / Within | `\(SS_{W}\)` | 12 | `\(SS_{W} / 12\)` | |
+
+---
+
+### `\(SS_{\text{within}}\)`
+
+Error from the full model
+
+The full model allows for the Age effect, the Problem effect, and the Interaction effect.
+
+So from the full model's perspective, the best guess for each child is...
+
+--
+
+**their cell mean**: `\(\hat{Y}_{ijk} = \bar{Y}_{jk}\)`
+
+---
+
+## `\(SS_{\text{within}}\)`
+
+Full model: every child is predicted by their cell mean
+
+.small-table[
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Cell &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Scores (Y) &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Prediction &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Errors (Y - Prediction) &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Sum of squared errors &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8-9, Normal &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3, 4, 3, 4 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3.500 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -0.500, 0.500, -0.500, 0.500 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.0000 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 8-9, Tricky &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0, 0, 0, 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.250 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; -0.250, -0.250, -0.250, 0.750 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.7500 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 9-10, Normal &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4, 4, 4, 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3.750 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.250, 0.250, 0.250, -0.750 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.7500 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 9-10, Tricky &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2, 3, 2, 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2.000 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 0.000, 1.000, 0.000, -1.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.0000 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;b&gt;Total&lt;/b&gt; &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; &lt;b&gt;4.50&lt;/b&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+]
+
+`$$E_F = SS_{W} = \sum (Y - \hat{Y})^2 = 4.50$$`
+
+---
+
+## ANOVA (Source) Table
+
+| Source | SS | df | MS | F |
+|:--|:--|:--|:--|:--|
+| Age | 4.00 | 1 | 4.00 | `\(MS_{A} / MS_{W}\)` |
+| Problem | 25.00 | 1 | 25.00 | `\(MS_{P} / MS_{W}\)` |
+| Age × Problem | 2.25 | 1 | 2.25 | `\(MS_{A \times P} / MS_{W}\)` |
+| Error / Within | **4.50** | 12 | `\(SS_{W} / 12\)` | |
+
+---
+
+## ANOVA (Source) Table
+
+| Source | SS | df | MS | F |
+|:--|:--|:--|:--|:--|
+| Age | 4.00 | 1 | 4.00 | `\(MS_{A} / MS_{W}\)` |
+| Problem | 25.00 | 1 | 25.00 | `\(MS_{P} / MS_{W}\)` |
+| Age × Problem | 2.25 | 1 | 2.25 | `\(MS_{A \times P} / MS_{W}\)` |
+| Error / Within | 4.50 | 12 | **0.375** | |
+
+---
+
+## ANOVA (Source) Table
+
+| Source | SS | df | MS | F |
+|:--|:--|:--|:--|:--|
+| Age | 4.00 | 1 | 4.00 | **10.667** |
+| Problem | 25.00 | 1 | 25.00 | **66.667** |
+| Age × Problem | 2.25 | 1 | 2.25 | **6.000** |
+| Error / Within | 4.50 | 12 | 0.375 | |
+
+Critical value of *F* with 1 and 12 df, `\(\alpha = .05\)`:
+
+
+``` r
+qf(p = .05, df1 = 1, df2 = 12, lower.tail = FALSE)
+```
+
+```
+## [1] 4.747225
+```
+
+---
+
+## What do we conclude?
+
+We reject all 3 null hypotheses. We interpret:
+
+1) **Main effect of age:** *averaging across problem types*, 9–10 year olds scored higher than 8–9 year olds ( 2.875 vs. 1.875 )
+
+2) **Main effect of problem type:** *averaging across age groups*, normal problems were easier than tricky ones ( 3.625 vs. 1.125 )
+
+3) **Interaction:** the age difference depends on problem type: small for normal problems ( 0.25 ), large for tricky problems ( 1.75 ). Equivalently, the tricky-problem penalty is bigger for the younger kids ( 3.25 vs. 1.75 )
+
+---
+
+## Main effects when there's an interaction
+
+**Because the interaction is significant, interpret the main effects with care.**
+
+- The age main effect ( 1.00 ) is an *average* of a tiny age difference ( 0.25 ) and a big one ( 1.75 )
+- So "older kids do better" is mostly a story about tricky problems
+
+--
+
+The natural follow-up: test the age difference *separately* within each problem type (**simple effects**).
+
+---
+
+## In `R`
+
+
+``` r
+library(here)
+# fileEncoding: the file starts with an invisible character that
+# can turn the first column name into "X...Score"
+mathproblem = read.csv(here("data/mathproblem.csv"),
+                       fileEncoding = "UTF-8-BOM")
+mathproblem
+```
+
+```
+##    Score   Age Problem
+## 1      3 Eight  Normal
+## 2      4 EIght  Normal
+## 3      3 Eight  Normal
+## 4      4 Eight  Normal
+## 5      4  Nine  Normal
+## 6      4  Nine  Normal
+## 7      4  Nine  Normal
+## 8      3  Nine  Normal
+## 9      0 Eight  Tricky
+## 10     0 Eight  Tricky
+## 11     0 Eight  Tricky
+## 12     1 Eight  Tricky
+## 13     2  Nine  Tricky
+## 14     3  Nine  Tricky
+## 15     2  Nine  Tricky
+## 16     1  Nine  Tricky
+```
+
+---
+
+## In `R` - No Interaction
+
+
+``` r
+summary(aov(Score ~ Age + Problem, data = mathproblem))
+```
+
+```
+##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## Age          2  9.161   4.580   9.464  0.00341 ** 
+## Problem      1 20.782  20.782  42.939 2.72e-05 ***
+## Residuals   12  5.808   0.484                     
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+--
+
+**What's wrong with this?**
+
+--
+
+Age has **2** df, but we only have 2 age groups (1 df). Look at row 2 of the data: `"EIght"`. R treats it as a third age group.
+
+---
+
+## In `R` - No Interaction
+
+
+``` r
+# Fix the typo: replace "EIght" with "Eight"
+mathproblem$Age[mathproblem$Age == "EIght"] &lt;- "Eight"
+
+# Make the grouping variables factors
+mathproblem$Age &lt;- factor(mathproblem$Age)
+mathproblem$Problem &lt;- factor(mathproblem$Problem)
+
+summary(aov(Score ~ Age + Problem, data = mathproblem))
+```
+
+```
+##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## Age          1   4.00   4.000   7.704   0.0157 *  
+## Problem      1  25.00  25.000  48.148 1.02e-05 ***
+## Residuals   13   6.75   0.519                     
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+Without the interaction term, its SS (2.25) ends up in the error term ( `\(SS_{W}\)` = 6.75 instead of 4.50).
+
+---
+
+## In `R` - With Interaction
+
+
+``` r
+summary(aov(Score ~ Age + Problem + Age:Problem,
+            data = mathproblem))
+```
+
+```
+##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## Age          1   4.00   4.000   10.67  0.00675 ** 
+## Problem      1  25.00  25.000   66.67 3.05e-06 ***
+## Age:Problem  1   2.25   2.250    6.00  0.03062 *  
+## Residuals   12   4.50   0.375                     
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+``` r
+summary(aov(Score ~ Age * Problem, data = mathproblem))
+```
+
+```
+##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## Age          1   4.00   4.000   10.67  0.00675 ** 
+## Problem      1  25.00  25.000   66.67 3.05e-06 ***
+## Age:Problem  1   2.25   2.250    6.00  0.03062 *  
+## Residuals   12   4.50   0.375                     
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+---
+
+## In `R` - With Interaction
+
+- `Age:Problem` is the interaction term by itself
+- `Age * Problem` is shorthand for `Age + Problem + Age:Problem`, so the two models on the previous slide are identical
+- Same SS, df, MS, and *F* as our hand calculations
+
+
+---
+
+## Plotting
+
+&lt;img src="23-interactions-revised_files/figure-html/plotMeans-1.png" alt="" width="85%" /&gt;
+
+Non-parallel lines: the age gap is much bigger for tricky problems.
+
+---
+
+class: inverse, center, middle
+
+# Effect sizes
+
+### `\(\eta^2\)` and partial `\(\eta^2\)`
+
+---
+
+## Effect Sizes
+
+![](images/diagrams.png)
+
+---
+
+## Eta-squared
+
+`\(\eta^2 = \frac{SS_{\text{Effect}}}{SS_{\text{Total}}}\)`
+
+.pull-left[
+&lt;img src="images/etasq.png" width="100%"&gt;
+]
+
+.pull-right[
+
+`\(\eta^2_{\text{Age}} = \frac{4.00}{35.75} = 0.112\)`
+]
+
+Proportion of the *total* variation in Y that is associated with membership in the groups defined by X. How much variance in our outcome is associated with Age? 11.2% of the *total* variance.
+
+---
+
+## Eta-squared
+
+`\(\eta^2 = \frac{SS_{\text{Effect}}}{SS_{\text{Total}}}\)`
+
+.pull-left[
+&lt;img src="images/etasq.png" width="100%"&gt;
+]
+
+.pull-right[
+
+`\(\eta^2_{\text{Age}} = \frac{4.00}{35.75} = 0.112\)`
+]
+
+Hard to compare across studies because it depends on everything else in the study: adding another factor that explains a lot of variance makes `\(SS_{\text{Total}}\)` bigger and every other `\(\eta^2\)` smaller.
+
+---
+
+### Partial eta-squared
+
+`\(\eta_p^2 = \frac{SS_{\text{Effect}}}{SS_{\text{Effect}} + SS_{\text{Error}}}\)`
+
+.pull-left[
+&lt;img src="images/petasq.png" width="100%"&gt;
+]
+
+.pull-right[
+
+`\(\eta^2_{p,\text{Age}} = \frac{4.00}{4.00 + 4.50} = 0.471\)`
+]
+
+Leaves the other effects out of the denominator. Of the variance in Y *not* explained by Problem or the interaction, 47.1% is associated with Age.
+
+.small-text[
+In one-way ANOVA, `\(\eta^2 = \eta^2_p\)`. With more factors, `\(\eta^2_p \geq \eta^2\)`, so they aren't interchangeable: say which one you report, and don't compare your `\(\eta^2_p\)` to someone else's `\(\eta^2\)`.
+]
+
+---
+
+class: inverse
+
+## Next time
+
+- Random soapboxes (within-subjects ANOVA)
+
+- THANKSGIVING! No class 11/26
+
+- 12/1 Lab Assignment 3
+
+- 12/3 last EXAM!
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
