@@ -1,0 +1,183 @@
+---
+title: 'Psych 8066: Homework #5'
+author: "YOUR NAME"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+# Instructions
+
+Please complete this assignment using the RMarkdown file provided (<a href="hw-5-2026.Rmd" download="hw-5-2026.Rmd">download here</a>). Be sure to include your name in the preamble. When you turn in the assignment, include **_both_** the .Rmd and knitted .html files. Please turn in both documents to the **ASSIGNMENTS** page on Canvas.
+
+Please put all R `CODE` within gray chunks. They will behave as normal R code. If you are asked to explain something or write a few sentences, please do that *outside* of the gray chunks. That way, when you knit, your sentences will show up as normal text, but all of your code will be in a designated code chunk.
+
+You may Google things. **You may NOT use artificial intelligence to generate code that you turn in**. You may discuss homework assignments with your classmates; however, it is important that you complete each assignment on your own and **do not simply copy someone else’s code**. If we believe one student has copied another’s work, both students will receive a 0 on the homework assignment. Please list at the top of the document who you worked with.
+
+In the instructions, when it says **_by hand_**, what we mean is that you should not use a function that is built into R to complete the task. For example, if I ask you to find the mean *by hand*, you should **not** use the `mean()` function. However, you can (and should!) use your variables. So for instance, if I ask you to find the `mean()` by hand, you may do something like `sum(variableX)/length(variableX)`. This would be an appropriate *by hand* calculation. (You don't need to type `(3 + 5 + 5 + 17) / 4`...you can still use your variables). 
+
+**Data:** You will use the `palmerpenguins` data. Please install the package `palmerpenguins` if you don't have it already. The data itself is just called `penguins`
+
+## Overview
+
+In this assignment you will analyze a single 3 (Species: Adelie, Chinstrap, Gentoo) × 2 (Sex: female, male) between-subjects design using the Palmer Penguins data. The outcome is **body mass (g)**.
+
+Each question asks a different research question about the *same* data. For each question you will:
+
+a. **Identify the hypothesis.** State in words which effect the question is about (a main effect or the interaction). Then describe the **restricted model** and the **full model** in words: what value does each model use as its best estimate of a penguin's body mass?
+b. **Calculate it by hand (in R).** For each model, compute every penguin's deviation from that model's prediction, square the deviations, and sum them. This gives SS(Restricted) and SS(Full). Then compute:
+    - SS for the effect = SS(Restricted) − SS(Full)
+    - *df* for the effect
+    - *F* = (SS_effect / df_effect) / (SS_within / df_within)
+    - *p* (use `pf()`)
+    - partial η² = SS_effect / (SS_effect + SS_within)
+c. **Check your work with `aov()`.** Find the matching row in the `aov()` table and confirm that your SS, *df*, *F*, and *p* match.
+d. **Graph it.** Make a plot that shows the effect the question is about, with error bars (±1 SE or 95% CI; say which one you used).
+e. **Interpret it.** Write 2–3 sentences that a reader who hasn't seen your code could understand.
+
+Show all of your code.
+
+## Data setup
+
+Run this chunk as is. It removes penguins with missing sex or body mass. It then randomly samples **34 penguins per cell** so the design is balanced (34 is the size of the smallest cell).
+
+```{r data}
+library(palmerpenguins)
+library(tidyverse)
+
+set.seed(2026)  # do not change: keeps everyone's sample the same
+
+peng <- penguins %>%
+  drop_na(body_mass_g, sex) %>%
+  group_by(species, sex) %>%
+  slice_sample(n = 34) %>%
+  ungroup() %>%
+  select(species, sex, body_mass_g)
+
+# Check: every cell should have n = 34
+table(peng$species, peng$sex)
+```
+
+## Part 0: Means and the error term
+
+You will use these values in every question, so compute them once here.
+
+**0a.** Compute the grand mean, the marginal means for species, the marginal means for sex, and the six cell means. Display them in a table.
+
+```{r q0-means}
+# your code here
+```
+
+**0b.** Compute **SS_within**, the sum of squared deviations of each penguin from its *cell* mean, and its *df* (df_within). This is the error term for all of your *F* tests.
+
+```{r q0-sswithin}
+# your code here
+```
+
+### The `aov()` model (for checking your work)
+
+```{r aov-model}
+aov_mod <- aov(body_mass_g ~ species * sex, data = peng)
+summary(aov_mod)
+```
+
+---
+
+## Question 1: Do the species differ in body mass?
+
+You want to know whether the three penguin species differ in body mass, averaging across males and females.
+
+**1a.** Which effect does this question test? Describe the restricted and full models in words. How many *df* does this effect have, and why?
+
+*Your answer here.*
+
+**1b.** Calculate it.
+
+```{r q1-calc}
+# your code here
+```
+
+**1c.** Check your work with `aov()`.
+
+*Your answer here.*
+
+**1d.** Graph it.
+
+```{r q1-plot}
+# your code here
+```
+
+**1e.** Interpret it.
+
+*Your answer here.*
+
+---
+
+## Question 2: Is the sex difference the same across species?
+
+You want to know whether the size of the male–female difference in body mass **depends on species**.
+
+**2a.** Which effect does this question test? Describe the restricted and full models in words. How many *df* does this effect have, and why?
+
+*Your answer here.*
+
+**2b.** Calculate it. (*Hint:* in a balanced design, *n* is the cell size not the overall sample size)
+
+```{r q2-calc}
+# your code here
+```
+
+**2c.** Check your work with `aov()`.
+
+*Your answer here.*
+
+**2d.** Graph it. (Put species on the x-axis and use a different color or line for each sex.)
+
+```{r q2-plot}
+# your code here
+```
+
+**2e.** Interpret it. Use your graph to describe *how* the sex difference changes across species.
+
+*Your answer here.*
+
+---
+
+## Question 3: Are males heavier than females?
+
+You want to know if on average across species, male penguins weigh more than female penguins.
+
+**3a.** Which effect does this question test? Describe the restricted and full models in words. How many *df* does this effect have, and why?
+
+*Your answer here.*
+
+**3b.** Calculate it.
+
+```{r q3-calc}
+# your code here
+```
+
+**3c.** Check your work with `aov()`.
+
+*Your answer here.*
+
+**3d.** Graph it.
+
+```{r q3-plot}
+# your code here
+```
+
+**3e.** Interpret it. Then answer this: **given your result in Question 2, how should a reader interpret this main effect?** Is "males are X grams heavier than females" an accurate summary for every species? (2–4 sentences.) (*Hint:* think about how crossover interactions differ from ordinal interactions)
+
+*Your answer here.*
+
+---
+
+## Question 4: Reflection (short)
+
+Add up SS_species, SS_sex, SS_interaction, and SS_within. What do you get, and why does that make sense? Then compare the three partial η² values: which effect is largest, and which is smallest? Lastly, add up all the degrees of freedom. What is the total degrees of freedom and why does it make sense?
+
+*Your answer here.*
