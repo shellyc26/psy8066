@@ -1,0 +1,62 @@
+---
+title: "Contrast Slides from 2024"
+author: "Shelly Cooper"
+date: "2026-11-23"
+output: html_document
+---
+
+## OG data
+
+![](images/ogdata.png)
+
+---
+
+## What we did...
+
+- Found the means for each cell in our 2x2 ANOVA
+
+- Took away the effect of each of the 2 factors (Age and Problem)
+
+- Added back the grand mean
+
+---
+
+## Another way of doing the interaction
+
+
+$H_{0.3}$ : *The differences between age groups are the same regardless of problem type (tricky or normal)*
+
+![](images/ixcontrast1.png)
+
+---
+
+## Null hypothesis for interactions
+
+$H_{0.3}$ : *The differences between age groups are the same regardless of problem type (tricky or normal)*
+
+$H_{0.3} : (\mu_{N8} - \mu_{N9}) = (\mu_{T8} - \mu_{T9})$
+
+$H_{0.3} : (\mu_{N8} - \mu_{N9}) - (\mu_{T8} - \mu_{T9}) = 0$
+
+$H_{0.3} : \mu_{N8} - \mu_{N9} - \mu_{T8} + \mu_{T9} = 0$
+
+--
+
+![](images/ixcontrast2.png)
+ **First rule of contrasts is that they must sum to 0**
+---
+
+## Coontrasts are your friends!
+
+$$F = \frac{\psi^2}{MS_\text{Within}\Sigma(c_j^2/n_j)}$$
+
+$$ \psi = (1)(3.50) + (-1)(3.75) + (-1)(0.25) + (1)(2.00)  = 1.50 $$
+$$F = \frac{1.50^2}{.375\Sigma(c_j^2/n_j)}$$
+$$F = \frac{1.50^2}{.375(\frac{1^2}{4} + \frac{-1^2}{4} + \frac{-1^2}{4} + \frac{1^2}{4})}$$
+
+$$F = \frac{2.25}{.375} = 6$$
+---
+
+## Did we get it right?
+
+![](images/finaltable3.png)

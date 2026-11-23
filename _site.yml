@@ -51,6 +51,8 @@ navbar:
         href: "lectures/21-multiplecomparisons_EZ.html"
       - text: "22-Interactions"
         href: "lectures/23-interactions-revised.html"
+      - text: "23-Misc"
+        href: "lectures/24-within.html"
     - text: PDF Slides
       menu:
       - text: "1-Intro"
@@ -97,6 +99,8 @@ navbar:
         href: "lectures/21-multiplecomparisons_EZ.pdf"
       - text: "22-Interactions"
         href: "lectures/23-interactions-revised.pdf"
+      - text: "23-Misc"
+        href: "lectures/24-within.pdf"
     - text: Homework
       href: homework.html
   right:
